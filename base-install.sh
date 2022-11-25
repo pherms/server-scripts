@@ -1,6 +1,6 @@
 #!/bin/bash
 apt update -y
-apt install screenfetch linux-firmware -y
+apt install git sudo screenfetch linux-firmware -y
 
 # add regular user
 useradd -G sudo admin
