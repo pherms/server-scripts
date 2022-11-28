@@ -8,7 +8,8 @@ if [ "$installBridge" == "bridge" ]; then
   brctl addbr $bridgeName
   brctl addif $bridgeName $nic
   sed "s/iface $nic inet dhcp/# iface $nic inet dhcp/" /etc/network/interfaces
-  sed "s/iface $nic inet auto/# iface $nic inet manual/" /etc/network/interfaces
+  sed "s/iface $nic inet auto/iface $nic inet manual/" /etc/network/interfaces
+  echo "# Configure bridge" >> /etc/network/interfaces
   echo "iface $bridgeName inet static" >> /etc/network/interfaces
   echo "  bridge_ports $nic" >> /etc/network/interfaces
   echo "    address 192.168.2.20/24" >> /etc/network/interfaces
