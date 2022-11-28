@@ -7,6 +7,13 @@ if [ "$installBridge" == "bridge" ]; then
   apt install -y bridge-utils
   brctl addbr $bridgeName
   brctl addif $bridgeName $nic
+  sed "s/iface $nic inet dhcp/# iface $nic inet dhcp/" /etc/network/interfaces
+  sed "s/iface $nic inet auto/# iface $nic inet manual/" /etc/network/interfaces
+  echo "iface $bridgeName inet static" >> /etc/network/interfaces
+  echo "  bridge_ports $nic" >> /etc/network/interfaces
+  echo "    address 192.168.2.20/24" >> /etc/network/interfaces
+  echo "    broadcast 192.168.2.255" >> /etc/network/interfaces
+  echo "    gateway 192.168.2.1" >> /etc/network/interfaces
   systemctl restart networking
 fi
 
