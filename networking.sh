@@ -1,6 +1,7 @@
 #!/bin/bash
-installBridge=$1
-staticIp=$2
+read installBridge="Install bridge or nic config?: "
+read staticIp="Static IP address?: "
+
 nic=$(ip -br l | awk '$1 !~ "lo|vir|wl" { print $1}')
 bridgeName="bridge0"
 
