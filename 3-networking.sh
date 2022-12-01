@@ -2,13 +2,16 @@
 read -p "Install bridge or nic config?: " installBridge
 read -p "Static IP address?: " staticIp
 
-nic=$(ip -br l | awk '$1 !~ "lo|vir|wl|bridge0" { print $1}')
-bridgeName="bridge0"
+nic=$(ip -br l | awk '$1 !~ "lo|vir|wl|br0|lxc" { print $1}')
+bridgeName=$(ip -br l | awk '$1 !~ "lo|vir|wl|enp" { print $1}')
+
 
 if [ "$installBridge" == "bridge" ];
 then
   apt install -y bridge-utils
-  brctl addbr $bridgeName
+  if [[ -z "$bridgeName" ]]; then
+    brctl addbr $bridgeName
+  fi
   brctl addif $bridgeName $nic
   echo $nic
   sed -i 's/iface '"$(echo ${nic})"' inet dhcp/# iface '"$(echo ${nic})"' inet dhcp/' /etc/network/interfaces
