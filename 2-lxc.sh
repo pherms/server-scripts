@@ -1,6 +1,6 @@
 #!/bin/bash
 # install lxc
-apt install lxc libvirt0 libpam-cgfs bridge-utils uidmap libvirt-clients libvirt-daemon-system iptables ebtables dnsmasq-base libxml2-utils iproute2 -y --no-install-recommends
+apt install lxc lxc-templates debootstrap libvirt0 libpam-cgfs bridge-utils uidmap libvirt-clients libvirt-daemon-system iptables ebtables dnsmasq-base libxml2-utils iproute2 cgroupfs-mount -y --no-install-recommends
 
 bridge=$(ip -br l | awk '$1 !~ "lo|vir|wl|enp" { print $1}')
 
@@ -35,3 +35,10 @@ fi
 # allow admin user to create virtual network interfaces
 echo "Allow user to create asdditional vNICs"
 echo admin veth lxcbr0 10 >> /etc/lxc/lxc-usernet
+
+# make cgroup systemd mount
+echo "Create directory for cgroup systemd mount"
+cgroupDir="/sys/fs/cgroup/systemd"
+mkdir -p $cgroupDir
+mount -t cgroup -o none,name=systemd systemd $cgroupDir
+
