@@ -26,7 +26,10 @@ if [[ -z "$isContrib" ]]; then
 fi
 
 apt update -y
-apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-linux snapd lshw xfsprogs
+apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-linux snapd lshw xfsprogs openssh-server
+
+systemctl enable ssh.service
+systemctl start ssh.service
 
 if [ "${addRegularUser,,}" = "y" ]; then
   #add regular user
