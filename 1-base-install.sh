@@ -26,12 +26,22 @@ if [[ -z "$isContrib" ]]; then
 fi
 
 apt update -y
-apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-linux
+apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-linux snapd lshw xfsprogs
 
 if [ "${addRegularUser,,}" = "y" ]; then
   #add regular user
   useradd -m -s /bin/bash -p $(openssl passwd -crypt $password) -G sudo $userName
 fi
+
+# setup fstab
+nvme=$(lsblk -d | grep nvme | awk '$1 !~ "loo|sd" {print $1}')
+if [ -z "$nvme" ]; then
+  echo "second disk found"
+  echo "Creating mount point"
+  mkdir -p /mnt/vmdisks
+  echo "Mounting second disk"
+  echo "/dev/$nvme  /mnt/vmdisks  xfs   defaults,relatime  0 0"
+fi  
 
 # configure screenfetch
 echo "if [ -f /usr/bin/screenfetch ]; then" >> /etc/profile

@@ -1,6 +1,7 @@
 #!/bin/bash
 # install lxc
 apt install lxc lxc-templates debootstrap libvirt0 libpam-cgfs bridge-utils uidmap libvirt-clients libvirt-daemon-system iptables ebtables dnsmasq-base libxml2-utils iproute2 cgroupfs-mount -y --no-install-recommends
+snap install lxd
 
 bridge=$(ip -br l | awk '$1 !~ "lo|vir|wl|enp" { print $1}')
 
@@ -42,3 +43,4 @@ cgroupDir="/sys/fs/cgroup/systemd"
 mkdir -p $cgroupDir
 mount -t cgroup -o none,name=systemd systemd $cgroupDir
 
+logout
