@@ -54,8 +54,8 @@ table inet firewall {
 
         tcp dport { 22 } accept
 
-        iif != lo ip daddr 127.0.0.1/8 counter drop comment "drop connections to loopback not coming from loopback"
-		iif != lo ip6 daddr ::1/128 counter drop comment "drop connections to loopback not coming from loopback"
+        # iif != lo ip daddr 127.0.0.1/8 counter drop comment "drop connections to loopback not coming from loopback"
+		# iif != lo ip6 daddr ::1/128 counter drop comment "drop connections to loopback not coming from loopback"
         
         # Uncomment to enable logging of denied inbound traffic
         # log prefix "[nftables] Inbound Denied: " counter drop
