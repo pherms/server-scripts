@@ -42,13 +42,13 @@ table inet firewall {
         type filter hook input priority 0; policy drop;
 
         # Allow traffic from established and related packets, drop invalid
-        ct state vmap { established : accept, related : accept, invalid : drop } 
+        ct state vmap { established: accept, related: accept, invalid: drop } 
 
         # Allow loopback traffic.
         iifname lo accept
 
         # Jump to chain according to layer 3 protocol using a verdict map
-        meta protocol vmap { ip : jump inbound_ipv4, ip6 : jump inbound_ipv6 }
+        meta protocol vmap { ip: jump inbound_ipv4, ip6: jump inbound_ipv6 }
 
         tcp dport { 22 } accept
 
