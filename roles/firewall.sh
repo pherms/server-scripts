@@ -10,29 +10,29 @@ echo "Geselecteerde rol: $role"
 # switch statement rol
 case $role in
 db)
-  ./fw-rules/firewall-base.sh
-  ./fw-rules/firewall-db.sh
+  ./roles/fw-rules/firewall-base.sh
+  ./roles/fw-rules/firewall-db.sh
 infra)
-  ./fw-rules/firewall-base.sh
-  ./fw-rules/firewall-infra.sh
+  ./roles/fw-rules/firewall-base.sh
+  ./roles/fw-rules/firewall-infra.sh
 proxy)
-  ./fw-rules/firewall-base.sh
-  ./fw-rules/firewall-proxy.sh
+  ./roles/fw-rules/firewall-base.sh
+  ./roles/fw-rules/firewall-proxy.sh
 web)
-  ./fw-rules/firewall-base.sh
-  ./fw-rules/firewall-web.sh
+  ./roles/fw-rules/firewall-base.sh
+  ./roles/fw-rules/firewall-web.sh
 docker)
-  ./fw-rules/firewall-base.sh
-  ./fw-rules/firewall-docker.sh
+  ./roles/fw-rules/firewall-base.sh
+  ./roles/fw-rules/firewall-docker.sh
 ventrilo)
-  ./fw-rules/firewall-base.sh
-  ./fw-rules/firewall-ventrilo.sh
+  ./roles/fw-rules/firewall-base.sh
+  ./roles/fw-rules/firewall-ventrilo.sh
 smaba)
-  ./fw-rules/firewall-base.sh
-  ./fw-rules/firewall-smb.sh
+  ./roles/fw-rules/firewall-base.sh
+  ./roles/fw-rules/firewall-smb.sh
 smtp)
-  ./fw-rules/firewall-base.sh
-  ./fw-rules/firewall-smtp.sh
+  ./roles/fw-rules/firewall-base.sh
+  ./roles/fw-rules/firewall-smtp.sh
 *)
 echo "Rol niet gevonden. Script wordt afgebroken"
 exit 1
