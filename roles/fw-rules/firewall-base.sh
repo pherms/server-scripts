@@ -5,13 +5,11 @@ table inet firewall {
     set LANv4 {
 		type ipv4_addr
 		flags interval
-
 		elements = { 192.168.2.0/24, 169.254.0.0/16 }
 	}
 	set LANv6 {
 		type ipv6_addr
 		flags interval
-
 		elements = { 2a02:a462:72b3:1::/64, fe80::5604:a6ff:fe48:9010/64 }
 	}
                                                                                  
