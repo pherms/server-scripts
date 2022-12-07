@@ -1,9 +1,12 @@
 #!/bin/bash
-read -p "Welke rol krijgt deze server? (db,infra,proxy,web,docker,ventrilo,samba,smtp)? " role
+#read -p "Welke rol krijgt deze server? (db,infra,proxy,web,docker,ventrilo,samba,smtp)? " role
+role=$1
 echo "Installeren nftables (firewall)"
 apt update
 apt install -y nftables
 
+echo "Argument: $1"
+echo "Geselecteerde rol: $role"
 # switch statement rol
 case $role in
 db)
