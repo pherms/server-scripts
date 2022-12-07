@@ -1,4 +1,4 @@
-#!/usr/bin/nft -f
+#!/usr/sbin/nft -f
 
 # Web
 add rule inet firewall input ip @LANv4 tcp dport { 123 } accept

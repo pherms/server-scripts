@@ -1,3 +1,3 @@
-#!/usr/bin/nft -f
+#!/usr/sbin/nft -f
 
 add rule inet firewall input tcp dport { 80, 443 } accept

@@ -1,4 +1,4 @@
-#!/usr/bin/nft -f
+#!/usr/sbin/nft -f
 
 # Samba filesharing
 add rule inet firewall inbound ip @LANv4 tcp dport { 25 } accept
