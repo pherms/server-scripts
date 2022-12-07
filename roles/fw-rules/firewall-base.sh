@@ -52,10 +52,10 @@ table inet firewall {
         # Jump to chain according to layer 3 protocol using a verdict map
         meta protocol vmap { ip: jump inbound_ipv4, ip6: jump inbound_ipv6 }
 
-        tcp dport { 22 } accept
+        tcp dport 22 accept
 
-        iifname != lo ip daddr 127.0.0.1/8 counter drop comment "drop connections to loopback not coming from loopback"
-		iifname != lo ip6 daddr ::1/128 counter drop comment "drop connections to loopback not coming from loopback"
+        # iifname != lo ip daddr 127.0.0.1/8 counter drop comment "drop connections to loopback not coming from loopback"
+		# iifname != lo ip6 daddr ::1/128 counter drop comment "drop connections to loopback not coming from loopback"
         
         # Uncomment to enable logging of denied inbound traffic
         # log prefix "[nftables] Inbound Denied: " counter drop
