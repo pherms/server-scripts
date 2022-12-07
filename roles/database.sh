@@ -7,4 +7,4 @@ echo "Enable en start MariaDB service"
 systemctl enable mariadb.service
 systemctl start mariadb.service
 
-./fw-rules/firewall.sh db
+./fw-rules/firewall-base.sh db
