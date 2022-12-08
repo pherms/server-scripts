@@ -60,3 +60,6 @@ case $role in
       ;;
 esac
 
+echo "Opslaan van de ruleset in /etc/nftables.conf"
+mv /etc/nftables.conf /etc/nftables.conf.empty
+nft list ruleset >> /etc/nftables.conf
