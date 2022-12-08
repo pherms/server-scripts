@@ -15,6 +15,6 @@ sed -i 's/bind-address/#bind-address/' /etc/mysql/mariadb.conf.d/50-server.cnf
 
 echo "Enable en start MariaDB service"
 systemctl enable mariadb.service
-systemctl start mariadb.service
+systemctl restart mariadb.service
 
 ./roles/firewall.sh $1
