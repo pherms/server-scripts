@@ -5,36 +5,53 @@ echo "Installeren nftables (firewall)"
 apt update
 apt install -y nftables
 
+systemctl enable nftables.service
+systemctl start nftables.service
+
 echo "Argument: $1"
 echo "Geselecteerde rol: $role"
 # switch statement rol
 case $role in
     db)
+      echo "Installeren basis firewall regel set"
       ./roles/fw-rules/firewall-base.sh
+      echo "Installeren $role specifieke regel set"
       ./roles/fw-rules/firewall-db.sh
       ;;
     infra)
+      echo "Installeren basis firewall regel set"
       ./roles/fw-rules/firewall-base.sh
+      echo "Installeren $role specifieke regel set"
       ./roles/fw-rules/firewall-infra.sh
       ;;
     proxy)
+      echo "Installeren basis firewall regel set"
       ./roles/fw-rules/firewall-base.sh
+      echo "Installeren $role specifieke regel set"
       ./roles/fw-rules/firewall-proxy.sh
       ;;
     web)
+      echo "Installeren basis firewall regel set"
       ./roles/fw-rules/firewall-base.sh
+      echo "Installeren $role specifieke regel set"
       ./roles/fw-rules/firewall-web.sh
       ;;
     docker)
+      echo "Installeren basis firewall regel set"
       ./roles/fw-rules/firewall-base.sh
+      echo "Installeren $role specifieke regel set"
       ./roles/fw-rules/firewall-docker.sh
       ;;
     smaba)
+      echo "Installeren basis firewall regel set"
       ./roles/fw-rules/firewall-base.sh
+      echo "Installeren $role specifieke regel set"
       ./roles/fw-rules/firewall-smb.sh
       ;;
     smtp)
+      echo "Installeren basis firewall regel set"
       ./roles/fw-rules/firewall-base.sh
+      echo "Installeren $role specifieke regel set"
       ./roles/fw-rules/firewall-smtp.sh
       ;;
     *)
@@ -43,5 +60,3 @@ case $role in
       ;;
 esac
 
-systemctl enable nftables.service
-systemctl start nftables.service
