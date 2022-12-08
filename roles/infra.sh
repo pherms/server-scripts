@@ -1,4 +1,7 @@
 #!/bin/bash
+read -p "Wat is de hostnaam van deze server?: " hostname
+echo "Setting hostname"
+echo $hostname >> /etc/hostname
 
 echo "Installeren bind DNS en DHCP server"
 apt update
@@ -52,3 +55,5 @@ fi
 echo "Enable en start bind DNS server"
 systemctl enable named
 systemctl start named
+
+#./roles/firewall.sh $1

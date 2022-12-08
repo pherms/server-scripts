@@ -1,6 +1,7 @@
 #!/bin/bash
 read -p "Install bridge or nic config?: " installBridge
 read -p "Static IP address?: " staticIp
+read -p "Welke rol ((I)nfra,(D)b,(W)eb,(P)roxy,Do(C)ker,(M)ail,(S)amba krijgt deze machine?: " role
 
 nic=$(ip -br l | awk '$1 !~ "lo|vir|wl|br0|lxc" { print $1}')
 bridgeName=$(ip -br l | awk '$1 !~ "lo|vir|wl|enp" { print $1}')
@@ -48,3 +49,31 @@ else
 fi
 
 apt install -y inetutils-ping
+
+$role="${role,,}"
+case $role in
+  c)
+  ./roles/docker.sh docker
+  ;;
+  d)
+  ./roles/database.sh db
+  ;;
+  i)
+  ./roles/infra.sh infra
+  ;;
+  m)
+  ./roles/mail.sh smtp
+  ;;
+  p)
+  ./roles/proxy.sh proxy
+  ;;
+  s)
+  ./roles/samba.sh samba
+  ;;
+  w)
+  ./roles/web.sh web
+  ;;
+  *)
+  echo "Geen geldige keuze. Script wordt afgebroken"
+  exit 1
+esac

@@ -29,10 +29,6 @@ case $role in
       ./roles/fw-rules/firewall-base.sh
       ./roles/fw-rules/firewall-docker.sh
       ;;
-    ventrilo)
-      ./roles/fw-rules/firewall-base.sh
-      ./roles/fw-rules/firewall-ventrilo.sh
-      ;;
     smaba)
       ./roles/fw-rules/firewall-base.sh
       ./roles/fw-rules/firewall-smb.sh
