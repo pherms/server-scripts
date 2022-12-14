@@ -43,8 +43,8 @@ fi
 
 apt install -y inetutils-ping
 
-$role="${role,,}"
-case $role in
+selectedRole="${role,,}"
+case $selectedRole in
   c)
   ./roles/docker.sh docker
   ;;
