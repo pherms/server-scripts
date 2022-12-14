@@ -67,10 +67,10 @@ chown -R www-data:www-data wordpress
 rm wordpress.tar.gz
 
 echo "Downloaden en installeren PhpMyAdmin"
-curl -o phpmyadmin.tar.gz https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz
+curl -o phpmyadmin.tar.gz https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-english.tar.gz
 tar -xzvf phpmyadmin.tar.gz
 chown -R www-data:www-data phpmyadmin
 rm phpmyadmin
 
 echo "Bijwerken firewall regels"
-#./roles/firewall.sh $1
+./roles/firewall.sh $1
