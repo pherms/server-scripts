@@ -102,20 +102,20 @@ cd /var/www/
 nextcloudSourceFile="nextcloud.zip"
 nextcloudDir="nextcloud"
 nextcloudUrl="https://download.nextcloud.com/server/releases/nextcloud-25.0.2.zip"
-# downloadExtract $nextcloudSourceFile $nextcloudDir $nextcloudUrl
+downloadExtract $nextcloudSourceFile $nextcloudDir $nextcloudUrl
 
 echo "Downloaden en installeren van wordpress"
 cd /var/www/
 wordpressSourceFile="wordpress.tar.gz"
 wordpressDir="wordpress"
 wordpressUrl="https://wordpress.org/latest.tar.gz"
-# downloadExtract $wordpressSourceFile $wordpressDir $wordpressUrl
+downloadExtract $wordpressSourceFile $wordpressDir $wordpressUrl
 
 echo "Downloaden en installeren PhpMyAdmin"
 phpmyadminSourceFile="phpmyadmin.tar.gz"
 phpmyadminDir="phpmyadmin"
 phpmyadminUrl="https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-english.tar.gz"
-# downloadExtract $phpmyadminSourceFile $phpmyadminDir $phpmyadminUrl
+downloadExtract $phpmyadminSourceFile $phpmyadminDir $phpmyadminUrl
 
 shopt -u nocaseglob
 
