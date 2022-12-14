@@ -142,3 +142,5 @@ downloadExtract $phpmyadminSourceFile $phpmyadminDir $phpmyadminUrl
 # fi
 
 ./roles/firewall.sh $role
+
+shopt -u nocaseglob
