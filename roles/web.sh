@@ -121,7 +121,7 @@ echo "Downloaden en installeren PhpMyAdmin"
 phpmyadminSourceFile="phpmyadmin.tar.gz"
 phpmyadminDir="phpmyadmin"
 phpmyadminUrl="https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-english.tar.gz"
-downloadExtract $phpmyadminSourceFile $pgpmyadminDir $phpmyadminUrl
+downloadExtract $phpmyadminSourceFile $phpmyadminDir $phpmyadminUrl
 # curl -o $phpmyadminSourceFile https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-english.tar.gz
 # tar -xzf $phpmyadminSourceFile
 # phpExtractDir=$(ls -d *php*)
