@@ -24,7 +24,7 @@ function downloadExtract {
   extractDir=$(ls -d *$2*)
 
   if [[ "$extractDir" != "$2" ]]; then
-    mv $extractDir $2
+    mv $extractDir $2/
   fi
 
   if [[ -d "$2" ]]; then
