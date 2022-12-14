@@ -72,22 +72,6 @@ echo "opcache.revalidate_freq = 1" >> /etc/php/7.4/apache2/php.ini
 echo "Apache2 service herstarten"
 systemctl restart apache2
 
-echo "Downloaden en installeren van NextCloud"
-cd /var/www/
-nextcloudSourceFile="nextcloud.zip"
-nextcloudDir="nextcloud"
-nextcloudUrl="https://download.nextcloud.com/server/releases/nextcloud-25.0.2.zip"
-downloadExtract $nextcloudSourceFile $nextcloudDir $nextcloudUrl
-# curl -o $nextcloudSourceFile https://download.nextcloud.com/server/releases/nextcloud-25.0.2.zip
-# unzip -q $nextcloudSourceFile
-# phpExtractDir=$(ls -d *next*)
-
-# if [[ -n "$phpExtractDir" ]]; then
-#   chown -R www-data:www-data nextcloud
-#   rm nextcloud.zip
-#   echo "Downloaden en uitpakken van Nextcloud is voltooid"
-# fi
-
 echo "Setup Letsencrypt certbot"
 mkdir -p /var/lib/letsencrypt/.well-known
 chgrp www-data /var/lib/letsencrypt
@@ -109,38 +93,27 @@ if [[ "$configOk" == "Syntax OK" ]]; then
   systemctl restart apache2
 fi
 
+echo "Downloaden en installeren van NextCloud"
+cd /var/www/
+nextcloudSourceFile="nextcloud.zip"
+nextcloudDir="nextcloud"
+nextcloudUrl="https://download.nextcloud.com/server/releases/nextcloud-25.0.2.zip"
+downloadExtract $nextcloudSourceFile $nextcloudDir $nextcloudUrl
+
 echo "Downloaden en installeren van wordpress"
 cd /var/www/
 wordpressSourceFile="wordpress.tar.gz"
 wordpressDir="wordpress"
 wordpressUrl="https://wordpress.org/latest.tar.gz"
 downloadExtract $wordpressSourceFile $wordpressDir $wordpressUrl
-# curl -o $wordpressSourceFile https://wordpress.org/latest.tar.gz
-# tar -xzf $wordpressSourceFile
-# phpExtractDir=$(ls -d *wordpress*)
-
-# if [[ -n "$phpExtractDir" ]]; then
-#   chown -R www-data:www-data $wordpressDir
-#   rm $wordpressSourceFile
-#   echo "Downloaden en uitpakken van wordpress is voltooid"
-# fi
 
 echo "Downloaden en installeren PhpMyAdmin"
 phpmyadminSourceFile="phpmyadmin.tar.gz"
 phpmyadminDir="phpmyadmin"
 phpmyadminUrl="https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-english.tar.gz"
 downloadExtract $phpmyadminSourceFile $phpmyadminDir $phpmyadminUrl
-# curl -o $phpmyadminSourceFile https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-english.tar.gz
-# tar -xzf $phpmyadminSourceFile
-# phpExtractDir=$(ls -d *php*)
 
-# if [[ -n "$phpExtractDir" ]]; then
-#   mv $phpExtractDir $phpmyadminDir
-#   chown -R www-data:www-data $phpmyadminDir
-#   rm $phpmyadminSourceFile
-#   echo "Downloaden en uitpakken van phpmyadmin is voltooid"
-# fi
-
+echo "De firewall rules voor $role worden aangemaakt"
 ./roles/firewall.sh $role
 
 shopt -u nocaseglob
