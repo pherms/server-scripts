@@ -2,6 +2,9 @@
 role=$1
 shopt -s nocaseglob
 
+echo "De firewall rules aanmaken voor: $role"
+./roles/firewall.sh $role
+
 function downloadExtract {
   # $1: Source zip file, ie nextcloud.zip
   # $2: Program dir, i.e nextcloud
@@ -92,9 +95,6 @@ configOk=$(apachectl configtest)
 if [[ "$configOk" == "Syntax OK" ]]; then
   systemctl restart apache2
 fi
-
-echo "De firewall rules aanmaken voor: $role"
-./roles/firewall.sh $role
 
 echo "Setup webserver apache voltooid. Installeren webapps."
 echo "Downloaden en installeren van NextCloud"
