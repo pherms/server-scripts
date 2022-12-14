@@ -8,7 +8,6 @@ apt install -y nftables
 systemctl enable nftables.service
 systemctl start nftables.service
 
-echo "Argument: $1"
 echo "Geselecteerde rol: $role"
 # switch statement rol
 case $role in

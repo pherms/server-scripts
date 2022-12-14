@@ -113,7 +113,7 @@ phpmyadminDir="phpmyadmin"
 phpmyadminUrl="https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-english.tar.gz"
 # downloadExtract $phpmyadminSourceFile $phpmyadminDir $phpmyadminUrl
 
+shopt -u nocaseglob
+
 echo "De firewall rules aanmaken voor: $role"
 ./roles/firewall.sh $role
-
-shopt -u nocaseglob
