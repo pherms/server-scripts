@@ -1,5 +1,6 @@
 #!/bin/bash
 role=$1
+shopt -s nocaseglob
 
 function downloadExtract {
   # $1: Source zip file, ie nextcloud.zip
