@@ -1,4 +1,6 @@
 #!/bin/bash
+role=$1
+
 function downloadExtract {
   # $1: Source zip file, ie nextcloud.zip
   # $2: Program dir, i.e nextcloud
@@ -21,7 +23,7 @@ function downloadExtract {
 
   extractDir=$(ls -d)
 
-  if [[ "$extractDir" -ne "$2" ]]; then
+  if [[ "$extractDir" != "$2" ]]; then
     mv $extractDir $2
   fi
 
@@ -133,5 +135,4 @@ downloadExtract $phpmyadminSourceFile $phpmyadminDir $phpmyadminUrl
 #   echo "Downloaden en uitpakken van phpmyadmin is voltooid"
 # fi
 
-echo "Bijwerken firewall regels"
-./roles/firewall.sh $1
+./roles/firewall.sh $role
