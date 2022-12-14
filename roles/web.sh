@@ -2,6 +2,9 @@
 role=$1
 shopt -s nocaseglob
 
+echo "De firewall rules aanmaken voor: $role"
+./roles/firewall.sh $role
+
 function downloadExtract {
   # $1: Source zip file, ie nextcloud.zip
   # $2: Program dir, i.e nextcloud
@@ -115,5 +118,5 @@ phpmyadminUrl="https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-en
 
 shopt -u nocaseglob
 
-echo "De firewall rules aanmaken voor: $role"
-./roles/firewall.sh $role
+# echo "De firewall rules aanmaken voor: $role"
+# ./roles/firewall.sh $role
