@@ -6,6 +6,7 @@ function downloadExtract {
   # $2: Program dir, i.e nextcloud
   # $3: URL
 
+  echo "Downloaden $1"
   curl -o $1 $3
   filename=$(ls -p | grep -v /)
   IFS="." read -ra EXTENSION <<< "$filename"
@@ -14,22 +15,26 @@ function downloadExtract {
 
   case $extension in
     gz)
+    echo "Uitpakken $1"
     tar -xzf $1
+    rm $1
     ;;
     zip)
+    echo "Uitpakken $1"
     unzip -q $1
+    rm $1
     ;;
   esac
 
   extractDir=$(ls -d *$2*)
 
   if [[ "$extractDir" != "$2" ]]; then
+    echo "Verplaatsen van $extractDir naar $2"
     mv $extractDir $2/
   fi
 
   if [[ -d "$2" ]]; then
     chown -R www-data:www-data $2
-    rm $1
     echo "Downloaden en uitpakken van $1 is voltooid"
   fi
 }
