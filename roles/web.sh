@@ -21,7 +21,7 @@ function downloadExtract {
     ;;
   esac
 
-  extractDir=$(ls -d)
+  extractDir=$(ls -d *$2*)
 
   if [[ "$extractDir" != "$2" ]]; then
     mv $extractDir $2
