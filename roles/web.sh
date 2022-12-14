@@ -4,7 +4,7 @@ echo "Setting hostname"
 echo $hostname >> /etc/hostname
 
 echo "Webserver apache wordt geïnstalleerd"
-apt install -y apache apt-transport-https lsb-release ca-certificates curl php php-mysql libapache2-mod-php php-curl php-cli php-gd php-common php-xml php-json php-intl php-pear php-imagick php-dev php-common php-mbstring php-zip php-soap php-bz2 php-bcmath php-gmp php-apcu
+apt install -y apache2 apt-transport-https lsb-release ca-certificates curl php php-mysql libapache2-mod-php php-curl php-cli php-gd php-common php-xml php-json php-intl php-pear php-imagick php-dev php-common php-mbstring php-zip php-soap php-bz2 php-bcmath php-gmp php-apcu
 apt install -y libmagickcore-dev unzip certbot
 
 echo "Activeren apache modules"
