@@ -93,6 +93,10 @@ if [[ "$configOk" == "Syntax OK" ]]; then
   systemctl restart apache2
 fi
 
+echo "De firewall rules aanmaken voor: $role"
+./roles/firewall.sh $role
+
+echo "Setup webserver apache voltooid. Installeren webapps."
 echo "Downloaden en installeren van NextCloud"
 cd /var/www/
 nextcloudSourceFile="nextcloud.zip"
@@ -115,5 +119,3 @@ phpmyadminUrl="https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-en
 
 shopt -u nocaseglob
 
-echo "De firewall rules aanmaken voor: $role"
-./roles/firewall.sh $role
