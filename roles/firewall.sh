@@ -11,12 +11,6 @@ systemctl start nftables.service
 echo "Geselecteerde rol: $role"
 # switch statement rol
 case $role in
-    web)
-      echo "Installeren basis firewall regel set"
-      ./roles/fw-rules/firewall-base.sh
-      echo "Installeren $role specifieke regel set"
-      ./roles/fw-rules/firewall-web.sh
-      ;;
     db)
       echo "Installeren basis firewall regel set"
       ./roles/fw-rules/firewall-base.sh
@@ -34,6 +28,12 @@ case $role in
       ./roles/fw-rules/firewall-base.sh
       echo "Installeren $role specifieke regel set"
       ./roles/fw-rules/firewall-proxy.sh
+      ;;
+    web)
+      echo "Installeren basis firewall regel set"
+      ./roles/fw-rules/firewall-base.sh
+      echo "Installeren $role specifieke regel set"
+      ./roles/fw-rules/firewall-web.sh
       ;;
     docker)
       echo "Installeren basis firewall regel set"
