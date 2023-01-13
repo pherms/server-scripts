@@ -26,4 +26,4 @@ echo "Installeren van docker engine"
 apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
 echo "Bijwerken firewall regels"
-#./roles/firewall.sh $1
+./roles/firewall.sh $1
