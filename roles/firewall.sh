@@ -1,5 +1,5 @@
 #!/bin/bash
-#read -p "Welke rol krijgt deze server? (db,infra,proxy,web,docker,ventrilo,samba,smtp)? " role
+#read -p "Welke rol krijgt deze server? (db,infra,proxy,web,docker,ventrilo,samba,smtp,kibana)? " role
 role=$1
 echo "Installeren nftables (firewall)"
 apt update
@@ -22,6 +22,12 @@ case $role in
       ./roles/fw-rules/firewall-base.sh
       echo "Installeren $role specifieke regel set"
       ./roles/fw-rules/firewall-infra.sh
+      ;;
+    kibana)
+      echo "Installeren basis firewall regel set"
+      ./roles/fw-rules/firewall-base.sh
+      echo "Installeren $role specifieke regel set"
+      ./roles/fw-rules/firewall-kibana.sh
       ;;
     proxy)
       echo "Installeren basis firewall regel set"

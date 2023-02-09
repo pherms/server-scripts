@@ -4,7 +4,7 @@ if [ "$installBridge" == "bridge" ]; then
   read -p "Static IP address?: " staticIp
 fi
 
-read -p "Welke rol ((I)nfra,(D)b,(W)eb,(P)roxy,Do(C)ker,(M)ail,(S)amba krijgt deze machine?: " role
+read -p "Welke rol ((I)nfra,(D)b,(W)eb,(P)roxy,Do(C)ker,(M)ail,(S)amba,(K)ibana) krijgt deze machine?: " role
 
 nic=$(ip -br l | awk '$1 !~ "lo|vir|wl|br0|lxc" { print $1}')
 bridgeName=$(ip -br l | awk '$1 !~ "lo|vir|wl|enp" { print $1}')
@@ -53,6 +53,9 @@ case $selectedRole in
   ;;
   i)
   ./roles/infra.sh infra
+  ;;
+  k)
+  ./roles/kibana.sh kibana
   ;;
   m)
   ./roles/mail.sh smtp

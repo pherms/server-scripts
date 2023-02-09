@@ -6,7 +6,17 @@ echo $hostname >> /etc/hostname
 echo "Mailserver wordt geïnstalleerd"
 echo "Installeren packages"
 
-apt install -y postfix openssl mailx
+apt install -y postfix openssl mailx curl wget gpg apt-transport-https 
+
+echo "Toevoegen van elasticsearch key aan repository"
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
+
+echo "Bijwerken sources list en bijwerken cache"
+echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
+apt update
+
+echo "Installeren van elastic-agent"
+apt install -y metricbeat filebeat elastic-agent
 
 echo "Writing postfix configuration"
 echo "smtpd_recipient_restrictions = reject_invalid_hostname, reject_unknown_recipient_domain, reject_unauth_destination, reject_rbl_client sbl.spamhaus.org, permit" >> /etc/postfix/main.cf
