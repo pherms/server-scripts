@@ -43,12 +43,20 @@ function downloadExtract {
   fi
 }
 
+function restartApache2 {
+  echo "Indien configuratie geen fouten bevat, dan herstarten"
+  configOk=$(apachectl configtest)
+  if [[ "$configOk" == "Syntax OK" ]]; then
+    systemctl restart apache2
+  fi
+}
+
 read -p "Wat is de hostnaam van deze server?: " hostname
 echo "Setting hostname"
 echo $hostname >> /etc/hostname
 
 echo "Webserver apache wordt geïnstalleerd"
-apt install -y apache2 apt-transport-https lsb-release ca-certificates curl php php-mysql libapache2-mod-php php-curl php-cli php-gd php-common php-xml php-json php-intl php-pear php-imagick php-dev php-common php-mbstring php-zip php-soap php-bz2 php-bcmath php-gmp php-apcu
+apt install -y apache2 apt-transport-https lsb-release ca-certificates curl php php-mysql libapache2-mod-php php-curl php-cli php-gd php-common php-xml php-json php-intl php-pear php-imagick php-dev php-common php-mbstring php-zip php-soap php-bz2 php-bcmath php-gmp php-apcu git composer
 apt install -y libmagickcore-dev unzip certbot curl wget gpg apt-transport-https 
 
 echo "Toevoegen van elasticsearch key aan repository"
@@ -100,11 +108,7 @@ echo "    Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec" >> wel
 echo "    Require method GET POST OPTIONS" >> well-known.conf
 echo "</Directory>" >> well-known.conf
 
-echo "Indien configuratie geen fouten bevat, dan herstarten"
-configOk=$(apachectl configtest)
-if [[ "$configOk" == "Syntax OK" ]]; then
-  systemctl restart apache2
-fi
+restartApache2
 
 echo "Setup webserver apache voltooid. Installeren webapps."
 echo "Downloaden en installeren van NextCloud"
@@ -113,6 +117,10 @@ nextcloudSourceFile="nextcloud.zip"
 nextcloudDir="nextcloud"
 nextcloudUrl="https://download.nextcloud.com/server/releases/nextcloud-25.0.2.zip"
 downloadExtract $nextcloudSourceFile $nextcloudDir $nextcloudUrl
+echo "Kopiëren van nextcloud apache2 config file"
+if [[ ! -f /etc/apache2/sites-available/cloud.conf ]]; then
+    cp ./roles/files/apache2/cloud.conf /etc/apache2/sites-available/coud.conf
+fi
 
 echo "Downloaden en installeren van wordpress"
 cd /var/www/
@@ -120,6 +128,16 @@ wordpressSourceFile="wordpress.tar.gz"
 wordpressDir="wordpress"
 wordpressUrl="https://wordpress.org/latest.tar.gz"
 downloadExtract $wordpressSourceFile $wordpressDir $wordpressUrl
+echo "Kopiëren van wordpress apache2 config file"
+if [[ ! -f /etc/apache2/sites-available/www.conf ]]; then
+    cp ./roles/files/apache2/www.conf /etc/apache2/sites-available/www.conf
+fi
+
+echo "Installeer Bookstack handmatig. Zie url: https://www.bookstackapp.com/docs/admin/installation/"
+echo "Kopiëren van Bookstack apache2 config file"
+if [[ ! -f /etc/apache2/sites-available/docs.conf ]]; then
+    cp ./roles/files/apache2/docs.conf /etc/apache2/sites-available/docs.conf
+fi
 
 echo "Downloaden en installeren PhpMyAdmin"
 phpmyadminSourceFile="phpmyadmin.tar.gz"
@@ -129,3 +147,7 @@ downloadExtract $phpmyadminSourceFile $phpmyadminDir $phpmyadminUrl
 
 shopt -u nocaseglob
 
+a2ensite www
+restartApache2
+
+./roles/firewall.sh $1

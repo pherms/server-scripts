@@ -39,7 +39,7 @@ read -p "Normale gebruiker toevoegen? (Y/N): " addSambaUser
 if [[ "${addSambaUser,,}" = "y" ]]; then
   GetPassword
   if [[ "$password1" = "$password2" ]]; then
-    echo "Passwords do match"
+    echo "Passwords match"
     password=$password1
   else
     GetPassword
@@ -47,4 +47,4 @@ if [[ "${addSambaUser,,}" = "y" ]]; then
 fi
 echo -e "$password\n$password" | smbpasswd -a -s $username
 
-#./roles/firewall.sh $1
+./roles/firewall.sh $1

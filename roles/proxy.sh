@@ -28,13 +28,35 @@ echo "Setup websites"
 echo "Setup Kibana"
 if [[ ! -f /etc/nginx/sites-available/kibana ]]; then
     cp ./roles/files/nginx/kibana /etc/nginx/sites-available/kibana
+    echo "Website Kibana live zetten..."
+    ln -s /etc/nginx/sites-available/kibana /etc/nginx/sites-enabled/kibana
 fi
 
-echo "Geconfigureerde websites live zetten"
-echo "Kibana..."
-ln -s /etc/nginx/sites-available/kibana /etc/nginx/sites-enabled/kibana
+echo "Setup Nextcloud"
+if [[ ! -f /etc/nginx/sites-available/cloud ]]; then
+    cp ./roles/files/nginx/cloud /etc/nginx/sites-available/cloud
+    echo "Website Nextcloud live zetten..."
+    ln -s /etc/nginx/sites-available/cloud /etc/nginx/sites-enabled/cloud
+fi
+
+echo "Setup wordpress"
+if [[ ! -f /etc/nginx/sites-available/www ]]; then
+    cp ./roles/files/nginx/www /etc/nginx/sites-available/www
+    echo "Website wordpress live zetten..."
+    ln -s /etc/nginx/sites-available/www /etc/nginx/sites-enabled/www
+fi
+
+echo "Setup Bookstack"
+if [[ ! -f /etc/nginx/sites-available/docs ]]; then
+    cp ./roles/files/nginx/docs /etc/nginx/sites-available/docs
+    echo "Website docs live zetten..."
+    ln -s /etc/nginx/sites-available/docs /etc/nginx/sites-enabled/docs
+fi
+
 status=$(nginx -t | awk '$1 !~ "syntax is ok" { print $1}')
 if [[ "$status" = "syntax is ok" ]]; then
     echo "De Kibana webserver is juist geconfigureerd"
+    systemctl restart nginx
 fi
-#./roles/firewall.sh $1
+
+./roles/firewall.sh $1

@@ -35,4 +35,4 @@ echo "Start en enable postfix service"
 systemctl enable postfix
 systemctl start postfix
 
-#./roles/firewall.sh $1
+./roles/firewall.sh $1
