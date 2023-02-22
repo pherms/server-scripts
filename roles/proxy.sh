@@ -25,28 +25,28 @@ echo "Disable default virtual host"
 unlink /etc/nginx/sites-enabled/default
 
 echo "Setup websites"
-echo "Setup Kibana"
+echo "Kibana"
 if [[ ! -f /etc/nginx/sites-available/kibana ]]; then
     cp ./roles/files/nginx/kibana /etc/nginx/sites-available/kibana
     echo "Website Kibana live zetten..."
     ln -s /etc/nginx/sites-available/kibana /etc/nginx/sites-enabled/kibana
 fi
 
-echo "Setup Nextcloud"
+echo "Nextcloud"
 if [[ ! -f /etc/nginx/sites-available/cloud ]]; then
     cp ./roles/files/nginx/cloud /etc/nginx/sites-available/cloud
     echo "Website Nextcloud live zetten..."
     ln -s /etc/nginx/sites-available/cloud /etc/nginx/sites-enabled/cloud
 fi
 
-echo "Setup wordpress"
+echo "wordpress"
 if [[ ! -f /etc/nginx/sites-available/www ]]; then
     cp ./roles/files/nginx/www /etc/nginx/sites-available/www
     echo "Website wordpress live zetten..."
     ln -s /etc/nginx/sites-available/www /etc/nginx/sites-enabled/www
 fi
 
-echo "Setup Bookstack"
+echo "Bookstack"
 if [[ ! -f /etc/nginx/sites-available/docs ]]; then
     cp ./roles/files/nginx/docs /etc/nginx/sites-available/docs
     echo "Website docs live zetten..."
@@ -55,7 +55,7 @@ fi
 
 status=$(nginx -t | awk '$1 !~ "syntax is ok" { print $1}')
 if [[ "$status" = "syntax is ok" ]]; then
-    echo "De Kibana webserver is juist geconfigureerd"
+    echo "Nginx is juist geconfigureerd. Restarting..."
     systemctl restart nginx
 fi
 

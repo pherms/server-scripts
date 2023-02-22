@@ -54,6 +54,7 @@ function restartApache2 {
 read -p "Wat is de hostnaam van deze server?: " hostname
 echo "Setting hostname"
 echo $hostname >> /etc/hostname
+phpVersion = "7.4"
 
 echo "Webserver apache wordt geïnstalleerd"
 apt install -y apache2 apt-transport-https lsb-release ca-certificates curl php php-mysql libapache2-mod-php php-curl php-cli php-gd php-common php-xml php-json php-intl php-pear php-imagick php-dev php-common php-mbstring php-zip php-soap php-bz2 php-bcmath php-gmp php-apcu git composer
@@ -73,22 +74,22 @@ echo "Activeren apache modules"
 a2enmod status rewrite ssl headers
 
 echo "Configureren php voor Nextcloud"
-sed -i 's/^file_uploads = .*/On/' /etc/php/7.4/apache2/php.ini
-sed -i 's/^allow_url_fopen = .*/On/' /etc/php/7.4/apache2/php.ini
-sed -i 's/^memory_limit = .*/512M/' /etc/php/7.4/apache2/php.ini
-sed -i 's/^upload_max_filesize = .*/500M/' /etc/php/7.4/apache2/php.ini
-sed -i 's/^post_max_size = .*/600M/' /etc/php/7.4/apache2/php.ini
-sed -i 's/^max_execution_time = .*/300/' /etc/php/7.4/apache2/php.ini
-sed -i 's/^display_errors = .*/Off/' /etc/php/7.4/apache2/php.ini
-sed -i 's/^date.timezone = .*/Europe\/Amsterdam/' /etc/php/7.4/apache2/php.ini
-sed -i 's/^foutput_buffering = .*/Off/' /etc/php/7.4/apache2/php.ini
+sed -i 's/^file_uploads = .*/On/' /etc/php/$phpVersion/apache2/php.ini
+sed -i 's/^allow_url_fopen = .*/On/' /etc/php/$phpVersion/apache2/php.ini
+sed -i 's/^memory_limit = .*/512M/' /etc/php/$phpVersion/apache2/php.ini
+sed -i 's/^upload_max_filesize = .*/500M/' /etc/php/$phpVersion/apache2/php.ini
+sed -i 's/^post_max_size = .*/600M/' /etc/php/$phpVersion/apache2/php.ini
+sed -i 's/^max_execution_time = .*/300/' /etc/php/$phpVersion/apache2/php.ini
+sed -i 's/^display_errors = .*/Off/' /etc/php/$phpVersion/apache2/php.ini
+sed -i 's/^date.timezone = .*/Europe\/Amsterdam/' /etc/php/$phpVersion/apache2/php.ini
+sed -i 's/^foutput_buffering = .*/Off/' /etc/php/$phpVersion/apache2/php.ini
 
-echo "opcache.enable = 1" >> /etc/php/7.4/apache2/php.ini
-echo "opcache.interned_strings_buffer = 8" >> /etc/php/7.4/apache2/php.ini
-echo "opcache.max_accelerated_files = 10000" >> /etc/php/7.4/apache2/php.ini
-echo "opcache.memory_consumption = 128" >> /etc/php/7.4/apache2/php.ini
-echo "opcache.save_comments = 1" >> /etc/php/7.4/apache2/php.ini
-echo "opcache.revalidate_freq = 1" >> /etc/php/7.4/apache2/php.ini
+echo "opcache.enable = 1" >> /etc/php/$phpVersion/apache2/php.ini
+echo "opcache.interned_strings_buffer = 8" >> /etc/php/$phpVersion/apache2/php.ini
+echo "opcache.max_accelerated_files = 10000" >> /etc/php/$phpVersion/apache2/php.ini
+echo "opcache.memory_consumption = 128" >> /etc/php/$phpVersion/apache2/php.ini
+echo "opcache.save_comments = 1" >> /etc/php/$phpVersion/apache2/php.ini
+echo "opcache.revalidate_freq = 1" >> /etc/php/$phpVersion/apache2/php.ini
 
 echo "Apache2 service herstarten"
 systemctl restart apache2

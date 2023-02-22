@@ -35,5 +35,9 @@ apt update
 echo "Installeren van docker engine"
 apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
+echo "Starting containers"
+# Starten containers. Onder andere Home assistant
+./roles/docker/homeassistant.sh
+
 echo "Bijwerken firewall regels"
 ./roles/firewall.sh $1

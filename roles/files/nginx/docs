@@ -2,7 +2,7 @@ server {
   listen 443;
   server_name docs.pascalherms.nl;
   location / {
-    proxy_pass http://sydney.merel107.local:8080/docs;
+    proxy_pass http://docs.merel107.local;
     proxy_http_version 1.1;
     proxy_set_header Upgrade \$http_upgrade;
     proxy_set_header Connection 'upgrade';
