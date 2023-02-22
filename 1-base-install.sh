@@ -6,7 +6,7 @@ function GetPassword {
   read -sp "Re-enter password: " password2
 }
 
-function copyBeatConfig {
+function startBeats {
   # $1: type agent (filebeat of metricbeat)
   agentType=$1
   configPath="/etc/$agentType"
@@ -17,6 +17,8 @@ function copyBeatConfig {
       yes | cp ./roles/files/system/${agentType}.yml ${configPath}/
     fi
   fi
+  systemctl enable agentType
+  systemctl start agentType
 }
 
 # Setup regular user
@@ -56,8 +58,8 @@ apt update
 echo "Installeren van elastic-agent"
 apt install -y metricbeat filebeat elastic-agent
 
-copyBeatConfig metricbeat
-copyBeatConfig filebeat
+startBeats metricbeat
+startBeats filebeat
 
 if [ "${addRegularUser,,}" = "y" ]; then
   #add regular user
