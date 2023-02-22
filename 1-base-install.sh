@@ -6,6 +6,19 @@ function GetPassword {
   read -sp "Re-enter password: " password2
 }
 
+function copyBeatConfig {
+  # $1: type agent (filebeat of metricbeat)
+  agentType=$1
+  configPath="/etc/$agentType"
+
+  if [[ -d /etc/${agentType} ]]; then
+    echo "Kopieren $agentType config file"
+    if [[ -f ${configPath}/${agentType}.yml ]]; then
+      yes | cp ./roles/files/system/${agentType}.yml ${configPath}/
+    fi
+  fi
+}
+
 # Setup regular user
 read -p "Normale gebruiker toevoegen? (Y/N): " addRegularUser
 if [[ "${addRegularUser,,}" = "y" ]]; then
@@ -42,6 +55,9 @@ apt update
 
 echo "Installeren van elastic-agent"
 apt install -y metricbeat filebeat elastic-agent
+
+copyBeatConfig metricbeat
+copyBeatConfig filebeat
 
 if [ "${addRegularUser,,}" = "y" ]; then
   #add regular user

@@ -150,7 +150,6 @@ systemctl reload apache2
 
 shopt -u nocaseglob
 
-a2ensite www
 restartApache2
 
 # firewall rules verplaatst naar top van het script
