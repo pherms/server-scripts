@@ -2,25 +2,25 @@
 
 # $1: DHCP protocol version
 function dhcpserver {
-    dhcpProtocol = $1
+    dhcpProtocol=$1
 
-    if [[ ! -f /etc/dhcp/dhcpd$dhcpProtocol.conf ]]; then
+    if [[ ! -f /etc/dhcp/dhcpd${$dhcpProtocol}.conf ]]; then
         echo "Copy config file"
-        cp ./roles/files/system/dhcp4$dhcpProtocol.conf /etc/dhcp/
+        cp ./roles/files/system/dhcp4${$dhcpProtocol}.conf /etc/dhcp/
     fi
 
     echo "Setup DHCP service Units"
-    if [[ ! -f /etc/systemd/system/dhcp-server$dhcpProtocol.service ]]; then
+    if [[ ! -f /etc/systemd/system/dhcp-server${$dhcpProtocol}.service ]]; then
         echo "DHCP IPv$dhcpProtocol Unit"
-        cp ./roles/files/system/dhcp-server$dhcpProtocol.service /etc/systemd/system/
+        cp ./roles/files/system/dhcp-server${$dhcpProtocol}.service /etc/systemd/system/
         systemctl daemon-reload
         
         echo "DHCP server voor IPv$dhcpProtocol starten"
-        dhcpstatus=$(systemctl show dhcp-server$dhcpProtocol --property=SubState | awk 'BEGIN{FS="="} {print $2}')
+        dhcpstatus=$(systemctl show dhcp-server${$dhcpProtocol} --property=SubState | awk 'BEGIN{FS="="} {print $2}')
         if [[ "$dhcpstatus" != "running" ]]; then
             echo "Enable en start DHCP server IPv$dhcpProtocol"
-            systemctl enable dhcp-server$dhcpProtocol.service
-            systemctl start dhcp-server$dhcpProtocol.service
+            systemctl enable dhcp-server${$dhcpProtocol}.service
+            systemctl start dhcp-server${$dhcpProtocol}.service
         else
             echo "DHCP server voor IPv$dhcpProtocol is al gestart"
         fi
