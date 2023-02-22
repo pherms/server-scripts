@@ -117,7 +117,7 @@ nextcloudUrl="https://download.nextcloud.com/server/releases/nextcloud-25.0.2.zi
 downloadExtract $nextcloudSourceFile $nextcloudDir $nextcloudUrl
 echo "Kopiëren van nextcloud apache2 config file"
 if [[ ! -f /etc/apache2/sites-available/cloud.conf ]]; then
-    cp ./roles/files/apache2/cloud.conf /etc/apache2/sites-available/coud.conf
+    cp ./roles/files/apache/cloud.conf /etc/apache2/sites-available/coud.conf
 fi
 
 echo "Downloaden en installeren van wordpress"
@@ -128,13 +128,13 @@ wordpressUrl="https://wordpress.org/latest.tar.gz"
 downloadExtract $wordpressSourceFile $wordpressDir $wordpressUrl
 echo "Kopiëren van wordpress apache2 config file"
 if [[ ! -f /etc/apache2/sites-available/www.conf ]]; then
-    cp ./roles/files/apache2/www.conf /etc/apache2/sites-available/www.conf
+    cp ./roles/files/apache/www.conf /etc/apache2/sites-available/www.conf
 fi
 
 echo "Installeer Bookstack handmatig. Zie url: https://www.bookstackapp.com/docs/admin/installation/"
 echo "Kopiëren van Bookstack apache2 config file"
 if [[ ! -f /etc/apache2/sites-available/docs.conf ]]; then
-    cp ./roles/files/apache2/docs.conf /etc/apache2/sites-available/docs.conf
+    cp ./roles/files/apache/docs.conf /etc/apache2/sites-available/docs.conf
 fi
 
 echo "Downloaden en installeren PhpMyAdmin"
@@ -143,9 +143,24 @@ phpmyadminDir="phpmyadmin"
 phpmyadminUrl="https://files.phpmyadmin.net/phpMyAdmin/5.2.0/phpMyAdmin-5.2.0-english.tar.gz"
 downloadExtract $phpmyadminSourceFile $phpmyadminDir $phpmyadminUrl
 
+echo "Verwijderen default site"
+defaultSite=$(a2query -s | awk '$1 ~ "000-default" { print $1}')
+if [[ "$defaultSite" = "000-default" ]]; then
+  echo "Default site is actief. Uitschakelen."
+  a2dissite $defaultSite
+fi
+
+a2dissite 000-default
+if [[ -d /var/www/html ]]; then
+  rm -rf /var/www/html
+fi
+
+echo "Apache2 configuratie verversen"
+systemctl reload apache2
+
 shopt -u nocaseglob
 
 a2ensite www
 restartApache2
 
-./roles/firewall.sh $1
+# firewall rules verplaatst naar top van het script
