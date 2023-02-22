@@ -9,6 +9,6 @@ WantedBy=multi-user.target
 [Service]
 KillMode=mixed
 Type=forking
-PIDFile=/var/run/dhcpd6.pid
+PIDFile=/run/dhcpd6.pid
 ExecStartPre=/usr/bin/touch /var/lib/dhcp/dhcpd6.leases
 ExecStart=/usr/sbin/dhcpd -6 -q -cf /etc/dhcp/dhcpd6.conf
