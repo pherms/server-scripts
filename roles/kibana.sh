@@ -1,8 +1,4 @@
 #!/bin/bash
-read -p "Wat is de hostnaam van deze server?: " hostname
-echo "Setting hostname"
-echo $hostname >> /etc/hostname
-
 echo "Elasticsearch en Kibana worden geïnstalleerd."
 echo "Installeren packages."
 apt install -y default-jre nginx gpg curl apt-transport-https wget

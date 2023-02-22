@@ -6,7 +6,7 @@ function dhcpserver {
 
     if [[ ! -f /etc/dhcp/dhcpd${dhcpProtocol}.conf ]]; then
         echo "Copy config file"
-        cp ./roles/files/system/dhcp4${dhcpProtocol}.conf /etc/dhcp/
+        cp ./roles/files/system/dhcpd${dhcpProtocol}.conf /etc/dhcp/
     fi
 
     echo "Setup DHCP service Units"
@@ -26,10 +26,6 @@ function dhcpserver {
         fi
     fi
 }
-
-read -p "Wat is de hostnaam van deze server?: " hostname
-echo "Setting hostname"
-echo $hostname >> /etc/hostname
 
 echo "Installeren bind DNS en DHCP server"
 apt update

@@ -1,8 +1,4 @@
 #!/bin/bash
-read -p "Wat is de hostnaam van deze server?: " hostname
-echo "Setting hostname"
-echo $hostname >> /etc/hostname
-
 echo "Mailserver wordt geïnstalleerd"
 echo "Installeren packages"
 

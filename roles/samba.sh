@@ -6,10 +6,6 @@ function GetPassword {
   read -sp "Re-enter password: " password2
 }
 
-read -p "Wat is de hostnaam van deze server?: " hostname
-echo "Setting hostname"
-echo $hostname >> /etc/hostname
-
 echo "Samba erver wordt geïnstalleerd"
 apt install -y samba curl wget gpg apt-transport-https 
 
