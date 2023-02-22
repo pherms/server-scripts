@@ -1,4 +1,32 @@
 #!/bin/bash
+
+# $1: DHCP protocol version
+function dhcpserver {
+    dhcpProtocol = $1
+
+    if [[ ! -f /etc/dhcp/dhcpd$dhcpProtocol.conf ]]; then
+        echo "Copy config file"
+        cp ./roles/files/system/dhcp4$dhcpProtocol.conf /etc/dhcp/
+    fi
+
+    echo "Setup DHCP service Units"
+    if [[ ! -f /etc/systemd/system/dhcp-server$dhcpProtocol.service ]]; then
+        echo "DHCP IPv$dhcpProtocol Unit"
+        cp ./roles/files/system/dhcp-server$dhcpProtocol.service /etc/systemd/system/
+        systemctl daemon-reload
+        
+        echo "DHCP server voor IPv$dhcpProtocol starten"
+        dhcpstatus=$(systemctl show dhcp-server$dhcpProtocol --property=SubState | awk 'BEGIN{FS="="} {print $2}')
+        if [[ "$dhcpstatus" != "running" ]]; then
+            echo "Enable en start DHCP server IPv$dhcpProtocol"
+            systemctl enable dhcp-server$dhcpProtocol.service
+            systemctl start dhcp-server$dhcpProtocol.service
+        else
+            echo "DHCP server voor IPv$dhcpProtocol is al gestart"
+        fi
+    fi
+}
+
 read -p "Wat is de hostnaam van deze server?: " hostname
 echo "Setting hostname"
 echo $hostname >> /etc/hostname
@@ -17,37 +45,9 @@ apt update
 echo "Installeren van elastic-agent"
 apt install -y metricbeat filebeat elastic-agent
 
-echo "Setup DHCP service Units"
-if [[ ! -f /etc/systemd/system/dhcp-server4.service ]]; then
-    echo "DHCP IPv4 Unit"
-    cp ./roles/files/system/dhcp-server4.service /etc/systemd/system/
-    systemctl daemon-reload
-    
-    echo "DHCP server voor IPv4 starten"
-    dhcp4status=$(systemctl show dhcp-server4 --property=SubState | awk 'BEGIN{FS="="} {print $2}')
-    if [[ "$dhcp4status" != "running" ]]; then
-        echo "Enable en start DHCP server IPv4"
-        systemctl enable dhcp-server4.service
-        systemctl start dhcp-server4.service
-    else
-        echo "DHCP server voor IPv4 is al gestart"
-    fi
-fi
-
-if [[ ! -f /etc/systemd/system/dhcp-server6.service ]]; then
-    echo "DHCP IPv6 Unit"
-    cp ./roles/files/system/dhcp-server6.service /etc/systemd/system/
-    systemctl daemon-reload
-    
-    dhcp6status=$(systemctl show dhcp-server6 --property=SubState | awk 'BEGIN{FS="="} {print $2}')
-    if [[ "$dhcp6status" != "running" ]]; then
-        echo "Enable en start DHCP server IPv6"
-        systemctl enable dhcp-server6.service
-        systemctl start dhcp-server6.service
-    else
-        echo "DHCP server voor IPv6 is al gestart"
-    fi
-fi
+# DHCP server
+dhcpserver 4
+dhcpserver 6
 
 echo "Enable en start bind DNS server"
 systemctl enable named
