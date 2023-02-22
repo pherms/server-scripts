@@ -42,6 +42,20 @@ apt update
 echo "Installeren van elastic-agent"
 apt install -y metricbeat filebeat elastic-agent
 
+echo "Uitschakelen oude dhcp server"
+systemctl disable isc-dhcp-server.service
+
+echo "Verwijderen oude unit file"
+if [[ -f /usr/lib/systemd/system/isc-dhcp-server.service ]]; then
+    rm /usr/lib/systemd/system/isc-dhcp-server.service
+fi
+
+if [[ -f /etc/systemd/system/isc-dhcp-server.service ]]; then
+    rm /usr/lib/systemd/system/isc-dhcp-server.service
+fi
+
+systemctl daemon-reload
+
 # DHCP server
 dhcpserver 4
 dhcpserver 6
