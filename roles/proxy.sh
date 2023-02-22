@@ -19,10 +19,10 @@ if [[ ! -f /etc/nginx/sites-available/kibana ]]; then
 fi
 
 echo "Nextcloud"
-if [[ ! -f /etc/nginx/sites-available/cloud ]]; then
-    cp ./roles/files/nginx/cloud /etc/nginx/sites-available/cloud
+if [[ ! -f /etc/nginx/sites-available/nextcloud ]]; then
+    cp ./roles/files/nginx/nextcloud /etc/nginx/sites-available/nextcloud
     echo "Website Nextcloud live zetten..."
-    ln -s /etc/nginx/sites-available/cloud /etc/nginx/sites-enabled/cloud
+    ln -s /etc/nginx/sites-available/nextcloud /etc/nginx/sites-enabled/nextcloud
 fi
 
 echo "wordpress"
