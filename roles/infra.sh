@@ -30,18 +30,6 @@ echo "Installeren bind DNS en DHCP server"
 apt update
 apt install -y bind9 bind9-dnsutils bind9-doc bind9-host isc-dhcp-server curl wget gpg apt-transport-https 
 
-echo "Toevoegen van elasticsearch key aan repository"
-if [[ ! -f /usr/share/keyrings/elasticsearch-keyring.gpg ]]; then
-    wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
-fi
-
-echo "Bijwerken sources list en bijwerken cache"
-echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
-apt update
-
-echo "Installeren van elastic-agent"
-apt install -y metricbeat filebeat elastic-agent
-
 echo "Uitschakelen oude dhcp server"
 systemctl disable isc-dhcp-server.service
 

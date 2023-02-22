@@ -57,16 +57,6 @@ echo "Webserver apache wordt geïnstalleerd"
 apt install -y apache2 apt-transport-https lsb-release ca-certificates curl php php-mysql libapache2-mod-php php-curl php-cli php-gd php-common php-xml php-json php-intl php-pear php-imagick php-dev php-common php-mbstring php-zip php-soap php-bz2 php-bcmath php-gmp php-apcu git composer
 apt install -y libmagickcore-dev unzip certbot curl wget gpg apt-transport-https 
 
-echo "Toevoegen van elasticsearch key aan repository"
-wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
-
-echo "Bijwerken sources list en bijwerken cache"
-echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
-apt update
-
-echo "Installeren van elastic-agent"
-apt install -y metricbeat filebeat elastic-agent
-
 echo "Activeren apache modules"
 a2enmod status rewrite ssl headers
 
