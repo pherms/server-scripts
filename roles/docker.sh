@@ -28,6 +28,7 @@ echo "Starting containers"
 # Starten containers. Onder andere Home assistant
 
 containerDir="./roles/docker"
+
 for file in ${containerDir}/*; do
   echo "Starten container $file"
   sudo -u pascal $file
