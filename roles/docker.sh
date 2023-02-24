@@ -21,13 +21,16 @@ apt update
 echo "Installeren van docker engine"
 apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
+echo "Gebruiker toevoegen aan groep"
+usermod -aG docker pascal
+
 echo "Starting containers"
 # Starten containers. Onder andere Home assistant
 
 containerDir="./roles/docker"
 for file in ${containerDir}/*; do
   echo "Starten container $file"
-  sudo $file
+  sudo -u pascal $file
 done
 
 echo "Bijwerken firewall regels"

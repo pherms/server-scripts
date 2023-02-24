@@ -33,6 +33,11 @@ if [[ "${addRegularUser,,}" = "y" ]]; then
   fi
 fi
 
+if [ "${addRegularUser,,}" = "y" ]; then
+  #add regular user
+  useradd -m -s /bin/bash -p $(openssl passwd -crypt $password) -G sudo $userName
+fi
+
 # update sources-list
 isContrib=$(grep "main contrib non-free" /etc/apt/sources.list)
 if [[ -z "$isContrib" ]]; then
@@ -60,11 +65,6 @@ apt install -y metricbeat filebeat elastic-agent
 
 startBeats metricbeat
 startBeats filebeat
-
-if [ "${addRegularUser,,}" = "y" ]; then
-  #add regular user
-  useradd -m -s /bin/bash -p $(openssl passwd -crypt $password) -G sudo $userName
-fi
 
 # configure screenfetch
 echo "if [ -f /usr/bin/screenfetch ]; then" >> /etc/profile
