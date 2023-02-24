@@ -27,7 +27,7 @@ echo "Starting containers"
 containerDir="./roles/docker"
 for file in ${containerDir}/*; do
   echo "Starten container $file"
-  $file
+  sudo $file
 done
 
 echo "Bijwerken firewall regels"

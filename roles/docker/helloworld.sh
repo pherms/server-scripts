@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo docker run -d --name helloworld 
+docker run -d --name helloworld 
