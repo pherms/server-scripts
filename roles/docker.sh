@@ -24,8 +24,8 @@ apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 echo "Starting containers"
 # Starten containers. Onder andere Home assistant
 
-containerDir="./roles/docker/"
-for file in ${containerDir}; do
+containerDir="./roles/docker"
+for file in ${containerDir}/*; do
   echo "Starten container $file"
   $file
 done
