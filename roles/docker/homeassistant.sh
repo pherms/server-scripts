@@ -8,7 +8,7 @@ if [[ ! -d ${configPath} ]]; then
     mkdip -p ${configPath}
 fi
 
-docker run -d \
+sudo docker run -d \
   --name homeassistant \
   --privileged \
   --restart=unless-stopped \
