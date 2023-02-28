@@ -16,7 +16,7 @@ sed -i 's/#http.port/http.port/' /etc/elasticsearch/elasticsearch.yml
 
 echo "Controleren of de elasticsearch service is gestart"
 isElasticRunning=$(systemctl status elasticsearch | grep '(running)')
-if [[ "$isElasticRunning" != "running" ]]; then
+if [[ -z "$isElasticRunning" ]]; then
     echo "Start en enable de elasticsearch service"
     systemctl start elasticsearch
     systemctl enable elasticsearch
@@ -26,7 +26,7 @@ fi
 
 echo "Controleren of de kibana service is gestart"
 isKibanaRunning=$(systemctl status kibana | grep '(running)')
-if [[ "$isKibanaRunning" != "running" ]]; then
+if [[ -z "$isKibanaRunning" ]]; then
     echo "Start en enable de kibana service"
     systemctl start kibana
     systemctl enable kibana
@@ -41,7 +41,7 @@ sed -i 's/#hosts:/hosts:/' /etc/metricbeat/metricbeat.yml
 echo "Controleren of de metricbeat service is gestart"
 isMetricbeatRunning=$(systemctl status metricbeat | grep '(running)')
 
-if [[ "$isMetricbeatRunning" != "running" ]]; then
+if [[ -z "$isMetricbeatRunning" ]]; then
     echo "Start en enable de metricbeat service"
     systemctl start metricbeat
     systemctl enable metricbeat
