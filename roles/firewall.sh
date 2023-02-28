@@ -47,7 +47,7 @@ case $role in
       echo "Installeren $role specifieke regel set"
       ./roles/fw-rules/firewall-docker.sh
       ;;
-    smaba)
+    samba)
       echo "Installeren basis firewall regel set"
       ./roles/fw-rules/firewall-base.sh
       echo "Installeren $role specifieke regel set"
