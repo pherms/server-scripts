@@ -12,7 +12,7 @@ ipAddress=$(ip route | awk '/192.168.2/ { print $9 }')
 echo "Updaten elasticsearch config file"
 # network.host: 192.168.0.1 in /etc/elasticsearch/elasticsearch.yml
 sed -i 's/#network.host/network.host/' /etc/elasticsearch/elasticsearch.yml
-sed -i 's/192.168.0.1/$ipAddress' /etc/elasticsearch/elasticsearch.yml
+sed -i 's/192.168.0.1/$ipAddress/' /etc/elasticsearch/elasticsearch.yml
 sed -i 's/#http.port/http.port/' /etc/elasticsearch/elasticsearch.yml
 
 echo "Controleren of de elasticsearch service is gestart"
