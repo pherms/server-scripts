@@ -31,7 +31,13 @@ containerDir="./roles/docker"
 
 for file in ${containerDir}/*; do
   echo "Starten container $file"
-  sudo -u pascal $file
+  fileName=${file##*/}
+  dockerContainer=$(echo $fileName | cut -d'.' -f 1)
+  isRunning=$(docker ps -q -f name=${dockerContainer})
+
+  if [[ -z $isRunning ]]; then
+    sudo -u pascal $file
+  fi
 done
 
 echo "Bijwerken firewall regels"

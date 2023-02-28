@@ -6,13 +6,8 @@ fi
 
 read -p "Welke rol ((I)nfra,(D)b,(W)eb,(P)roxy,Do(C)ker,(M)ail,(S)amba,(K)ibana) krijgt deze machine?: " role
 
-read -p "Wat is de hostnaam van deze server?: " hostname
-echo "Setting hostname"
-echo $hostname >> /etc/hostname
-
 nic=$(ip -br l | awk '$1 !~ "lo|vir|wl|br0|lxc" { print $1}')
 bridgeName=$(ip -br l | awk '$1 !~ "lo|vir|wl|enp" { print $1}')
-
 
 if [ "$installBridge" == "bridge" ];
 then
