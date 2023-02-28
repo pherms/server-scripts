@@ -1,5 +1,5 @@
 #!/bin/bash
-# Stappen om homeassistant container te downloaden en te starten
+# Stappen om homeassistant container te downloaden en te starten.
 timeZone="Europe/Amsterdam"
 configPath="/opt/homeassistant"
 
