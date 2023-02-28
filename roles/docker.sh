@@ -28,7 +28,7 @@ usermod -aG docker pascal
 echo "Starting containers"
 # Starten containers. Onder andere Home assistant
 
-containerDir="./roles/docker"
+containerDir="./roles/files/docker"
 
 for file in ${containerDir}/*; do
   fileName=${file##*/}

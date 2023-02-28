@@ -5,7 +5,7 @@ configPath="/opt/homeassistant"
 
 echo "Maken van directory $configPath"
 if [[ ! -d ${configPath} ]]; then
-    mkdip -p ${configPath}
+    mkdir -p ${configPath}
 fi
 
 docker run -d \
