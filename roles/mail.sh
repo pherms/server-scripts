@@ -2,16 +2,18 @@
 echo "Opvragen hostname"
 hostname=$(cat /etc/hostname)
 
+echo "Gevonden hostname: $hostname"
+
 echo "Mailserver wordt geïnstalleerd"
 echo "Installeren packages"
 
-apt install -y postfix openssl mailx curl wget gpg apt-transport-https 
+apt install -y postfix openssl mailutils curl wget gpg apt-transport-https 
 
 echo "Writing postfix configuration"
 echo "smtpd_recipient_restrictions = reject_invalid_hostname, reject_unknown_recipient_domain, reject_unauth_destination, reject_rbl_client sbl.spamhaus.org, permit" >> /etc/postfix/main.cf
 echo "smtpd_helo_restrictions = reject_invalid_helo_hostname, reject_non_fqdn_helo_hostname, reject_unknown_helo_hostname" >> /etc/postfix/main.cf
 
-sed -i 's/^mydestination = .*/${hostname}.merel107.local, merel107.local, ${hostname}.merel107.local, localhost.merel107.local, localhost/' /etc/postfix/main.cf
+sed -i 's/^mydestination = .*/$hostname.merel107.local, merel107.local, $hostname.merel107.local, localhost.merel107.local, localhost/' /etc/postfix/main.cf
 sed -i 's/^relayhost = .*/[smtp.kpnmail.nl]:587/' /etc/postfix/main.cf
 sed -i 's/^smtp_sasl_auth_enable = .*/yes/' /etc/postfix/main.cf
 sed -i 's/^smtp_sasl_password_maps = .*/hash:/etc/postfix/sasl_passwd/' /etc/postfix/main.cf
