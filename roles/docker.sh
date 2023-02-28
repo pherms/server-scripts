@@ -31,12 +31,12 @@ echo "Starting containers"
 containerDir="./roles/docker"
 
 for file in ${containerDir}/*; do
-  echo "Starten container $file"
   fileName=${file##*/}
   dockerContainer=$(echo $fileName | cut -d'.' -f 1)
   isRunning=$(docker ps -q -f name=${dockerContainer})
 
   if [[ -z $isRunning ]]; then
+    echo "Starten container $file"
     sudo -u pascal $file
   fi
 done
