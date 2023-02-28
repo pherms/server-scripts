@@ -24,7 +24,7 @@ function startBeats {
 # Set hostname
 read -p "Wat is de hostnaam van deze server?: " hostname
 echo "Setting hostname"
-echo $hostname >> /etc/hostname
+hostnamectl set-hostname $hostname
 
 # Setup regular user
 read -p "Normale gebruiker toevoegen? (Y/N): " addRegularUser
