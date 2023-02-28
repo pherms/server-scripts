@@ -21,6 +21,11 @@ function startBeats {
   systemctl start agentType
 }
 
+# Set hostname
+read -p "Wat is de hostnaam van deze server?: " hostname
+echo "Setting hostname"
+echo $hostname >> /etc/hostname
+
 # Setup regular user
 read -p "Normale gebruiker toevoegen? (Y/N): " addRegularUser
 if [[ "${addRegularUser,,}" = "y" ]]; then
