@@ -41,13 +41,13 @@ fi
 
 echo "Samba-fs share configureren"
 
-echo "[samba-fs]" >> /etc//etc/samba/smb.conf
-echo "  comment = Windows fileshare on $hostname" >> /etc//etc/samba/smb.conf
-echo "  path = /vol/fs/samba-fs" >> /etc//etc/samba/smb.conf
-echo "  read-only = no" >> /etc//etc/samba/smb.conf
-echo "  writable = yes" >> /etc//etc/samba/smb.conf
-echo "  browsable = yes" >> /etc//etc/samba/smb.conf
-echo "  valid users = @samba-fs" >> /etc//etc/samba/smb.conf
+echo "[samba-fs]" >> /etc/samba/smb.conf
+echo "  comment = Windows fileshare on $hostname" >> /etc/samba/smb.conf
+echo "  path = /vol/fs/samba-fs" >> /etc/samba/smb.conf
+echo "  read-only = no" >> /etc/samba/smb.conf
+echo "  writable = yes" >> /etc/samba/smb.conf
+echo "  browsable = yes" >> /etc/samba/smb.conf
+echo "  valid users = @samba-fs" >> /etc/samba/smb.conf
 
 echo "Controleren of nmbd service is gestart"
 isNmbdRunning=$(systemctl status nmbd | grep '(running)')
