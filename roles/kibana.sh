@@ -14,6 +14,16 @@ sed -i 's/#network.host/network.host/' /etc/elasticsearch/elasticsearch.yml
 sed -i "s/192.168.0.1/$ipAddress/" /etc/elasticsearch/elasticsearch.yml
 sed -i 's/#http.port/http.port/' /etc/elasticsearch/elasticsearch.yml
 
+echo "Updaten Kibana config file"
+sed -i 's/#server.port/server.port/' /etc/kibana/kibana.yml
+sed -i 's/#server.host/server.host/' /etc/kibana/kibana.yml
+sed -i "s/192.168.0.1/$ipAdress/" /etc/kibana/kibana.yml
+sed -i 's/#elasticsearch.host/elasticsearch.host/' /etc/kibana/kibana.yml
+
+echo "Updaten metricbeat config file"
+sed -i 's/#host:/host:/' /etc/metricbeat/metricbeat.yml
+sed -i 's/#hosts:/hosts:/' /etc/metricbeat/metricbeat.yml
+
 echo "Controleren of de elasticsearch service is gestart"
 isElasticRunning=$(systemctl status elasticsearch | grep '(running)')
 if [[ -z "$isElasticRunning" ]]; then
@@ -33,10 +43,6 @@ if [[ -z "$isKibanaRunning" ]]; then
 else
     echo "De Kibana service is al actief"
 fi
-
-echo "Updaten metricbeat config file"
-sed -i 's/#host:/host:/' /etc/metricbeat/metricbeat.yml
-sed -i 's/#hosts:/hosts:/' /etc/metricbeat/metricbeat.yml
 
 echo "Controleren of de metricbeat service is gestart"
 isMetricbeatRunning=$(systemctl status metricbeat | grep '(running)')
