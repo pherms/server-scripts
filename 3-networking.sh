@@ -1,10 +1,13 @@
 #!/bin/bash
 read -p "Install bridge or nic config?: " installBridge
-read -p "Static IP address?: " staticIp
+if [ "$installBridge" == "bridge" ]; then
+  read -p "Static IP address?: " staticIp
+fi
+
+read -p "Welke rol ((I)nfra,(D)b,(W)eb,(P)roxy,Do(C)ker,(M)ail,(S)amba,(K)ibana) krijgt deze machine?: " role
 
 nic=$(ip -br l | awk '$1 !~ "lo|vir|wl|br0|lxc" { print $1}')
 bridgeName=$(ip -br l | awk '$1 !~ "lo|vir|wl|enp" { print $1}')
-
 
 if [ "$installBridge" == "bridge" ];
 then
@@ -35,16 +38,37 @@ then
   echo "iface $bridgeName inet6 dhcp" >> /etc/network/interfaces
   echo "  bridge_ports $nic" >> /etc/network/interfaces
   systemctl restart networking
-else
-  echo "# Configure Network interface" >> /etc/network/interfaces
-  echo "iface $nic inet static" >> /etc/network/interfaces
-  echo "  address $staticIp/24" >> /etc/network/interfaces
-  echo "  broadcast 192.168.2.255" >> /etc/network/interfaces
-  echo "  gateway 192.168.2.1" >> /etc/network/interfaces
-  echo "  network 192.168.2.0" >> /etc/network/interfaces
-  echo "# Configure IPv6 interface" >> /etc/network/interfaces
-  echo "iface $nic inet6 dhcp" >> /etc/network/interfaces
-  systemctl restart networking
 fi
 
 apt install -y inetutils-ping
+
+selectedRole="${role,,}"
+case $selectedRole in
+  c)
+  ./roles/docker.sh docker
+  ;;
+  d)
+  ./roles/database.sh db
+  ;;
+  i)
+  ./roles/infra.sh infra
+  ;;
+  k)
+  ./roles/kibana.sh kibana
+  ;;
+  m)
+  ./roles/mail.sh smtp
+  ;;
+  p)
+  ./roles/proxy.sh proxy
+  ;;
+  s)
+  ./roles/samba.sh samba
+  ;;
+  w)
+  ./roles/web.sh web
+  ;;
+  *)
+  echo "Geen geldige keuze. Script wordt afgebroken"
+  exit 1
+esac

@@ -1,0 +1,14 @@
+[Unit]
+Description=ISC DHCP Server for IPv6 (dhcpd6.conf)
+Wants=network-online.target
+After=network-online.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+KillMode=mixed
+Type=forking
+PIDFile=/run/dhcpd6.pid
+ExecStartPre=/usr/bin/touch /var/lib/dhcp/dhcpd6.leases
+ExecStart=/usr/sbin/dhcpd -6 -q -cf /etc/dhcp/dhcpd6.conf

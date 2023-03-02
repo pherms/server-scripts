@@ -5,6 +5,16 @@ snap install lxd
 
 bridge=$(ip -br l | awk '$1 !~ "lo|vir|wl|enp" { print $1}')
 
+# setup fstab
+nvme=$(lsblk -d | grep nvme | awk '$1 !~ "loo|sd" {print $1}')
+if [ -z "$nvme" ]; then
+  echo "second disk found"
+  echo "Creating mount point"
+  mkdir -p /mnt/vmdisks
+  echo "Mounting second disk"
+  echo "/dev/$nvme  /mnt/vmdisks  xfs   defaults,relatime  0 0"
+fi  
+
 # update /etc/lxc/default.conf
 echo "Updating /etc/lxc/default.conf file"
 #echo "Writing /etc/lxc/default.conf"
