@@ -16,7 +16,7 @@ sed -i 's/#http.port/http.port/' /etc/elasticsearch/elasticsearch.yml
 
 echo "Updaten Kibana config file"
 sed -i 's/#server.port/server.port/' /etc/kibana/kibana.yml
-sed -i "s/server.host: \"\"/server.host: \"${ipAddress}\"/" /etc/kibana/kibana.yml
+sed -i "s/#server.host: \"\"/server.host: \"${ipAddress}\"/" /etc/kibana/kibana.yml
 sed -i "s/#server.publicBaseUrl: \"\"/server.publicBaseUrl: \"kibana.merel107.local\"/" /etc/kibana/kibana.yml
 sed -i "s/\"localhost\"/\"${ipAdress}\"/" /etc/kibana/kibana.yml
 sed -i 's/#elasticsearch.host/elasticsearch.host/' /etc/kibana/kibana.yml
