@@ -6,21 +6,6 @@ function GetPassword {
   read -sp "Re-enter password: " password2
 }
 
-function startBeats {
-  # $1: type agent (filebeat of metricbeat)
-  agentType=$1
-  configPath="/etc/$agentType"
-
-  if [[ -d /etc/${agentType} ]]; then
-    echo "Kopieren $agentType config file"
-    if [[ -f ${configPath}/${agentType}.yml ]]; then
-      yes | cp ./roles/files/system/${agentType}.yml ${configPath}/
-    fi
-  fi
-  systemctl enable agentType
-  systemctl start agentType
-}
-
 # Set hostname
 read -p "Wat is de hostnaam van deze server?: " hostname
 echo "Setting hostname"
@@ -51,25 +36,10 @@ if [[ -z "$isContrib" ]]; then
 fi
 
 apt update -y
-apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-linux snapd lshw xfsprogs openssh-server
+apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-linux snapd lshw xfsprogs openssh-server prometheus-node-exporter
 
 systemctl enable ssh.service
 systemctl start ssh.service
-
-echo "Toevoegen van elasticsearch key aan repository"
-if [[ ! -f /usr/share/keyrings/elasticsearch-keyring.gpg ]]; then
-    wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
-fi
-
-echo "Bijwerken sources list en bijwerken cache"
-echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
-apt update
-
-echo "Installeren van elastic-agent"
-apt install -y metricbeat filebeat elastic-agent
-
-startBeats metricbeat
-startBeats filebeat
 
 # configure screenfetch
 echo "if [ -f /usr/bin/screenfetch ]; then" >> /etc/profile
