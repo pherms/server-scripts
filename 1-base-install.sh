@@ -40,6 +40,8 @@ apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-lin
 
 systemctl enable ssh.service
 systemctl start ssh.service
+systemctl enable prometheus-node-exporter.service
+systemctl start prometheus-node-exporter.service
 
 # configure screenfetch
 echo "if [ -f /usr/bin/screenfetch ]; then" >> /etc/profile
