@@ -1,8 +1,0 @@
-set_var EASYRSA_REQ_COUNTRY    "NL"
-set_var EASYRSA_REQ_PROVINCE   "Overijssel"
-set_var EASYRSA_REQ_CITY       "Raalte"
-set_var EASYRSA_REQ_ORG        "pascalherms.nl"
-set_var EASYRSA_REQ_EMAIL      "pherms@outlook.com"
-set_var EASYRSA_REQ_OU         "Community"
-set_var EASYRSA_ALGO           "ec"
-set_var EASYRSA_DIGEST         "sha512"

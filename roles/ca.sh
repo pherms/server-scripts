@@ -5,22 +5,22 @@ echo "Installeren van CA authority"
 echo "Installeren van easy-rsa"
 apt install -y easy-rsa
 
-easyrsadir="/var/lib/easy-rsa"
+easyrsadir="~/easy-rsa"
 echo "Creeeren van CA directory"
-sudo -u pascal mkdir -p $easyrsadir
+mkdir -p $easyrsadir
 
 echo "Symlink maken"
-sudo -u pascal ln -s /usr/share/easy-rsa/* $easyrsadir
+ln -s /usr/share/easy-rsa/* $easyrsadir
 
 echo "Rechten zetten"
-sudo -u pascal chmod 700 $easyrsadir
+chmod 700 $easyrsadir
 
 echo "Initialiseren van pki"
-sudo -u pascal cd $easyrsadir
-sudo -u pascal ./easyrsa init-pki
-sudo -u pascal cp ./roles/files/ca/ca /$easyrsadir
+cd $easyrsadir
+./easyrsa init-pki
+cp ./roles/files/ca/ca /$easyrsadir
 
 echo "CA certificaat genereren"
-sudo -u pascal ./easyrsa build-ca nopass
+./easyrsa build-ca nopass
 
 ./roles/firewall.sh $1
