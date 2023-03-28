@@ -36,12 +36,18 @@ if [[ -z "$isContrib" ]]; then
 fi
 
 apt update -y
-apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-linux snapd lshw xfsprogs openssh-server prometheus-node-exporter dnsutils
+apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-linux snapd lshw xfsprogs openssh-server prometheus-node-exporter dnsutils resolvconf
+
+yes | cp ./roles/files/system/resolv.conf /etc/
+yes | cp ./roles/files/system/head /etc/resolvconf/resolv.conf.d/
 
 systemctl enable ssh.service
 systemctl start ssh.service
 systemctl enable prometheus-node-exporter.service
 systemctl start prometheus-node-exporter.service
+systemctl enable resolvconf.service
+systemctl start resolvconf.service
+systemctl restart systemd-resolved.service
 
 # configure screenfetch
 echo "if [ -f /usr/bin/screenfetch ]; then" >> /etc/profile
