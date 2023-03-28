@@ -38,8 +38,8 @@ fi
 apt update -y
 apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-linux snapd lshw xfsprogs openssh-server prometheus-node-exporter dnsutils resolvconf
 
-yes | cp ./roles/files/resolv.conf /etc/
-yes | cp ./roles/files/head /etc/resolvconf/resolv.conf.d/
+yes | cp ./roles/files/system/resolv.conf /etc/
+yes | cp ./roles/files/system/head /etc/resolvconf/resolv.conf.d/
 
 systemctl enable ssh.service
 systemctl start ssh.service
