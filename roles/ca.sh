@@ -12,13 +12,15 @@ mkdir -p $easyrsadir
 echo "Symlink maken"
 ln -s /usr/share/easy-rsa/* $easyrsadir
 
+echo "Vars file kopieeren"
+cp ./roles/files/ca/vars /$easyrsadir
+
 echo "Rechten zetten"
 chmod 700 $easyrsadir
 
 echo "Initialiseren van pki"
 cd $easyrsadir
 ./easyrsa init-pki
-cp ./roles/files/ca/ca /$easyrsadir
 
 echo "CA certificaat genereren"
 ./easyrsa build-ca nopass
