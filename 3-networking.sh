@@ -44,6 +44,9 @@ apt install -y inetutils-ping
 
 selectedRole="${role,,}"
 case $selectedRole in
+  a)
+  ./roles/ca.sh ca
+  ;;
   c)
   ./roles/docker.sh docker
   ;;
