@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Installing nginx"
 apt update
-apt install -y nginx nginx-doc curl wget gpg apt-transport-https 
+apt install -y nginx nginx-doc curl wget gpg apt-transport-https python3-certbot-nginx certbot
 
 echo "Start en enable nginx"
 systemctl enable nginx
