@@ -6,9 +6,21 @@ import modules as mods
 # dir(readsource)
 
 def main():
-    print("Proberen uit te voeren")
-    result = mods.readtext("Pascal")
-    print(result)
+    config = mods.readConfig()
+
+    server = config["server"]
+    filename = config["filename"]
+    compression = config["compression"]
+    
+    lines = mods.readSourcesFile()
+    for line in lines:
+        
+        if (mods.isDirectory(line)):
+            print('Directory!')
+        else:
+            print('File')
+
+    
 
 if __name__ == '__main__':
     main()
