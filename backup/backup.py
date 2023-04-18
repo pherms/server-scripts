@@ -11,6 +11,7 @@ def main():
     server = config["server"]
     filename = config["filename"]
     compression = config["compression"]
+    filesize = config["filesize"]
     
     lines = mods.readSourcesFile()
     for line in lines:

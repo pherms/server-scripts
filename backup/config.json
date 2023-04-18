@@ -1,5 +1,6 @@
 {
     "server": "Test",
-    "filename": "test",
-    "compression": "zip"
+    "filename": "test.tar",
+    "compression": "bz2",
+    "filesize": "2GB"
 }
