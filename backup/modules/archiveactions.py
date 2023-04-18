@@ -1,5 +1,6 @@
 import tarfile
 import zipfile
+import os.path
 
 def openArchiveWrite(filename,filetype):
     if filetype == 'tar':
@@ -20,3 +21,11 @@ def addFilesToArchive(archive,fileToZip,filetype):
         archive.add(fileToZip)
     if filetype == 'zip':
         archive.write(fileToZip)
+
+def makeTarFile(output_filename,source):
+    if not os.path.isfile(output_filename):
+            with tarfile.open(output_filename,'w:bz2') as bz2archive:
+                bz2archive.add(source,arcname=os.path.basename(source))
+    else:
+        with tarfile.open(output_filename,'a') as bz2archive:
+            bz2archive.add(source,arcname=os.path.basename(source))

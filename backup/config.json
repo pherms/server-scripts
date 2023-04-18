@@ -1,6 +1,7 @@
 {
     "server": "Test",
-    "filename": "test.tar",
+    "filename": "/home/pascal/test.tar",
+    "filetype": "tar",
     "compression": "bz2",
     "filesize": "2GB"
 }
