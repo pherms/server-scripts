@@ -1,14 +1,17 @@
 import tarfile
 import zipfile
 import os.path
+import modules as mods
+from datetime import datetime
 
-def openArchiveWrite(filename,filetype):
+def openArchiveWrite(filename,filetype,compression):
     if filetype == 'tar':
-        with tarfile.open(filename,'w:bz2') as bz2archive:
-            return bz2archive
+        # with tarfile.open(filename,'w:bz2') as bz2archive:
+        bz2archive = tarfile.open(filename,'w:bz2')
+        return bz2archive
     elif filetype == 'zip':
-        with zipfile.ZipFile(filename,'w', allowZip64=True) as ziparchive:
-            return ziparchive
+        ziparchive = zipfile.ZipFile(filename,'w', allowZip64=True)
+        return ziparchive
         
 def closeArchiveWrite(archive,filetype):
     if filetype == 'tar':
@@ -16,16 +19,23 @@ def closeArchiveWrite(archive,filetype):
     elif filetype == 'zip':
         archive.close()
 
-def addFilesToArchive(archive,fileToZip,filetype):
+def addFilesToArchive(archive,fileToZip,filetype,logfile):
+    if mods.isDirectory(fileToZip):
+        logfile.write("{} Backup directory {}\n".format(datetime.today(),fileToZip))
+    else:
+        logfile.write("{} Backup file {}\n".format(datetime.today(),fileToZip))
+
     if filetype == 'tar':
         archive.add(fileToZip)
-    if filetype == 'zip':
+    elif filetype == 'zip':
         archive.write(fileToZip)
 
-def makeTarFile(output_filename,source):
-    if not os.path.isfile(output_filename):
-            with tarfile.open(output_filename,'w:bz2') as bz2archive:
-                bz2archive.add(source,arcname=os.path.basename(source))
+def determineInclusion(fileToZip):
+    if str(fileToZip).startswith("+"):
+        return True
     else:
-        with tarfile.open(output_filename,'a') as bz2archive:
-            bz2archive.add(source,arcname=os.path.basename(source))
+        return False
+    
+def prepareFileToZip(line):
+    line = line[1:].rstrip()
+    return line

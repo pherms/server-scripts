@@ -1,7 +1,8 @@
 {
     "server": "Test",
-    "filename": "/home/pascal/test.tar",
     "filetype": "tar",
+    "backuppath": "/home/pascal/backup/",
+    "logfilepath": "/home/pascal/log/backup/",
     "compression": "bz2",
     "filesize": "2GB"
 }
