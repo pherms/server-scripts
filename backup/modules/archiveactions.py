@@ -3,15 +3,20 @@ import zipfile
 import os.path
 import modules as mods
 from datetime import datetime
+from datetime import date
 
-def openArchiveWrite(filename,filetype,compression):
-    if filetype == 'tar':
-        # with tarfile.open(filename,'w:bz2') as bz2archive:
-        bz2archive = tarfile.open(filename,'w:bz2')
-        return bz2archive
-    elif filetype == 'zip':
-        ziparchive = zipfile.ZipFile(filename,'w', allowZip64=True)
-        return ziparchive
+def openArchiveWrite(filename,filetype,compression,logfile):
+    try:
+        if filetype == 'tar':
+            # with tarfile.open(filename,'w:bz2') as bz2archive:
+            bz2archive = tarfile.open(filename,'w:bz2')
+            return bz2archive
+        elif filetype == 'zip':
+            ziparchive = zipfile.ZipFile(filename,'w', allowZip64=True)
+            return ziparchive
+    except Exception:
+        logfile.write("{} Kan {} niet openen. Backup wordt afgebroken.\n".format(datetime.today(),filename))
+        exit()
         
 def closeArchiveWrite(archive,filetype):
     if filetype == 'tar':
@@ -25,10 +30,15 @@ def addFilesToArchive(archive,fileToZip,filetype,logfile):
     else:
         logfile.write("{} Backup file {}\n".format(datetime.today(),fileToZip))
 
-    if filetype == 'tar':
-        archive.add(fileToZip)
-    elif filetype == 'zip':
-        archive.write(fileToZip)
+    try:
+        if filetype == 'tar':
+            archive.add(fileToZip)
+        elif filetype == 'zip':
+            archive.write(fileToZip)
+    except Exception:
+        logfile.write("{} Kan {} niet naar backup archief schrijven. Backup wordt afgebroken.\n".format(datetime.today(),fileToZip))
+        closeArchiveWrite(archive,fileToZip)
+        exit()
 
 def determineInclusion(fileToZip):
     if str(fileToZip).startswith("+"):
@@ -39,3 +49,12 @@ def determineInclusion(fileToZip):
 def prepareFileToZip(line):
     line = line[1:].rstrip()
     return line
+
+def cleanupOldBackups(file):
+    print("Cleanup old backup")
+    dateModified = mods.getDateTime(file)
+    
+    week,dag = date.fromisoformat(dateModified).isocalendar()[:2]
+    
+    print(week)
+    print(dag)

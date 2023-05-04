@@ -11,6 +11,7 @@ def openLogFile(logpath):
         return logfile
     except Exception:
         print("Er is iets naars gebeurd")
+        exit()
 
 def closeLogFile(logfile):
     logfile.close()

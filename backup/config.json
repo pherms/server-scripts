@@ -1,5 +1,4 @@
 {
-    "server": "Test",
     "filetype": "tar",
     "backuppath": "/home/pascal/backup/",
     "logfilepath": "/home/pascal/log/backup/",
