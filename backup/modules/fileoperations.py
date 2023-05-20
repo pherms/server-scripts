@@ -30,6 +30,7 @@ def createFolder(folder):
 
 def getDateTime(file):
     if platform.system() == 'Windows':
+        print(file)
         return os.path.getctime(file)
     else:
         stat = os.stat(file)

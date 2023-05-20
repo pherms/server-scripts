@@ -56,5 +56,9 @@ def cleanupOldBackups(file):
     
     week,dag = date.fromisoformat(dateModified).isocalendar()[:2]
     
+    # Wanneer 7 dag backups, dan oudste verwijderen en de laatste wordt een weekbackup
+    # wanneer 5 week backups, dan oudste verwijderen. Oudste wordt een maandbackup
+    # wanneer 4 maand backups, dan de de oudste verwijderen
+    
     print(week)
     print(dag)
