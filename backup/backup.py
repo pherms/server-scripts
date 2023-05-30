@@ -16,7 +16,7 @@ def main():
     filesize = config["filesize"]
     filetype = config["filetype"]
     logfilepath = config["logfilepath"]
-    logfile = mods.openLogFile(logfilepath)
+    logfile = mods.openLogFile(logfilepath,"backup")
     
     if 'server' not in config:
         logfile.write("{} Servernaam niet gevonden in config bestand. Gebruik hostnaam\n".format(datetime.today()))

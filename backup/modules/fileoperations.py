@@ -1,5 +1,6 @@
 import os, sys
 import platform
+import time
 from pathlib import Path
 from datetime import datetime
 
@@ -28,13 +29,19 @@ def createFolder(folder):
     else:
         print("{} Folder {} gemaakt".format(datetime.today(),folder))
 
-def getDateTime(file):
-    if platform.system() == 'Windows':
-        print(file)
-        return os.path.getctime(file)
-    else:
-        stat = os.stat(file)
-        try:
-            return stat.st_birthtime
-        except AttributeError:
-            return stat.st_mtime
+def getCreationTime(directory):
+    # create an empty dictionary to store the file names and creation times
+    file_times = {}
+    # loop through all the files in the directory
+    for file in os.listdir(directory):
+        # get the full path of the file
+        file_path = os.path.join(directory, file)
+        # get the creation time of the file in seconds since epoch
+        creation_time = os.path.getctime(file_path)        
+        # convert the creation time to a human-readable format
+        creation_time = time.ctime(creation_time)
+        creation_datetime = datetime.strptime(creation_time,'%a %b %d %H:%M:%S %Y')
+        # store the file name and creation time in the dictionary
+        file_times[file] = creation_datetime.date()
+    # return the dictionary
+    return file_times

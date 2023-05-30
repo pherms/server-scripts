@@ -2,10 +2,14 @@ import modules as mods
 from datetime import datetime
 from pathlib import Path
 
-def openLogFile(logpath):
+def openLogFile(logpath,logfiletype):
     mods.createFolder(logpath)
     date = datetime.today().strftime('%y%m%d')
-    logfilename = "backuplog-" + date + ".log"
+    if logfiletype == "backup":
+        logfilename = "backuplog-" + date + ".log"
+    elif logfiletype == "cleanup":
+        logfilename = "cleanuplog-" + date + ".log"
+
     try:
         logfile = open(logpath + logfilename,"w")
         return logfile
