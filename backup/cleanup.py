@@ -21,16 +21,7 @@ def main():
 
         jaar,week,dag = date.fromisoformat(backupFileDate).isocalendar()[:3]
         currentJaar,currentWeek,currentDag = date.fromisoformat(datetime.strftime(datetime.now(),'%Y-%m-%d')).isocalendar()[:3]
-        # fullFile = backuppath + file
-        # dateModified = mods.getDateTime(fullFile)
-        # week,dag = date.fromisoformat(dateModified).isocalendar()[:2]
-        # print("Week: {}",week)
-        # print("dag: {}",dag)
-        # print(dag)
-        # print(week)
-        # print(currentDag)
-        # print(currentWeek)
-
+ 
         # backup dag 7 hernoemen naar week
         if dag == 7:
             logfile.write("{} Hernoemen van bestand {} naar weekbackup\n".format(datetime.today(),fileName))
@@ -42,7 +33,8 @@ def main():
             # remove file
             print(f"verwijderen dagbackup file: {fileName}")
             logfile.write("{} Verwijderen van bestand {}\n".format(datetime.today(),fileName))
-            os.remove(backuppath + fileName)
+            # os.remove(backuppath + fileName)
+            logfile.write("{} Bestand {} zou verwijderd zijn\n".format(datetime.today(),fileName))
             files_cleaned.append(fileName)
 
         # oudste weekbackup hernoemen naar month
@@ -60,7 +52,8 @@ def main():
             print(range(currentWeek - 4, currentWeek - 1))
             print(f"verwijderen weekbackup file: {fileName}")
             logfile.write("{} Verwijderen van bestand {}\n".format(datetime.today(),fileName))
-            os.remove(backuppath + fileName)
+            # os.remove(backuppath + fileName)
+            logfile.write("{} Bestand {} zou verwijderd zijn\n".format(datetime.today(),fileName))
             files_cleaned.append(fileName)
 
     logfile.write("{} Files verwijderd: {}\n".format(datetime.today(),len(files_cleaned)))

@@ -9,6 +9,8 @@ def openLogFile(logpath,logfiletype):
         logfilename = "backuplog-" + date + ".log"
     elif logfiletype == "cleanup":
         logfilename = "cleanuplog-" + date + ".log"
+    elif logfiletype == "copy":
+        logfilename = "copylog-" + date + ".log"
 
     try:
         logfile = open(logpath + logfilename,"w")

@@ -4,7 +4,7 @@
 import modules as mods
 from pathlib import Path
 from datetime import datetime
-import socket
+
 # from .modules/readsource import *
 # dir(readsource)
 
@@ -17,16 +17,11 @@ def main():
     filetype = config["filetype"]
     logfilepath = config["logfilepath"]
     logfile = mods.openLogFile(logfilepath,"backup")
-    
-    if 'server' not in config:
-        logfile.write("{} Servernaam niet gevonden in config bestand. Gebruik hostnaam\n".format(datetime.today()))
-        server = socket.gethostname()
-    else:
-        server = config["server"]
+    hostname = mods.getHostname(logfile)
     
     logfile.write("{} Inlezen configuratie bestand\n".format(datetime.today()))
     mods.createFolder(backuppath)
-    filename = backuppath + mods.generateFileName(server,filetype,compression,logfile)
+    filename = backuppath + mods.generateFileName(hostname,filetype,compression,logfile)
     
     lines = mods.readSourcesFile(logfile)
     archive = mods.openArchiveWrite(filename,filetype,compression,logfile)

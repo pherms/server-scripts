@@ -1,4 +1,5 @@
 import json
+import socket
 from datetime import datetime
 
 def readSourcesFile(logfile):
@@ -20,3 +21,16 @@ def readConfig():
     except Exception:
         print("{} Er is een fout opgetreden bij het inlezen van de config file. Backup wordt afgebroken.\n".format(datetime.today()))
         exit()
+
+def getHostname(logfile):
+    try:
+        config = readConfig()
+        if 'server' not in config:
+            logfile.write("{} Servernaam niet gevonden in config bestand. Gebruik hostnaam\n".format(datetime.today()))
+            server = socket.gethostname()
+        else:
+            server = config["server"]
+        
+        return server
+    except Exception:
+        logfile.write("{} Fout opgetreden tijdens het ophalen van de hostname\n".format(datetime.today()))
