@@ -9,14 +9,14 @@ def isDirectory(path):
     isDirectory = p.is_dir()
     return isDirectory
 
-def generateFileName(server,filetype,compression,logfile):
+def generateFileName(hostname,filetype,compression,logfile):
     date = datetime.today().strftime('%Y%m%d')
     if compression == 'bz2':
         # tar.bz2 file
-        filename = server+"-"+date+"."+filetype+"."+compression
+        filename = hostname+"-"+date+"."+filetype+"."+compression
     else:
         # zip file
-        filename = server+"-"+date+"."+filetype
+        filename = hostname+"-"+date+"."+filetype
     
     logfile.write("{} Backup wordt weggeschreven in bestand: {}\n".format(datetime.today(),filename))
     return filename
