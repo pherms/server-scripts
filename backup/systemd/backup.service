@@ -2,4 +2,4 @@
 Description=Backup system
 [Service]
 Type=simple
-ExecStart=/usr/bin/python '/home/pascal/scripts/backup.py'
+ExecStart=/usr/bin/python3 '/home/pascal/scripts/backup.py'
