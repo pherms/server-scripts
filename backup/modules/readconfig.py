@@ -5,7 +5,7 @@ from datetime import datetime
 def readSourcesFile(logfile):
     try:
         logfile.write("{} Inlezen van lijst met te backuppen files en folders\n".format(datetime.today()))
-        sourceFile = open('sources', 'r')
+        sourceFile = open('/etc/server-scripts/sources', 'r')
         lines = sourceFile.readlines()
         return lines
     except Exception:
