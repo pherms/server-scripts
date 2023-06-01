@@ -38,9 +38,9 @@ def main():
     mods.closeLogFile(logfile)
 
     message_text = """\
-        De backup van {hostname} is succesvol uitgevoerd.\n
-        Zie ook bijgande logfile\n"""
-    subject = "Backup server {hostname}"
+    De backup van {hostname} is succesvol uitgevoerd.\n
+    Zie ook bijgande logfile\n""".format(hostname=hostname)
+    subject = "Backup server {}".format(hostname)
 
     mods.sendMail(mailServer,recipient,subject,message_text,logfile)
     
