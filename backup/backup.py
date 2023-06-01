@@ -16,6 +16,8 @@ def main():
     filesize = config["filesize"]
     filetype = config["filetype"]
     logfilepath = config["logfilepath"]
+    mailServer = config["mailserver"]
+    recipient = config["mailRecipient"]
     logfile = mods.openLogFile(logfilepath,"backup")
     hostname = mods.getHostname(logfile)
     
@@ -34,6 +36,13 @@ def main():
     mods.closeArchiveWrite(archive,filetype)
     logfile.write("{} Backup geslaagd\n".format(datetime.today()))
     mods.closeLogFile(logfile)
+
+    message_text = """\
+    De backup van {hostname} is succesvol uitgevoerd.\n
+    Zie ook bijgande logfile\n""".format(hostname=hostname)
+    subject = "Backup server {}".format(hostname)
+
+    mods.sendMail(mailServer,recipient,subject,message_text,logfile)
     
 if __name__ == '__main__':
     main()

@@ -16,7 +16,9 @@ def openArchiveWrite(filename,filetype,compression,logfile):
             ziparchive = zipfile.ZipFile(filename,'w', allowZip64=True)
             return ziparchive
     except Exception:
-        logfile.write("{} Kan {} niet openen. Backup wordt afgebroken.\n".format(datetime.today(),filename))
+        logmessage = "{} Kan {} niet openen. Backup wordt afgebroken.\n".format(datetime.today(),filename)
+        logfile.write(logmessage)
+        mods.sendMailFailedBackup(mods.getHostname(logfile),logmessage)
         exit()
         
 def closeArchiveWrite(archive,filetype):
@@ -37,7 +39,9 @@ def addFilesToArchive(archive,fileToZip,filetype,logfile):
         elif filetype == 'zip':
             archive.write(fileToZip)
     except Exception:
-        logfile.write("{} Kan {} niet naar backup archief schrijven. Backup wordt afgebroken.\n".format(datetime.today(),fileToZip))
+        logmessage = "{} Kan {} niet naar backup archief schrijven. Backup wordt afgebroken.\n".format(datetime.today(),fileToZip)
+        logfile.write(logmessage)
+        mods.sendMailFailedBackup(mods.getHostname(logfile),logmessage)
         closeArchiveWrite(archive,fileToZip)
         exit()
 
@@ -58,5 +62,7 @@ def copyFileToServer(backupFullFile,backupserver,copycommand,remotefilepath,logf
         subprocess.run([copycommand,backupFullFile,backupDestination])
         logfile.write("{} {} naar de backuplocatie {} gekopieerd\n".format(datetime.today(),backupFullFile,backupDestination))
     except Exception:
-        logfile.write("{} Kan {} niet naar de backuplocatie {} kopieren\n".format(datetime.today(),backupFullFile,backupDestination))
+        logmessage = "{} Kan {} niet naar de backuplocatie {} kopieren\n".format(datetime.today(),backupFullFile,backupDestination)
+        logfile.write(logmessage)
+        mods.sendMailFailedCopyToServer(mods.getHostname(logfile),logmessage)
         exit()
