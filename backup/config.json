@@ -6,5 +6,7 @@
     "filesize": "2GB",
     "backupserver": "brisbane.merel107.local",
     "copycommand": "scp",
-    "remotefilepath": "/vol/data/fs/backup/"
+    "remotefilepath": "/vol/data/fs/backup/",
+    "mailserver": "adelaide.merel107.local",
+    "mailRecipient": "pherms@outlook.com"
 }
