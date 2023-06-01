@@ -14,7 +14,7 @@ def readSourcesFile(logfile):
 
 def readConfig():
     try:
-        f = open("config.json","rb")
+        f = open("/etc/server-scripts/backup-config.json","rb")
         jsonObject = json.load(f)
         f.close
         return jsonObject
