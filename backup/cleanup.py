@@ -8,8 +8,6 @@ def main():
     
     backuppath = config["backuppath"]
     logfilepath = config["logfilepath"]
-    mailServer = config["mailserver"]
-    recipient = config["mailRecipient"]
 
     logfile = mods.openLogFile(logfilepath,"cleanup")
     files = mods.getCreationTime(backuppath)
@@ -70,7 +68,7 @@ def main():
         Zie ook bijgande logfile\n""".format(hostname=hostname,totalFilesCopied=len(files_cleaned),totalFilesRenamed=len(files_renamed))
         subject = "Kopieren van files naar van server {} succesvol".format(hostname)
 
-        mods.sendMail(mailServer,recipient,subject,message_text,logfile)
+        mods.sendMail(subject,message_text,logfile)
     except Exception:
         message="Cleanup van server {} is gefaald\n".format(hostname)
         mods.sendMailFailedCleanup(hostname,message)

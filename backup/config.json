@@ -2,11 +2,13 @@
     "filetype": "tar",
     "backuppath": "/home/pascal/backup/",
     "logfilepath": "/home/pascal/log/backup/",
+    "sourcesLocation": "/etc/server-scripts/sources",
     "compression": "bz2",
     "filesize": "2GB",
     "backupserver": "brisbane.merel107.local",
     "copycommand": "scp",
     "remotefilepath": "/vol/data/fs/backup/",
     "mailserver": "adelaide.merel107.local",
-    "mailRecipient": "pherms@outlook.com"
+    "mailRecipient": "pherms@outlook.com",
+    "mailSender": "no_reply@pascalherms.nl"
 }

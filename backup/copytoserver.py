@@ -10,8 +10,6 @@ def main():
     backupserver = config['backupserver']
     copycommand = config['copycommand']
     remotefilepath = config['remotefilepath']
-    mailServer = config["mailserver"]
-    recipient = config["mailRecipient"]
 
     logfile = mods.openLogFile(logfiledir,"copy")
     hostname = mods.getHostname(logfile)
@@ -33,7 +31,7 @@ def main():
     Zie ook bijgande logfile\n""".format(hostname=hostname,totalFilesCopied=len(filesCopied))
     subject = "Kopieren van files naar van server {} succesvol".format(hostname)
 
-    mods.sendMail(mailServer,recipient,subject,message_text,logfile)
+    mods.sendMail(subject,message_text,logfile)
 
 if __name__ == '__main__':
     main()

@@ -2,10 +2,18 @@ import json
 import socket
 from datetime import datetime
 
-def readSourcesFile(logfile):
+def readSourcesFile(logfile,sources):
+    """
+    Leest de sources file in. De locatie van de sources file is configureerbaar in config.json
+
+    :param obj logfile: het logfile bestand waar naartoe moet worden gelogd
+    :param str sources: de locatie van de sources file. Deze parameter is configureerbaar in config.json
+    :return: een array met lines
+    :rtype: array
+    """
     try:
         logfile.write("{} Inlezen van lijst met te backuppen files en folders\n".format(datetime.today()))
-        sourceFile = open('/etc/server-scripts/sources', 'r')
+        sourceFile = open(sources, 'r')
         lines = sourceFile.readlines()
         return lines
     except Exception:
@@ -13,6 +21,12 @@ def readSourcesFile(logfile):
         exit()
 
 def readConfig():
+    """
+    Leest de config.json file in.
+
+    :return: een json object
+    :rtype: object
+    """
     try:
         f = open("/etc/server-scripts/backup-config.json","rb")
         jsonObject = json.load(f)
@@ -23,14 +37,21 @@ def readConfig():
         exit()
 
 def getHostname(logfile):
+    """
+    Leest de hostname waarde uit de config.json. Wanneer deze waarde niet in de config file staat geconfigureerd, dan wordt de systeem waarde opgehaald. Deze waarde is configureerbaar in config.json
+
+    :param obj logfile: de logfile waarnaartoe gelogd moet worden
+    :return: de hostname waarde als string
+    :rtype: str
+    """
     try:
         config = readConfig()
         if 'server' not in config:
             logfile.write("{} Servernaam niet gevonden in config bestand. Gebruik hostnaam\n".format(datetime.today()))
-            server = socket.gethostname()
+            hostname = socket.gethostname()
         else:
-            server = config["server"]
+            hostname = config["server"]
         
-        return server
+        return hostname
     except Exception:
         logfile.write("{} Fout opgetreden tijdens het ophalen van de hostname\n".format(datetime.today()))
