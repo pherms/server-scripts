@@ -49,6 +49,9 @@ systemctl enable resolvconf.service
 systemctl start resolvconf.service
 systemctl restart systemd-resolved.service
 
+# Set timezone
+timedatectl set-timezone Europe/Amsterdam
+
 # configure screenfetch
 echo "if [ -f /usr/bin/screenfetch ]; then" >> /etc/profile
 echo "    screenfetch;" >> /etc/profile
