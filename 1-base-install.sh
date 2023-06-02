@@ -25,7 +25,7 @@ fi
 
 if [ "${addRegularUser,,}" = "y" ]; then
   #add regular user
-  useradd -m -s /bin/bash -p $(openssl passwd -crypt $password) -G sudo $userName
+  useradd -m -s /bin/bash -p $(openssl passwd -crypt $password) -G sudo,backup $userName
 fi
 
 # update sources-list
@@ -36,7 +36,7 @@ if [[ -z "$isContrib" ]]; then
 fi
 
 apt update -y
-apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-linux snapd lshw xfsprogs openssh-server prometheus-node-exporter dnsutils resolvconf
+apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-linux snapd lshw xfsprogs openssh-server prometheus-node-exporter dnsutils resolvconf acl
 
 yes | cp ./roles/files/system/resolv.conf /etc/
 yes | cp ./roles/files/system/head /etc/resolvconf/resolv.conf.d/
