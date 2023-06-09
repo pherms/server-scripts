@@ -27,7 +27,12 @@ def main():
             # backup dag 7 hernoemen naar week
             if dag == 7:
                 logfile.write("{} Hernoemen van bestand {} naar weekbackup\n".format(datetime.today(),fileName))
-                os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-week.' + fileName.split('.')[1])
+                if fileName.split('.')[1] == "tar":
+                    fileNameArray = fileName.split('.')
+                    fileNameNew = backuppath + fileNameArray[0] + '-week.' + fileNameArray[1] + '.' + fileNameArray[2]
+                    os.rename(backuppath + fileName,backuppath + fileNameNew)
+                else:
+                    os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-week.' + fileName.split('.')[1])
                 files_renamed.append(fileName)
 
             # oude dag backups verwijderen
@@ -43,7 +48,12 @@ def main():
             if week == currentWeek - 4:
                 # rename file
                 logfile.write("{} Hernoemen van bestand {} naar maandbackup\n".format(datetime.today(),fileName))
-                os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-month.' + fileName.split('.')[1])
+                if fileName.split('.')[1] == "tar":
+                    fileNameArray = fileName.split('.')
+                    fileNameNew = backuppath + fileNameArray[0] + '-month.' + fileNameArray[1] + '.' + fileNameArray[2]
+                    os.rename(backuppath + fileName,backuppath + fileNameNew)
+                else:
+                    os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-month.' + fileName.split('.')[1])
                 files_renamed.append(fileName)
 
             # oude weekbackup verwijderen
