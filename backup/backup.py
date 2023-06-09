@@ -16,8 +16,7 @@ def main():
     filesize = config["filesize"]
     filetype = config["filetype"]
     logfilepath = config["logfilepath"]
-    mailServer = config["mailserver"]
-    recipient = config["mailRecipient"]
+    sources = config["sourcesLocation"]
     logfile = mods.openLogFile(logfilepath,"backup")
     hostname = mods.getHostname(logfile)
     
@@ -25,7 +24,7 @@ def main():
     mods.createFolder(backuppath)
     filename = backuppath + mods.generateFileName(hostname,filetype,compression,logfile)
     
-    lines = mods.readSourcesFile(logfile)
+    lines = mods.readSourcesFile(logfile,sources)
     archive = mods.openArchiveWrite(filename,filetype,compression,logfile)
 
     for line in lines:
@@ -42,7 +41,7 @@ def main():
     Zie ook bijgande logfile\n""".format(hostname=hostname)
     subject = "Backup server {}".format(hostname)
 
-    mods.sendMail(mailServer,recipient,subject,message_text,logfile)
+    mods.sendMail(subject,message_text,logfile)
     
 if __name__ == '__main__':
     main()

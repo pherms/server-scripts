@@ -8,8 +8,6 @@ def main():
     
     backuppath = config["backuppath"]
     logfilepath = config["logfilepath"]
-    mailServer = config["mailserver"]
-    recipient = config["mailRecipient"]
 
     logfile = mods.openLogFile(logfilepath,"cleanup")
     files = mods.getCreationTime(backuppath)
@@ -29,7 +27,12 @@ def main():
             # backup dag 7 hernoemen naar week
             if dag == 7:
                 logfile.write("{} Hernoemen van bestand {} naar weekbackup\n".format(datetime.today(),fileName))
-                os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-week.' + fileName.split('.')[1])
+                if fileName.split('.')[1] == "tar":
+                    fileNameArray = fileName.split('.')
+                    fileNameNew = backuppath + fileNameArray[0] + '-week.' + fileNameArray[1] + '.' + fileNameArray[2]
+                    os.rename(backuppath + fileName,backuppath + fileNameNew)
+                else:
+                    os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-week.' + fileName.split('.')[1])
                 files_renamed.append(fileName)
 
             # oude dag backups verwijderen
@@ -45,7 +48,12 @@ def main():
             if week == currentWeek - 4:
                 # rename file
                 logfile.write("{} Hernoemen van bestand {} naar maandbackup\n".format(datetime.today(),fileName))
-                os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-month.' + fileName.split('.')[1])
+                if fileName.split('.')[1] == "tar":
+                    fileNameArray = fileName.split('.')
+                    fileNameNew = backuppath + fileNameArray[0] + '-month.' + fileNameArray[1] + '.' + fileNameArray[2]
+                    os.rename(backuppath + fileName,backuppath + fileNameNew)
+                else:
+                    os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-month.' + fileName.split('.')[1])
                 files_renamed.append(fileName)
 
             # oude weekbackup verwijderen
@@ -70,7 +78,7 @@ def main():
         Zie ook bijgande logfile\n""".format(hostname=hostname,totalFilesCopied=len(files_cleaned),totalFilesRenamed=len(files_renamed))
         subject = "Kopieren van files naar van server {} succesvol".format(hostname)
 
-        mods.sendMail(mailServer,recipient,subject,message_text,logfile)
+        mods.sendMail(subject,message_text,logfile)
     except Exception:
         message="Cleanup van server {} is gefaald\n".format(hostname)
         mods.sendMailFailedCleanup(hostname,message)
