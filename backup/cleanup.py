@@ -16,7 +16,7 @@ def main():
     files_cleaned = []
     files_renamed = []
 
-    try:
+    # try:
         for file in files.keys():
             fileName = file
             backupFileDate = datetime.strftime(files.get(fileName),'%Y-%m-%d')
@@ -79,9 +79,9 @@ def main():
         subject = "Kopieren van files naar van server {} succesvol".format(hostname)
 
         mods.sendMail(subject,message_text,logfile)
-    except Exception:
-        message="Cleanup van server {} is gefaald\n".format(hostname)
-        mods.sendMailFailedCleanup(hostname,message)
+    # except Exception:
+    #     message="Cleanup van server {} is gefaald\n".format(hostname)
+    #     mods.sendMailFailedCleanup(hostname,message)
 
 if __name__ == '__main__':
     main()
