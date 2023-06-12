@@ -1,7 +1,7 @@
 [Unit]
 Description=Backup system
 [Service]
-Type=simple
+Type=oneshot
 ExecStart=/usr/bin/python3 '/scripts/server-scripts/backup/backup.py'
 [Install]
 WantedBy=multi-user.target
