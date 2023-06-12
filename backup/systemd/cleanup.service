@@ -1,0 +1,9 @@
+[Unit]
+Description=Cleanup old backup files
+After=backup.service
+BindsTo=backup.service
+[Service]
+Type=simple
+ExecStartPost=/usr/bin/python3 '/scripts/server-scripts/backup/cleanup.py'
+[Install]
+WantedBy=multi-user.target backup.service
