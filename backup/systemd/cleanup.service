@@ -1,8 +1,0 @@
-[Unit]
-Description=Cleanup and rename older backup files
-After=backup.service
-BindsTo=backup.service # Only starts if service1 exits with success
-WantedBy=backup.service # Creates a Wants dependency in service1
-[Service]
-Type=simple
-ExecStart=/usr/bin/python3 '/scripts/server-scripts/backup/cleanup.py'
