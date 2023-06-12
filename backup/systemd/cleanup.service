@@ -1,0 +1,5 @@
+[Unit]
+Description=Cleanup old backup files
+[Service]
+Type=simple
+ExecStartPost=/usr/bin/python3 '/home/pascal/scripts/cleanup.py'

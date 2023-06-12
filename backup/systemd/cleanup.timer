@@ -1,0 +1,8 @@
+[Unit]
+Description=Run cleanup script daily at 3 am, after backup timer has run
+[Timer]
+OnCalendar=*-*-* 03:00:00
+After=backup.timer
+Unit=cleanup.service
+[Install]
+WantedBy=timers.target

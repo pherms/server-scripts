@@ -3,4 +3,3 @@ Description=Backup system
 [Service]
 Type=simple
 ExecStart=/usr/bin/python3 '/home/pascal/scripts/backup.py'
-ExecStartPost=/usr/bin/python3 '/home/pascal/scripts/cleanup.py'
