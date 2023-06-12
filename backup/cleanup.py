@@ -76,10 +76,10 @@ def main():
         Het totaal aantal verwijderde bestanden is: {totalFilesCleaned}\n
         Het totaal aantal hernoemde bestanden is: {totalFilesRenamed}\n\n
         Zie ook bijgande logfile\n""".format(hostname=hostname,totalFilesCleaned=len(files_cleaned),totalFilesRenamed=len(files_renamed))
-        subject = "Kopieren van files naar van server {} succesvol".format(hostname)
+        subject = "Cleanup van files naar op server {} succesvol".format(hostname)
 
         mods.sendMail(subject,message_text,logfile)
-        
+
     except Exception:
         message="Cleanup van server {} is gefaald\n".format(hostname)
         mods.sendMailFailedCleanup(hostname,message)
