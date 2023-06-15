@@ -38,9 +38,20 @@ fi
 apt update -y
 apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-linux snapd lshw xfsprogs openssh-server prometheus-node-exporter dnsutils resolvconf acl
 
+# create backup directory
+mkdir -p /vol/backup
+
+# create config directory
+mkdir -p /etc/server-scripts
+
+# Kopieren van bestanden
 yes | cp ./roles/files/system/resolv.conf /etc/
 yes | cp ./roles/files/system/head /etc/resolvconf/resolv.conf.d/
+yes | cp ./backup/systemd/* /etc/systemd/system/
+yes | cp ./backup/config.json /etc/server-scripts/backup-config.json
+yes | cp ./backup/sources /etc/server-scripts/
 
+systemctl daemon-reload
 systemctl enable ssh.service
 systemctl start ssh.service
 systemctl enable prometheus-node-exporter.service
@@ -48,6 +59,10 @@ systemctl start prometheus-node-exporter.service
 systemctl enable resolvconf.service
 systemctl start resolvconf.service
 systemctl restart systemd-resolved.service
+systemctl enable backup.timer
+systemctl start backup.timer
+
+
 
 # Set timezone
 timedatectl set-timezone Europe/Amsterdam
