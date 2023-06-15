@@ -10,5 +10,6 @@
     "remotefilepath": "/vol/data/fs/backup/",
     "mailserver": "adelaide.merel107.local",
     "mailRecipient": "pherms@outlook.com",
-    "mailSender": "no_reply@pascalherms.nl"
+    "mailSender": "no_reply@pascalherms.nl",
+    "hostType": "vm"
 }
