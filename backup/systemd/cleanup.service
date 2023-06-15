@@ -1,7 +1,7 @@
 [Unit]
 Description=Cleanup old backup files
+Requires=backup.service
 After=backup.service
-BindsTo=backup.service
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/python3 '/scripts/server-scripts/backup/cleanup.py'

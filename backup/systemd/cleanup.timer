@@ -1,0 +1,9 @@
+[Unit]
+Description=Run cleanup script after backup finishes
+After=backup.service
+BindsTo=backup.service
+[Timer]
+OnCalendar=*-*-* *:*:00
+Unit=cleanup.service
+[Install]
+WantedBy=backup.service
