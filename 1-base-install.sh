@@ -51,6 +51,7 @@ yes | cp ./backup/systemd/* /etc/systemd/system/
 yes | cp ./backup/config.json /etc/server-scripts/backup-config.json
 yes | cp ./backup/sources /etc/server-scripts/
 
+# reload systemctl daemon en enable en start services
 systemctl daemon-reload
 systemctl enable ssh.service
 systemctl start ssh.service

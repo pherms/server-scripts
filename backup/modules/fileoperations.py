@@ -1,5 +1,8 @@
 import os
 import time
+import getpass
+import subprocess
+import modules as mods
 from pathlib import Path
 from datetime import datetime
 
@@ -73,3 +76,25 @@ def getCreationTime(directory):
         file_times[file] = creation_datetime.date()
     # return the dictionary
     return file_times
+
+def copyFileToServer(backupFullFile,backupserver,copycommand,remotefilepath,logfile,hostname):
+    """
+    Kopieer de backupfile naar een locatie op een andere server.
+
+    :param str backupFullFile: het bestand met volledig pad wat moet worden gekopieerd
+    :param str backupserver: de server waar het bestand naartoe moet worden geschreven. configureerbaar in config.json
+    :param str copycommand: het commando waarmee moet worden gekopieerd. configureerbaar in config.json
+    :param str remotefilepath: het pad op de server waar het bestand naartoe moet worden geschreven. configureerbaar in config.json
+    :param str logfile: het logfile object waar naartoe moet worden gelogd
+    :param str hostname: de hostname van de machine waar vandaan het backup bestand wordt geschreven. configureerbaar in config.json. Wanneer niet opgegeven, dan wordt de hostname van het systeem opgevraagd
+    """
+    try:
+        username = getpass.getuser()
+        backupDestination = username + "@" + backupserver + ":" + remotefilepath + hostname
+        subprocess.run([copycommand,backupFullFile,backupDestination])
+        logfile.write("{} {} naar de backuplocatie {} gekopieerd\n".format(datetime.today(),backupFullFile,backupDestination))
+    except Exception:
+        logmessage = "{} Kan {} niet naar de backuplocatie {} kopieren\n".format(datetime.today(),backupFullFile,backupDestination)
+        logfile.write(logmessage)
+        mods.sendMailFailedCopyToServer(mods.getHostname(logfile),logmessage)
+        exit()

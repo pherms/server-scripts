@@ -1,0 +1,9 @@
+[Unit]
+Description=Run copytoserver script after cleanup finishes
+After=copytoserver.service
+BindsTo=copytoserver.service
+[Timer]
+OnCalendar=*-*-* *:*:00
+Unit=copytoserver.service
+[Install]
+WantedBy=copytoserver.service
