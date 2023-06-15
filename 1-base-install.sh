@@ -62,7 +62,9 @@ systemctl start resolvconf.service
 systemctl restart systemd-resolved.service
 systemctl enable backup.timer
 systemctl start backup.timer
-
+systemctl enable backup.service
+systemctl enable cleanup.service
+systemctl enable copytoserver.service
 
 
 # Set timezone
