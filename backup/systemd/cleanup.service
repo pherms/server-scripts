@@ -2,6 +2,7 @@
 Description=Cleanup old backup files
 Requires=backup.service
 After=backup.service
+Before=copytoserver.service
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/python3 '/scripts/server-scripts/backup/cleanup.py'
