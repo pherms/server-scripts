@@ -90,11 +90,12 @@ def copyFileToServer(backupFullFile,backupserver,copycommand,remotefilepath,logf
     """
     try:
         username = getpass.getuser()
-        backupDestination = username + "@" + backupserver + ":" + remotefilepath + hostname
+        backupDestination = username + "@" + backupserver + ":" + remotefilepath + hostname + "/"
         subprocess.run([copycommand,backupFullFile,backupDestination])
         logfile.write("{} {} naar de backuplocatie {} gekopieerd\n".format(datetime.today(),backupFullFile,backupDestination))
     except Exception:
         logmessage = "{} Kan {} niet naar de backuplocatie {} kopieren\n".format(datetime.today(),backupFullFile,backupDestination)
+        print(Exception)
         logfile.write(logmessage)
         mods.sendMailFailedCopyToServer(mods.getHostname(logfile),logmessage)
         exit()
