@@ -9,6 +9,15 @@ read -p "Welke rol (Cert(A)uthority, (I)nfra,(D)b,(W)eb,(P)roxy,Do(C)ker,(M)ail,
 nic=$(ip -br l | awk '$1 !~ "lo|vir|wl|br0|lxc" { print $1}')
 bridgeName=$(ip -br l | awk '$1 !~ "lo|vir|wl|enp" { print $1}')
 
+backupfolder=/vol/backup
+# create backup directory
+if [[ ! -d $backupfolder ]]:
+  mkdir -p $backupfolder
+fi
+
+# Update acl
+setfacl -R -m g:backup:rwX $backupfolder
+
 if [ "$installBridge" == "bridge" ];
 then
   apt install -y bridge-utils

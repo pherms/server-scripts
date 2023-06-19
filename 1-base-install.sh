@@ -25,7 +25,7 @@ fi
 
 if [ "${addRegularUser,,}" = "y" ]; then
   #add regular user
-  useradd -m -s /bin/bash -p $(openssl passwd -crypt $password) -G sudo $userName
+  useradd -m -s /bin/bash -p $(openssl passwd -crypt $password) -G sudo,backup $userName
 fi
 
 # update sources-list
@@ -36,11 +36,23 @@ if [[ -z "$isContrib" ]]; then
 fi
 
 apt update -y
-apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-linux snapd lshw xfsprogs openssh-server prometheus-node-exporter dnsutils resolvconf rsync ntp
+apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-linux snapd lshw xfsprogs openssh-server prometheus-node-exporter dnsutils resolvconf rsync ntp acl
 
+# create backup directory
+mkdir -p /vol/backup
+
+# create config directory
+mkdir -p /etc/server-scripts
+
+# Kopieren van bestanden
 yes | cp ./roles/files/system/resolv.conf /etc/
 yes | cp ./roles/files/system/head /etc/resolvconf/resolv.conf.d/
+yes | cp ./backup/systemd/* /etc/systemd/system/
+yes | cp ./backup/config.json /etc/server-scripts/backup-config.json
+yes | cp ./backup/sources /etc/server-scripts/
 
+# reload systemctl daemon en enable en start services
+systemctl daemon-reload
 systemctl enable ssh.service
 systemctl start ssh.service
 systemctl enable prometheus-node-exporter.service
@@ -48,6 +60,15 @@ systemctl start prometheus-node-exporter.service
 systemctl enable resolvconf.service
 systemctl start resolvconf.service
 systemctl restart systemd-resolved.service
+systemctl enable backup.timer
+systemctl start backup.timer
+systemctl enable backup.service
+systemctl enable cleanup.service
+systemctl enable copytoserver.service
+
+
+# Set timezone
+timedatectl set-timezone Europe/Amsterdam
 
 # configure screenfetch
 echo "if [ -f /usr/bin/screenfetch ]; then" >> /etc/profile

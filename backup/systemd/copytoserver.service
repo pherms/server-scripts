@@ -1,0 +1,9 @@
+[Unit]
+Description=Copy backup files to server
+After=cleanup.service
+BindsTo=backup.service
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 '/scripts/server-scripts/backup/copytoserver.py'
+[Install]
+WantedBy=multi-user.target backup.service

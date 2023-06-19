@@ -10,13 +10,16 @@ echo "Hostame ophalen"
 hostname=$(cat /etc/hostname)
 
 echo "Samba erver wordt geïnstalleerd"
-apt install -y samba curl wget gpg apt-transport-https 
+apt install -y samba curl wget gpg apt-transport-https acl
 
 echo "Gebruiksaccount toevoegen. Dit is hetzelfde account als in base install is aangemaakt"
 
 # Setup regular user
 read -p "Normale gebruiker toevoegen? (Y/N): " addSambaUser
+read -p "Geef gebruikersnaam van de gebruiker: " sambaUser
+
 if [[ "${addSambaUser,,}" = "y" ]]; then
+  smbpasswd -a $sambaUser -n
   GetPassword
   if [[ "$password1" = "$password2" ]]; then
     echo "Passwords match"
