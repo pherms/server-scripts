@@ -24,7 +24,7 @@ def openLogFile(logpath,logfiletype):
         logfile = open(logpath + logfilename,"w")
         return logfile
     except Exception:
-        print("Er is iets naars gebeurd")
+        print("Er is iets naars gebeurd tijdnes het openen van de logfile")
         exit()
 
 def closeLogFile(logfile):

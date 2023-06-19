@@ -90,8 +90,9 @@ def copyFileToServer(backupFullFile,backupserver,copycommand,remotefilepath,logf
     """
     try:
         username = getpass.getuser()
+        print("Username is: {}".format(username))
         backupDestination = username + "@" + backupserver + ":" + remotefilepath + hostname + "/"
-        subprocess.run([copycommand,backupFullFile,backupDestination])
+        subprocess.run([copycommand,backupFullFile,backupDestination]).stdout
         logfile.write("{} {} naar de backuplocatie {} gekopieerd\n".format(datetime.today(),backupFullFile,backupDestination))
     except Exception:
         logmessage = "{} Kan {} niet naar de backuplocatie {} kopieren\n".format(datetime.today(),backupFullFile,backupDestination)

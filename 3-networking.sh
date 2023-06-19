@@ -10,13 +10,21 @@ nic=$(ip -br l | awk '$1 !~ "lo|vir|wl|br0|lxc" { print $1}')
 bridgeName=$(ip -br l | awk '$1 !~ "lo|vir|wl|enp" { print $1}')
 
 backupfolder=/vol/backup
+logfolder=/home/$Username/log
+
 # create backup directory
 if [[ ! -d $backupfolder ]]:
   mkdir -p $backupfolder
 fi
 
+# create backup directory
+if [[ ! -d $logfolder ]]:
+  mkdir -p $logfolder
+fi
+
 # Update acl
 setfacl -R -m g:backup:rwX $backupfolder
+setfacl -R -m u:Username:rwX $logfolder
 
 if [ "$installBridge" == "bridge" ];
 then
