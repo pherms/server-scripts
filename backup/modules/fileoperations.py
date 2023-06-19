@@ -100,3 +100,47 @@ def copyFileToServer(backupFullFile,backupserver,copycommand,remotefilepath,logf
         logfile.write(logmessage)
         mods.sendMailFailedCopyToServer(mods.getHostname(logfile),logmessage)
         exit()
+
+def renameBackupFile(backuppath,fileName,logfile,type):
+    """
+    Rename de backup file naar week of maand.
+
+    :param str backuppath: het volledige pad waar de backup file gevonden kan worden
+    :param str fileName: het backup bestand wat moet worden hernoemd naar maand of week
+    :param str logfile: het logfile object waar naartoe moet worden gelogd
+    :param str type: Het type waar het bestand naar kan worden hernoemd. Mogelijke opties zijn: week en month
+    """
+    
+    if fileName.split('.')[1] == "tar":
+        if type == 'week':
+            logfile.write("{} Hernoemen van bestand {} naar weekbackup\n".format(datetime.today(),fileName))
+            fileNameArray = fileName.split('.')
+            fileNameNew = backuppath + fileNameArray[0] + '-week.' + fileNameArray[1] + '.' + fileNameArray[2]
+            os.rename(backuppath + fileName,backuppath + fileNameNew)
+        
+        if type == 'month':
+            logfile.write("{} Hernoemen van bestand {} naar maandbackup\n".format(datetime.today(),fileName))
+            fileNameArray = fileName.split('.')
+            fileNameNew = backuppath + fileNameArray[0] + '-month.' + fileNameArray[1] + '.' + fileNameArray[2]
+            os.rename(backuppath + fileName,backuppath + fileNameNew)
+
+    elif fileName.split('.')[-1] == "zip":
+        if type == 'week':
+            logfile.write("{} Hernoemen van bestand {} naar weekbackup\n".format(datetime.today(),fileName))
+            os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-week.' + fileName.split('.')[1])
+        else:
+            logfile.write("{} Hernoemen van bestand {} naar maandbackup\n".format(datetime.today(),fileName))
+            os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-month.' + fileName.split('.')[1])  
+
+def removeBackupFile(backuppath,fileName,logfile):
+    """
+    Het verwijderen van oude backup bestanden
+
+    :param str backuppath: het volledige pad waar de backup file gevonden kan worden
+    :param str fileName: het backup bestand wat moet worden hernoemd naar maand of week
+    :param str logfile: het logfile object waar naartoe moet worden gelogd
+    """
+    print(f"verwijderen dagbackup file: {fileName}")
+    logfile.write("{} Verwijderen van bestand {}\n".format(datetime.today(),fileName))
+    os.remove(backuppath + fileName)
+    logfile.write("{} Bestand {} zou verwijderd zijn\n".format(datetime.today(),fileName))

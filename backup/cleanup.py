@@ -26,46 +26,24 @@ def main():
 
             # backup dag 7 hernoemen naar week
             if dag == 7:
-                logfile.write("{} Hernoemen van bestand {} naar weekbackup\n".format(datetime.today(),fileName))
-                if fileName.split('.')[1] == "tar":
-                    fileNameArray = fileName.split('.')
-                    fileNameNew = backuppath + fileNameArray[0] + '-week.' + fileNameArray[1] + '.' + fileNameArray[2]
-                    os.rename(backuppath + fileName,backuppath + fileNameNew)
-                else:
-                    os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-week.' + fileName.split('.')[1])
+                mods.renameBackupFile(backuppath,fileName,logfile,"week")
                 files_renamed.append(fileName)
 
             # oude dag backups verwijderen
             if dag < 7  and week == currentWeek -1 and not ("week" in fileName or "month" in fileName) and not dag == currentDag:
                 # remove file
-                print(f"verwijderen dagbackup file: {fileName}")
-                logfile.write("{} Verwijderen van bestand {}\n".format(datetime.today(),fileName))
-                # os.remove(backuppath + fileName)
-                logfile.write("{} Bestand {} zou verwijderd zijn\n".format(datetime.today(),fileName))
+                mods.removeBackupFile(backuppath,fileName,logfile)
                 files_cleaned.append(fileName)
 
             # oudste weekbackup hernoemen naar month
             if week == currentWeek - 4:
                 # rename file
-                logfile.write("{} Hernoemen van bestand {} naar maandbackup\n".format(datetime.today(),fileName))
-                if fileName.split('.')[1] == "tar":
-                    fileNameArray = fileName.split('.')
-                    fileNameNew = backuppath + fileNameArray[0] + '-month.' + fileNameArray[1] + '.' + fileNameArray[2]
-                    os.rename(backuppath + fileName,backuppath + fileNameNew)
-                else:
-                    os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-month.' + fileName.split('.')[1])
+                mods.renameBackupFile(backuppath,fileName,logfile,"month")
                 files_renamed.append(fileName)
 
             # oude weekbackup verwijderen
             if (week in range(currentWeek - 4,currentWeek - 1)) and not "month" in fileName:
-                if not (week in range(currentWeek - 4,currentWeek - 1)):
-                    print(currentWeek - 4)
-                # remove file
-                print(range(currentWeek - 4, currentWeek - 1))
-                print(f"verwijderen weekbackup file: {fileName}")
-                logfile.write("{} Verwijderen van bestand {}\n".format(datetime.today(),fileName))
-                # os.remove(backuppath + fileName)
-                logfile.write("{} Bestand {} zou verwijderd zijn\n".format(datetime.today(),fileName))
+                mods.removeBackupFile(backuppath,fileName,logfile)
                 files_cleaned.append(fileName)
 
         logfile.write("{} Files verwijderd: {}\n".format(datetime.today(),len(files_cleaned)))
