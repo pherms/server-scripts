@@ -24,6 +24,8 @@ def main():
             jaar,week,dag = date.fromisoformat(backupFileDate).isocalendar()[:3]
             currentJaar,currentWeek,currentDag = date.fromisoformat(datetime.strftime(datetime.now(),'%Y-%m-%d')).isocalendar()[:3]
 
+            logfile.write("{} Beoordelen van bestand: {}\n".format(datetime.today(),file))
+
             # backup dag 7 hernoemen naar week
             if dag == 7:
                 mods.renameBackupFile(backuppath,fileName,logfile,"week")
@@ -55,7 +57,8 @@ def main():
         Het totaal aantal hernoemde bestanden is: {totalFilesRenamed}\n\n
         Zie ook bijgande logfile\n""".format(hostname=hostname,totalFilesCleaned=len(files_cleaned),totalFilesRenamed=len(files_renamed))
         subject = "Cleanup van files naar op server {} succesvol".format(hostname)
-
+        
+        mods.closeLogFile(logfile)
         mods.sendMail(subject,message_text,logfile)
 
     except Exception:
