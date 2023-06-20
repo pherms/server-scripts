@@ -29,7 +29,8 @@ def sendMail(subject,message_text,logfile=None):
 
     if not logfile is None:
         filename = logfile.name
-
+        logfilename = filename.split('/')[-1]
+        
         with open(filename, "rb") as attachement:
             part = MIMEBase("application", "octet-stream")
             part.set_payload(attachement.read())
@@ -38,7 +39,7 @@ def sendMail(subject,message_text,logfile=None):
 
         part.add_header(
             "Content-Disposition",
-            f"attachment; filename= {filename}",
+            f"attachment; filename= {logfilename}",
         )
 
         message.attach(part)

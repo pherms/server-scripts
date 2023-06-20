@@ -116,13 +116,13 @@ def renameBackupFile(backuppath,fileName,logfile,type):
             logfile.write("{} Hernoemen van bestand {} naar weekbackup\n".format(datetime.today(),fileName))
             fileNameArray = fileName.split('.')
             fileNameNew = backuppath + fileNameArray[0] + '-week.' + fileNameArray[1] + '.' + fileNameArray[2]
-            os.rename(backuppath + fileName,backuppath + fileNameNew)
+            os.rename(backuppath + fileName,fileNameNew)
         
         if type == 'month':
             logfile.write("{} Hernoemen van bestand {} naar maandbackup\n".format(datetime.today(),fileName))
             fileNameArray = fileName.split('.')
             fileNameNew = backuppath + fileNameArray[0] + '-month.' + fileNameArray[1] + '.' + fileNameArray[2]
-            os.rename(backuppath + fileName,backuppath + fileNameNew)
+            os.rename(backuppath + fileName,fileNameNew)
 
     elif fileName.split('.')[-1] == "zip":
         if type == 'week':

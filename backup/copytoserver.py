@@ -33,6 +33,7 @@ def main():
         Zie ook bijgande logfile\n""".format(hostname=hostname,totalFilesCopied=len(filesCopied))
         subject = "Kopieren van files naar van server {} succesvol".format(hostname)
 
+    mods.closeLogFile(logfile)
     mods.sendMail(subject,message_text,logfile)
 
 if __name__ == '__main__':
