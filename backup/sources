@@ -1,4 +1,7 @@
-+/etc/alsa
-+/home/pascal/rofi
-+/etc/fstab
--/home/pascal/.config
++/etc
++/home
++/var
+-/var/backup
+-/var/cache
++/opt
++/root
