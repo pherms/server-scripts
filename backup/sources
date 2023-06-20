@@ -5,3 +5,5 @@
 -/var/cache
 +/opt
 +/root
++/scripts
+
