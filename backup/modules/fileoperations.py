@@ -1,10 +1,11 @@
 import os
+import re
 import time
 import getpass
 import subprocess
 import modules as mods
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, date
 
 def isDirectory(path):
     """
@@ -16,6 +17,7 @@ def isDirectory(path):
     """
     p = Path(path)
     isDirectory = p.is_dir()
+    
     return isDirectory
 
 def generateFileName(hostname,filetype,compression,logfile):
@@ -113,23 +115,23 @@ def renameBackupFile(backuppath,fileName,logfile,type):
     
     if fileName.split('.')[1] == "tar":
         if type == 'week':
-            logfile.write("{} Hernoemen van bestand {} naar weekbackup\n".format(datetime.today(),fileName))
+            logfile.write("{} Hernoemen van bestand {} naar weekbackup\n".format(datetime.today(),backuppath + fileName))
             fileNameArray = fileName.split('.')
             fileNameNew = backuppath + fileNameArray[0] + '-week.' + fileNameArray[1] + '.' + fileNameArray[2]
             os.rename(backuppath + fileName,fileNameNew)
         
         if type == 'month':
-            logfile.write("{} Hernoemen van bestand {} naar maandbackup\n".format(datetime.today(),fileName))
+            logfile.write("{} Hernoemen van bestand {} naar maandbackup\n".format(datetime.today(),backuppath + fileName))
             fileNameArray = fileName.split('.')
             fileNameNew = backuppath + fileNameArray[0] + '-month.' + fileNameArray[1] + '.' + fileNameArray[2]
             os.rename(backuppath + fileName,fileNameNew)
 
     elif fileName.split('.')[-1] == "zip":
         if type == 'week':
-            logfile.write("{} Hernoemen van bestand {} naar weekbackup\n".format(datetime.today(),fileName))
+            logfile.write("{} Hernoemen van bestand {} naar weekbackup\n".format(datetime.today(),backuppath + fileName))
             os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-week.' + fileName.split('.')[1])
         else:
-            logfile.write("{} Hernoemen van bestand {} naar maandbackup\n".format(datetime.today(),fileName))
+            logfile.write("{} Hernoemen van bestand {} naar maandbackup\n".format(datetime.today(),backuppath + fileName))
             os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-month.' + fileName.split('.')[1])  
 
 def removeBackupFile(backuppath,fileName,logfile):
@@ -143,4 +145,75 @@ def removeBackupFile(backuppath,fileName,logfile):
     print(f"verwijderen dagbackup file: {fileName}")
     logfile.write("{} Verwijderen van bestand {}\n".format(datetime.today(),fileName))
     os.remove(backuppath + fileName)
-    logfile.write("{} Bestand {} zou verwijderd zijn\n".format(datetime.today(),fileName))
+    logfile.write("{} Bestand {} zou verwijderd zijn\n".format(datetime.today(),backuppath + fileName))
+
+def determineRemoveOrBackup(files,hostType,logfile,backuppath):
+    """
+    Bepalen of de backup file moet worden hernoemd of verwijderd
+
+    :param str backuppath: het volledige pad waar de backup file gevonden kan worden
+    :param str files: de array met files die moeten worden gerenamed, dan wel verwijderd
+    :param str logfile: het logfile object waar naartoe moet worden gelogd
+    :param str hostType: het host type waarop het script moet worden uitgevoerd. 2 opties: vm en host
+    :return: een tuple, bestaande uit files_cleaned en files_renamed
+    :rtype: tuple
+    """
+    files_cleaned = []
+    files_renamed = []
+
+    for file in files.keys():
+        fileName = file
+
+        if hostType == 'vm':
+            backupFileDate = datetime.strftime(files.get(fileName),'%Y-%m-%d')
+        elif hostType == 'host':
+            backupFileDate = mods.determineCreationDateFromFileName(file)
+
+        jaar,week,dag = date.fromisoformat(backupFileDate).isocalendar()[:3]
+        currentJaar,currentWeek,currentDag = date.fromisoformat(datetime.strftime(datetime.now(),'%Y-%m-%d')).isocalendar()[:3]
+
+        logfile.write("{} Beoordelen van bestand: {}\n".format(datetime.today(),file))
+
+        # backup dag 7 hernoemen naar week
+        if dag == 7:
+            if hostType == 'vm':
+                mods.renameBackupFile(backuppath,fileName,logfile,"week")
+            files_renamed.append(fileName)
+
+        # oude dag backups verwijderen
+        if dag < 7  and week == currentWeek -1 and not ("week" in fileName or "month" in fileName) and not dag == currentDag:
+            # remove file
+            if hostType == 'vm':
+                mods.removeBackupFile(backuppath,fileName,logfile)
+            files_cleaned.append(fileName)
+
+        # oudste weekbackup hernoemen naar month
+        if week == currentWeek - 4:
+            # rename file
+            if hostType == 'vm':
+                mods.renameBackupFile(backuppath,fileName,logfile,"month")
+            files_renamed.append(fileName)
+
+        # oude weekbackup verwijderen
+        if (week in range(currentWeek - 4,currentWeek - 1)) and not "month" in fileName:
+            if hostType == 'vm':
+                mods.removeBackupFile(backuppath,fileName,logfile)
+            files_cleaned.append(fileName)
+
+    return files_cleaned,files_renamed
+
+def determineCreationDateFromFileName(fileName):
+    """
+    Bepalen van de creation date van de backupfile op basis van de datum in de bestandsnaam
+
+    :param fileName: het backup bestand waarvan de creation date moet worden bepaald.
+    :return: datetime object
+    :rtype: obj
+    """
+    regexPattern = "(?<=-)\d+"
+    match = re.search(regexPattern,fileName)
+    creationDateString = match[0]
+
+    creationDate = datetime.strftime(datetime.strptime(creationDateString, '%Y%m%d'), '%Y-%m-%d')
+    
+    return creationDate
