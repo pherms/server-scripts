@@ -1,3 +1,4 @@
+import os
 import tarfile
 import zipfile
 import modules as mods
@@ -40,6 +41,8 @@ def closeArchiveWrite(archive,filetype):
         archive.close()
     elif filetype == 'zip':
         archive.close()
+    
+    return os.path.getsize(archive)
 
 def addFilesToArchive(archive,fileToZip,filetype,logfile):
     """
@@ -95,3 +98,17 @@ def prepareFileToZip(line):
     """
     line = line[1:].rstrip()
     return line
+
+def archiveSize(num, suffix="B"):
+    """
+    Functie voor het converteren van bytes naar human readable
+
+    :param int num: De waarde in bytes
+    :return: string in human readable vorm
+    :rtype: str
+    """
+    for unit in ("", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"):
+        if abs(num) < 1024.0:
+            return f"{num:3.1f}{unit}{suffix}"
+        num /= 1024.0
+    return f"{num:.1f}Yi{suffix}"
