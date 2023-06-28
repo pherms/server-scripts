@@ -5,7 +5,7 @@ import getpass
 import subprocess
 import modules as mods
 from pathlib import Path
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 def isDirectory(path):
     """
@@ -163,41 +163,50 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath):
 
     for file in files.keys():
         fileName = file
-
+        
         if hostType == 'vm':
             backupFileDate = datetime.strftime(files.get(fileName),'%Y-%m-%d')
+            
         elif hostType == 'host':
             backupFileDate = mods.determineCreationDateFromFileName(file)
+            folderArray = fileName.split('/')
+            backupFolder = folderArray[:-1]
+            fileName = folderArray[-1]
+            backuppath = '/'.join(backupFolder) + '/'
 
-        jaar,week,dag = date.fromisoformat(backupFileDate).isocalendar()[:3]
-        currentJaar,currentWeek,currentDag = date.fromisoformat(datetime.strftime(datetime.now(),'%Y-%m-%d')).isocalendar()[:3]
+        # behouden
+        dag = date.fromisoformat(backupFileDate).isocalendar()[2]
+        currentDag = date.fromisoformat(datetime.strftime(datetime.now(),'%Y-%m-%d')).isocalendar()[2]
+
+        ageInDays = (datetime.now() - datetime.strptime(backupFileDate, '%Y-%m-%d')).days
 
         logfile.write("{} Beoordelen van bestand: {}\n".format(datetime.today(),file))
 
         # backup dag 7 hernoemen naar week
-        if dag == 7:
-            if hostType == 'vm':
-                mods.renameBackupFile(backuppath,fileName,logfile,"week")
+        if dag == 7 and not ("week" in fileName or "month" in fileName):
+            mods.renameBackupFile(backuppath,fileName,logfile,"week")
             files_renamed.append(fileName)
 
-        # oude dag backups verwijderen
-        if dag < 7  and week == currentWeek -1 and not ("week" in fileName or "month" in fileName) and not dag == currentDag:
+        # oude dag en week backups verwijderen
+        if dag < 7  and ageInDays >= 7 and not ("week" in fileName or "month" in fileName) and not dag == currentDag:
             # remove file
-            if hostType == 'vm':
-                mods.removeBackupFile(backuppath,fileName,logfile)
+            mods.removeBackupFile(backuppath,fileName,logfile)
             files_cleaned.append(fileName)
 
-        # oudste weekbackup hernoemen naar month
-        if week == currentWeek - 4:
+        # oudste weekbackup hernoemen naar month. max age in weeks 4
+        if ageInDays >= 28 and "week" in fileName and not "month" in fileName:
             # rename file
-            if hostType == 'vm':
-                mods.renameBackupFile(backuppath,fileName,logfile,"month")
+            mods.renameBackupFile(backuppath,fileName,logfile,"month")
             files_renamed.append(fileName)
 
         # oude weekbackup verwijderen
-        if (week in range(currentWeek - 4,currentWeek - 1)) and not "month" in fileName:
-            if hostType == 'vm':
-                mods.removeBackupFile(backuppath,fileName,logfile)
+        if ageInDays in range(7,28) and not "month" in fileName and "week" in fileName:
+            mods.removeBackupFile(backuppath,fileName,logfile)
+            files_cleaned.append(fileName)
+
+        # oude maand backup verwijderen. max age in months 3 (12 weken, ~84 dagen)
+        if ageInDays >= 84 and "month" in fileName:
+            mods.removeBackupFile(backuppath,fileName,logfile)
             files_cleaned.append(fileName)
 
     return files_cleaned,files_renamed
@@ -217,3 +226,20 @@ def determineCreationDateFromFileName(fileName):
     creationDate = datetime.strftime(datetime.strptime(creationDateString, '%Y%m%d'), '%Y-%m-%d')
     
     return creationDate
+
+def cleanupLogs(logPath):
+    """
+    Opschonen van de log directory.
+
+    :param logPath: Het pad waar de logfiles worden opgeslagen
+    """
+    for file in os.listdir(logPath):
+        logfileDate = mods.determineCreationDateFromFileName(file)
+        
+        if len(logfileDate) == 6:
+            logfileDate = '20' + logfileDate
+        
+        ageInDays = (datetime.now() - datetime.strptime(logfileDate, '%Y-%m-%d')).days
+        
+        if ageInDays >= 84:
+            os.remove(os.path.abspath(file))

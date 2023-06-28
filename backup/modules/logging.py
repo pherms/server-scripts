@@ -12,7 +12,7 @@ def openLogFile(logpath,logfiletype):
     :rtype: object
     """
     mods.createFolder(logpath)
-    date = datetime.today().strftime('%y%m%d')
+    date = datetime.today().strftime('%Y%m%d')
     if logfiletype == "backup":
         logfilename = "backuplog-" + date + ".log"
     elif logfiletype == "cleanup":
@@ -34,6 +34,3 @@ def closeLogFile(logfile):
     :param str logfile: het logfile object wat moet worden gesloten
     """
     logfile.close()
-
-def cleanupLogs():
-    print("Cleanup Logs")

@@ -32,13 +32,15 @@ def main():
             line = mods.prepareFileToZip(line)
             mods.addFilesToArchive(archive,Path(line),filetype,logfile)
 
-    mods.closeArchiveWrite(archive,filetype)
+    archiveFileSize = mods.closeArchiveWrite(archive,filetype)
+
     logfile.write("{} Backup geslaagd\n".format(datetime.today()))
     mods.closeLogFile(logfile)
 
     message_text = """\
     De backup van {hostname} is succesvol uitgevoerd.\n
-    Zie ook bijgande logfile\n""".format(hostname=hostname)
+    Het backup bestand is {filesizeHumanReadable} groot.\n
+    Zie ook bijgande logfile\n""".format(hostname=hostname,filesizeHumanReadable=mods.archiveSize(archiveFileSize))
     subject = "Backup server {}".format(hostname)
 
     mods.sendMail(subject,message_text,logfile)
