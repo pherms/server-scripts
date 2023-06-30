@@ -32,7 +32,8 @@ def main():
             line = mods.prepareFileToZip(line)
             mods.addFilesToArchive(archive,Path(line),filetype,logfile)
 
-    archiveFileSize = mods.closeArchiveWrite(archive,filetype)
+    mods.closeArchiveWrite(archive,filetype)
+    archiveFileSize = mods.getArchiveFileSize(archive)
 
     logfile.write("{} Backup geslaagd\n".format(datetime.today()))
     mods.closeLogFile(logfile)
