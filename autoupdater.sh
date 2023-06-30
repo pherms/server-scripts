@@ -13,3 +13,5 @@ if [[ -n "$changes" ]]; then
 else
     echo "Er zijn geen veranderingen"
 fi
+
+# verandering geïntroduceerd
