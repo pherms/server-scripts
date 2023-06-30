@@ -42,7 +42,7 @@ def closeArchiveWrite(archive,filetype):
     elif filetype == 'zip':
         archive.close()
     
-    return os.path.getsize(archive)
+    return os.path.getsize(os.path.abspath(archive))
 
 def addFilesToArchive(archive,fileToZip,filetype,logfile):
     """
