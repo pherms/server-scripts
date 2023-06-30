@@ -222,7 +222,7 @@ def determineCreationDateFromFileName(fileName):
     regexPattern = "(?<=-)\d+"
     match = re.search(regexPattern,fileName)
     creationDateString = match[0]
-
+    print('Creationdatestring: {}'.format(creationDateString))
     creationDate = datetime.strftime(datetime.strptime(creationDateString, '%Y%m%d'), '%Y-%m-%d')
     
     return creationDate
