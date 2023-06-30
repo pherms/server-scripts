@@ -236,12 +236,11 @@ def cleanupLogs(logPath):
     for file in os.listdir(logPath):
         logfileDate = mods.determineCreationDateFromFileName(file)
         
-        print('Waarde logfiledata: {waarde}, lengte: {lengte}'.format(waarde=logfileDate,lengte=len(logfileDate)))
-
         if len(logfileDate) == 6:
-            ageInDays = (datetime.now() - datetime.strptime(logfileDate, '%y-%m-%d')).days
-        else:
-            ageInDays = (datetime.now() - datetime.strptime(logfileDate, '%Y-%m-%d')).days
+            logfileDate = '20' + logfileDate
+        print('Waarde logfiledata: {waarde}, lengte: {lengte}'.format(waarde=logfileDate,lengte=len(logfileDate)))
+        
+        ageInDays = (datetime.now() - datetime.strptime(logfileDate, '%Y-%m-%d')).days
         
         if ageInDays >= 84:
             os.remove(os.path.abspath(file))
