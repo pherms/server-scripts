@@ -222,8 +222,11 @@ def determineCreationDateFromFileName(fileName):
     regexPattern = "(?<=-)\d+"
     match = re.search(regexPattern,fileName)
     creationDateString = match[0]
-
-    creationDate = datetime.strftime(datetime.strptime(creationDateString, '%Y%m%d'), '%Y-%m-%d')
+    
+    if len(creationDateString) == 6:
+        creationDate = datetime.strftime(datetime.strptime(creationDateString, '%y%m%d'), '%Y-%m-%d')
+    else:
+        creationDate = datetime.strftime(datetime.strptime(creationDateString, '%Y%m%d'), '%Y-%m-%d')
     
     return creationDate
 
@@ -235,10 +238,7 @@ def cleanupLogs(logPath):
     """
     for file in os.listdir(logPath):
         logfileDate = mods.determineCreationDateFromFileName(file)
-        
-        if len(logfileDate) == 6:
-            logfileDate = '20' + logfileDate
-        
+
         ageInDays = (datetime.now() - datetime.strptime(logfileDate, '%Y-%m-%d')).days
         
         if ageInDays >= 84:
