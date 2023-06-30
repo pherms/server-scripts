@@ -238,10 +238,6 @@ def cleanupLogs(logPath):
     """
     for file in os.listdir(logPath):
         logfileDate = mods.determineCreationDateFromFileName(file)
-        print('Unmodified logfiledata: {}'.format(logfileDate))
-        if len(logfileDate) == 6:
-            logfileDate = '20' + logfileDate
-        print('Waarde logfiledata: {waarde}, lengte: {lengte}'.format(waarde=logfileDate,lengte=len(logfileDate)))
 
         ageInDays = (datetime.now() - datetime.strptime(logfileDate, '%Y-%m-%d')).days
         
