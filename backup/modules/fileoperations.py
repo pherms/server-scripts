@@ -253,6 +253,7 @@ def getArchiveFileSize(archive):
     """
 
     fullArchivePath = os.path.abspath(archive.name)
+    print('full Archive nam: {}'.format(fullArchivePath))
     sizeHumanReadable = mods.archiveSize(os.path.getsize(fullArchivePath))
 
     return sizeHumanReadable
