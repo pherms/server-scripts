@@ -47,8 +47,10 @@ def main():
         # Cleanup logfiles in logpPath
         mods.cleanupLogs(logfilepath)
 
-    except Exception:
-        message="Cleanup van server {} is gefaald\n".format(hostname)
+    except Exception as error:
+        message="""\
+            Cleanup van server {} is gefaald\n
+            {}""".format(hostname,error)
         mods.sendMailFailedCleanup(hostname,message)
 
 if __name__ == '__main__':
