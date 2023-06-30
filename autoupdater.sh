@@ -4,7 +4,7 @@ cd /scripts/server-scripts
 
 # git checkout main
 git fetch
-changes=$(git diff origin/feature/auto-updater)
+changes=$(git diff origin/main)
 
 if [[ -n "$changes" ]]; then
     echo "Changes in remote gdetecteerd. Nu downloaden"
