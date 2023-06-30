@@ -2,9 +2,9 @@
 
 cd /scripts/server-scripts
 
-git checkout main
+# git checkout main
 git fetch
-changes=$(git diff origin/main)
+changes=$(git diff origin/feature/auto-updater)
 
 if [[ -n "$changes"]]; then
     echo "Changes in remote gdetecteerd. Nu downloaden"
