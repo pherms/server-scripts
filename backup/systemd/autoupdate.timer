@@ -1,0 +1,7 @@
+[Unit]
+Description=Run Autoupdate every night at 12
+[Timer]
+OnCalendar=*-*-* 00:00:00
+Unit=autoupdate.service
+[Install]
+WantedBy=timers.target

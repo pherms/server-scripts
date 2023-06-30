@@ -1,0 +1,5 @@
+[Unit]
+Description=Autoupdate server scripts
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash '/scripts/server-scripts/autoupdater.sh'
