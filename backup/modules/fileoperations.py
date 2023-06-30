@@ -243,3 +243,15 @@ def cleanupLogs(logPath):
         
         if ageInDays >= 84:
             os.remove(os.path.abspath(file))
+
+def getArchiveFileSize(archive):
+    """
+    Opvragen van bestand grootte van het backup bestand in Human Readable formaat
+
+    :param archive: Het archief bestand waarvan de grootte moet worden bepaald
+    :retrun: str: de waarde in human readable formaat
+    """
+    fullArchivePath = os.path.abspath(archive)
+    sizeHumanReadable = mods.archiveSize(os.path.getsize(fullArchivePath))
+
+    return sizeHumanReadable
