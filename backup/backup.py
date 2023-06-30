@@ -41,7 +41,7 @@ def main():
     message_text = """\
     De backup van {hostname} is succesvol uitgevoerd.\n
     Het backup bestand is {filesizeHumanReadable} groot.\n
-    Zie ook bijgande logfile\n""".format(hostname=hostname,filesizeHumanReadable=mods.archiveSize(archiveFileSize))
+    Zie ook bijgande logfile\n""".format(hostname=hostname,filesizeHumanReadable=archiveFileSize)
     subject = "Backup server {}".format(hostname)
 
     mods.sendMail(subject,message_text,logfile)
