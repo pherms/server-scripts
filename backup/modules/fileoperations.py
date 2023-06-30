@@ -224,7 +224,7 @@ def determineCreationDateFromFileName(fileName):
     creationDateString = match[0]
     
     if len(creationDateString) == 6:
-        creationDate = datetime.strftime(datetime.strptime(creationDateString, '%Y%m%d'), '%y-%m-%d')
+        creationDate = datetime.strftime(datetime.strptime(creationDateString, '%y%m%d'), '%Y-%m-%d')
     else:
         creationDate = datetime.strftime(datetime.strptime(creationDateString, '%Y%m%d'), '%Y-%m-%d')
     
