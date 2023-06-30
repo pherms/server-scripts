@@ -49,8 +49,8 @@ def main():
 
     except Exception as error:
         message="""\
-            Cleanup van server {} is gefaald\n
-            {}""".format(hostname,error)
+            Cleanup van server {hostname} is gefaald\n
+            {error}""".format(hostname=hostname,error=error)
         mods.sendMailFailedCleanup(hostname,message)
 
 if __name__ == '__main__':

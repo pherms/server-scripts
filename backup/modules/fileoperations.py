@@ -251,10 +251,7 @@ def getArchiveFileSize(archive):
     :param archive: Het archief bestand waarvan de grootte moet worden bepaald
     :retrun: str: de waarde in human readable formaat
     """
-
     fullArchivePath = os.path.abspath(archive.name)
-    print('full Archive nam: {}'.format(fullArchivePath))
-    print(type(os.path.getsize(fullArchivePath)))
     sizeHumanReadable = mods.archiveSize(os.path.getsize(fullArchivePath))
 
     return sizeHumanReadable
