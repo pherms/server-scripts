@@ -39,7 +39,7 @@ def main():
         Het totaal aantal verwijderde bestanden is: {totalFilesCleaned}\n
         Het totaal aantal hernoemde bestanden is: {totalFilesRenamed}\n\n
         Zie ook bijgande logfile\n""".format(hostname=hostname,totalFilesCleaned=len(files_cleaned),totalFilesRenamed=len(files_renamed))
-        subject = "Cleanup van files naar op server {} succesvol".format(hostname)
+        subject = "Cleanup van files op server {} succesvol".format(hostname)
         
         mods.closeLogFile(logfile)
         mods.sendMail(subject,message_text,logfile)
