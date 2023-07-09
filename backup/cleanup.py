@@ -24,7 +24,7 @@ def main():
             files_cleaned,files_renamed = mods.determineRemoveOrBackup(files,hostType,logfile,backuppath)
         elif hostType == 'host':
             filesArray = {}
-            backupRootPath = Path(backuppath).parent
+            backupRootPath = str(Path(backuppath).parent)
             print('[Debug] backup root path: {}'.format(backupRootPath))
             for folder in os.listdir(backupRootPath):
                 print(type(backupRootPath))
