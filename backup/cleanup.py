@@ -25,20 +25,14 @@ def main():
         elif hostType == 'host':
             filesArray = {}
             backupRootPath = str(Path(backuppath).parent)
-            print('[Debug] backup root path: {}'.format(backupRootPath))
+            
             for folder in os.listdir(backupRootPath):
-                print(type(backupRootPath))
-                print('[Debug] folder: {}'.format(folder))
                 currentFolder = backupRootPath + '/' + folder
-                print('[Debug] current folder: {}'.format(currentFolder))
                 if mods.isDirectory(currentFolder):
-                    print('[Debug] opzoeken oude files in folder: {}'.format(folder))
                     for file in os.listdir(currentFolder):
-                        print('[Debug] te verwijderen bestand: {}'.format(file))
                         fullFile = os.path.abspath(currentFolder + '/' + file)
                         filesArray[fullFile] = "nothing"
 
-            print('[Debug] Files die worden verwijderd: {}'.format(filesArray))
             files_cleaned,files_renamed = mods.determineRemoveOrBackup(filesArray,hostType,logfile,backupRootPath)
             
         logfile.write("{} Files verwijderd: {}\n".format(datetime.today(),len(files_cleaned)))
