@@ -1,5 +1,6 @@
 # import datetime
 from datetime import *
+from pathlib import Path
 import os
 import modules as mods
 
@@ -23,6 +24,8 @@ def main():
             files_cleaned,files_renamed = mods.determineRemoveOrBackup(files,hostType,logfile,backuppath)
         elif hostType == 'host':
             filesArray = {}
+            backupRootPath = Path(backuppath).parent
+            print('[Debug] backup root path: {}'.format(backupRootPath))
             for folder in os.listdir(backuppath):
                 if mods.isDirectory(backuppath + folder):
                     print('[Debug] opzoeken oude files in folder: {}'.format(folder))
