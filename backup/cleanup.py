@@ -27,6 +27,7 @@ def main():
             backupRootPath = Path(backuppath).parent
             print('[Debug] backup root path: {}'.format(backupRootPath))
             for folder in os.listdir(backupRootPath):
+                print(type(backupRootPath))
                 print('[Debug] folder: {}'.format(folder))
                 currentFolder = backupRootPath + '/' + folder
                 print('[Debug] current folder: {}'.format(currentFolder))
