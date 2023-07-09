@@ -27,6 +27,7 @@ def main():
             backupRootPath = Path(backuppath).parent
             print('[Debug] backup root path: {}'.format(backupRootPath))
             for folder in os.listdir(backupRootPath):
+                print('[Debug] Gevonden folder: {}'.format(folder))
                 if mods.isDirectory(backupRootPath + folder):
                     print('[Debug] opzoeken oude files in folder: {}'.format(folder))
                     for file in os.listdir(backupRootPath + folder):
