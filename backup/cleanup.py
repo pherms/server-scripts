@@ -1,5 +1,6 @@
 # import datetime
 from datetime import *
+from pathlib import Path
 import os
 import modules as mods
 
@@ -23,13 +24,16 @@ def main():
             files_cleaned,files_renamed = mods.determineRemoveOrBackup(files,hostType,logfile,backuppath)
         elif hostType == 'host':
             filesArray = {}
-            for folder in os.listdir(backuppath):
-                if mods.isDirectory(backuppath + folder):
-                    for file in os.listdir(backuppath + folder):
-                        fullFile = os.path.abspath(backuppath + folder + '/' + file)
+            backupRootPath = str(Path(backuppath).parent)
+            
+            for folder in os.listdir(backupRootPath):
+                currentFolder = backupRootPath + '/' + folder
+                if mods.isDirectory(currentFolder):
+                    for file in os.listdir(currentFolder):
+                        fullFile = os.path.abspath(currentFolder + '/' + file)
                         filesArray[fullFile] = "nothing"
 
-            files_cleaned,files_renamed = mods.determineRemoveOrBackup(filesArray,hostType,logfile,backuppath)
+            files_cleaned,files_renamed = mods.determineRemoveOrBackup(filesArray,hostType,logfile,backupRootPath)
             
         logfile.write("{} Files verwijderd: {}\n".format(datetime.today(),len(files_cleaned)))
         logfile.write("{} Files hernoemd: {}\n".format(datetime.today(),len(files_renamed)))

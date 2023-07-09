@@ -199,10 +199,10 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath):
             mods.renameBackupFile(backuppath,fileName,logfile,"month")
             files_renamed.append(fileName)
 
-        # oude weekbackup verwijderen
-        if ageInDays in range(7,28) and not "month" in fileName and "week" in fileName:
-            mods.removeBackupFile(backuppath,fileName,logfile)
-            files_cleaned.append(fileName)
+            # oude weekbackup verwijderen
+            if ageInDays in range(7,27) and "week" in fileName:
+                mods.removeBackupFile(backuppath,fileName,logfile)
+                files_cleaned.append(fileName)
 
         # oude maand backup verwijderen. max age in months 3 (12 weken, ~84 dagen)
         if ageInDays >= 84 and "month" in fileName:
