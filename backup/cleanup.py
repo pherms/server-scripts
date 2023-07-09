@@ -26,16 +26,16 @@ def main():
             filesArray = {}
             backupRootPath = Path(backuppath).parent
             print('[Debug] backup root path: {}'.format(backupRootPath))
-            for folder in os.listdir(backuppath):
-                if mods.isDirectory(backuppath + folder):
+            for folder in os.listdir(backupRootPath):
+                if mods.isDirectory(backupRootPath + folder):
                     print('[Debug] opzoeken oude files in folder: {}'.format(folder))
-                    for file in os.listdir(backuppath + folder):
+                    for file in os.listdir(backupRootPath + folder):
                         print('[Debug] te verwijderen bestand: {}'.format(file))
-                        fullFile = os.path.abspath(backuppath + folder + '/' + file)
+                        fullFile = os.path.abspath(backupRootPath + folder + '/' + file)
                         filesArray[fullFile] = "nothing"
 
             print('[Debug] Files die worden verwijderd: {}'.format(filesArray))
-            files_cleaned,files_renamed = mods.determineRemoveOrBackup(filesArray,hostType,logfile,backuppath)
+            files_cleaned,files_renamed = mods.determineRemoveOrBackup(filesArray,hostType,logfile,backupRootPath)
             
         logfile.write("{} Files verwijderd: {}\n".format(datetime.today(),len(files_cleaned)))
         logfile.write("{} Files hernoemd: {}\n".format(datetime.today(),len(files_renamed)))
