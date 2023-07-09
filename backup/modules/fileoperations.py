@@ -184,29 +184,34 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath):
 
         # backup dag 7 hernoemen naar week
         if dag == 7 and not ("week" in fileName or "month" in fileName):
-            mods.renameBackupFile(backuppath,fileName,logfile,"week")
+            # mods.renameBackupFile(backuppath,fileName,logfile,"week")
+            print('[Debug] hernoemen dagbackup {} naar weekbackup'.format(fileName))
             files_renamed.append(fileName)
 
         # oude dag en week backups verwijderen
         if dag < 7  and ageInDays >= 7 and not ("week" in fileName or "month" in fileName) and not dag == currentDag:
             # remove file
-            mods.removeBackupFile(backuppath,fileName,logfile)
+            # mods.removeBackupFile(backuppath,fileName,logfile)
+            print('[Debug] Verwijderen oude dagbackup of weekbackup {}'.format(fileName))
             files_cleaned.append(fileName)
 
         # oudste weekbackup hernoemen naar month. max age in weeks 4
         if ageInDays >= 28 and "week" in fileName and not "month" in fileName:
             # rename file
-            mods.renameBackupFile(backuppath,fileName,logfile,"month")
+            # mods.renameBackupFile(backuppath,fileName,logfile,"month")
+            print('[Debug] hernoemen weekbackup{} naar maandbackup'.format(fileName))
             files_renamed.append(fileName)
 
         # oude weekbackup verwijderen
         if ageInDays in range(7,28) and not "month" in fileName and "week" in fileName:
-            mods.removeBackupFile(backuppath,fileName,logfile)
+            # mods.removeBackupFile(backuppath,fileName,logfile)
+            print('[Debug] verwijderen oude weekbackup {}'.format(fileName))
             files_cleaned.append(fileName)
 
         # oude maand backup verwijderen. max age in months 3 (12 weken, ~84 dagen)
         if ageInDays >= 84 and "month" in fileName:
-            mods.removeBackupFile(backuppath,fileName,logfile)
+            # mods.removeBackupFile(backuppath,fileName,logfile)
+            print('[Debug] verwijderen oude maandbackup {}'.format(fileName))
             files_cleaned.append(fileName)
 
     return files_cleaned,files_renamed
