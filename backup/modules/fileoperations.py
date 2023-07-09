@@ -199,7 +199,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath):
         if ageInDays >= 28 and "week" in fileName and not "month" in fileName:
             # rename file
             # mods.renameBackupFile(backuppath,fileName,logfile,"month")
-            print('[Debug] hernoemen weekbackup{} naar maandbackup'.format(fileName))
+            print('[Debug] hernoemen weekbackup {} naar maandbackup'.format(fileName))
             files_renamed.append(fileName)
 
         # oude weekbackup verwijderen
