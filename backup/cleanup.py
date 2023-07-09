@@ -28,11 +28,12 @@ def main():
             print('[Debug] backup root path: {}'.format(backupRootPath))
             for folder in os.listdir(backupRootPath):
                 print('[Debug] Gevonden folder: {}'.format(folder))
-                if mods.isDirectory(backupRootPath + folder):
+                currentFolder = backupRootPath + '/' + folder
+                if mods.isDirectory(currentFolder):
                     print('[Debug] opzoeken oude files in folder: {}'.format(folder))
-                    for file in os.listdir(backupRootPath + folder):
+                    for file in os.listdir(currentFolder):
                         print('[Debug] te verwijderen bestand: {}'.format(file))
-                        fullFile = os.path.abspath(backupRootPath + folder + '/' + file)
+                        fullFile = os.path.abspath(currentFolder + '/' + file)
                         filesArray[fullFile] = "nothing"
 
             print('[Debug] Files die worden verwijderd: {}'.format(filesArray))
