@@ -123,7 +123,7 @@ def renameBackupFile(backuppath,fileName,logfile,type):
         if type == 'month':
             logfile.write("{} Hernoemen van bestand {} naar maandbackup\n".format(datetime.today(),backuppath + fileName))
             fileNameArray = fileName.split('.')
-            fileNameNew = backuppath + fileNameArray[0] + '-month.' + fileNameArray[1] + '.' + fileNameArray[2]
+            fileNameNew = backuppath + fileNameArray[0].replace('-week','') + '-month.' + fileNameArray[1] + '.' + fileNameArray[2]
             os.rename(backuppath + fileName,fileNameNew)
 
     elif fileName.split('.')[-1] == "zip":
@@ -132,7 +132,7 @@ def renameBackupFile(backuppath,fileName,logfile,type):
             os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-week.' + fileName.split('.')[1])
         else:
             logfile.write("{} Hernoemen van bestand {} naar maandbackup\n".format(datetime.today(),backuppath + fileName))
-            os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-month.' + fileName.split('.')[1])  
+            os.rename(backuppath + fileName,backuppath + fileName.split('.')[0].replace('-week','') + '-month.' + fileName.split('.')[1])  
 
 def removeBackupFile(backuppath,fileName,logfile):
     """
