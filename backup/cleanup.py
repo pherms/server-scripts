@@ -10,6 +10,7 @@ def main():
     backuppath = config["backuppath"]
     logfilepath = config["logfilepath"]
     hostType = config["hostType"]
+    debug = config["debug"]
 
     logfile = mods.openLogFile(logfilepath,"cleanup")
     hostname = mods.getHostname(logfile)
@@ -21,7 +22,7 @@ def main():
         if hostType == 'vm':
             files = mods.getCreationTime(backuppath)
 
-            files_cleaned,files_renamed = mods.determineRemoveOrBackup(files,hostType,logfile,backuppath)
+            files_cleaned,files_renamed = mods.determineRemoveOrBackup(files,hostType,logfile,backuppath,debug)
         elif hostType == 'host':
             filesArray = {}
             backupRootPath = str(Path(backuppath).parent)
