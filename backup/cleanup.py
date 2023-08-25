@@ -10,8 +10,9 @@ def main():
     backuppath = config["backuppath"]
     logfilepath = config["logfilepath"]
     hostType = config["hostType"]
+    debug = bool(config["debug"])
 
-    logfile = mods.openLogFile(logfilepath,"cleanup")
+    logfile = mods.openLogFile(logfilepath,"cleanup",debug)
     hostname = mods.getHostname(logfile)
     
     files_cleaned = []
@@ -19,9 +20,9 @@ def main():
 
     try:
         if hostType == 'vm':
-            files = mods.getCreationTime(backuppath)
+            files = mods.getCreationTime(backuppath,debug)
 
-            files_cleaned,files_renamed = mods.determineRemoveOrBackup(files,hostType,logfile,backuppath)
+            files_cleaned,files_renamed = mods.determineRemoveOrBackup(files,hostType,logfile,backuppath,debug)
         elif hostType == 'host':
             filesArray = {}
             backupRootPath = str(Path(backuppath).parent)
@@ -33,7 +34,13 @@ def main():
                         fullFile = os.path.abspath(currentFolder + '/' + file)
                         filesArray[fullFile] = "nothing"
 
-            files_cleaned,files_renamed = mods.determineRemoveOrBackup(filesArray,hostType,logfile,backupRootPath)
+            if debug:
+                print("[DEBUG] HostType: {}".format(hostType))
+                print("[DEBUG] filesArray: {}".format(filesArray))
+                print("[DEBUG] backupRootPath: {}".format(backupRootPath))
+                print("[DEBUG] fullFile: {}".format(fullFile))
+
+            files_cleaned,files_renamed = mods.determineRemoveOrBackup(filesArray,hostType,logfile,backupRootPath,debug)
             
         logfile.write("{} Files verwijderd: {}\n".format(datetime.today(),len(files_cleaned)))
         logfile.write("{} Files hernoemd: {}\n".format(datetime.today(),len(files_renamed)))
@@ -49,7 +56,7 @@ def main():
         mods.sendMail(subject,message_text,logfile)
 
         # Cleanup logfiles in logpPath
-        mods.cleanupLogs(logfilepath)
+        mods.cleanupLogs(logfilepath,debug)
 
     except Exception as error:
         message="""\

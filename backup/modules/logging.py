@@ -2,7 +2,7 @@ import modules as mods
 from datetime import datetime
 from pathlib import Path
 
-def openLogFile(logpath,logfiletype):
+def openLogFile(logpath,logfiletype,debug):
     """
     Opent de logfile in schrijf modus, waar naartoe moet worden gelogd.
 
@@ -22,9 +22,13 @@ def openLogFile(logpath,logfiletype):
 
     try:
         logfile = open(logpath + logfilename,"w")
+
+        if debug:
+            print("[DEBUG] Logfile {} is aangemaakt".format(logfilename))
+
         return logfile
     except Exception:
-        print("Er is iets naars gebeurd tijdnes het openen van de logfile")
+        print("Er is iets naars gebeurd tijdens het openen van de logfile")
         exit()
 
 def closeLogFile(logfile):

@@ -13,19 +13,19 @@ def main():
     
     compression = config["compression"]
     backuppath = config["backuppath"]
-    filesize = config["filesize"]
     filetype = config["filetype"]
     logfilepath = config["logfilepath"]
     sources = config["sourcesLocation"]
-    logfile = mods.openLogFile(logfilepath,"backup")
+    debug = bool(config["debug"])
+    logfile = mods.openLogFile(logfilepath,"backup",debug)
     hostname = mods.getHostname(logfile)
     
     logfile.write("{} Inlezen configuratie bestand\n".format(datetime.today()))
     mods.createFolder(backuppath)
-    filename = backuppath + mods.generateFileName(hostname,filetype,compression,logfile)
+    filename = backuppath + mods.generateFileName(hostname,filetype,compression,logfile,debug)
     
-    lines = mods.readSourcesFile(logfile,sources)
-    archive = mods.openArchiveWrite(filename,filetype,compression,logfile)
+    lines = mods.readSourcesFile(logfile,sources,debug)
+    archive = mods.openArchiveWrite(filename,filetype,logfile,debug)
 
     for line in lines:
         if mods.determineInclusion(line):

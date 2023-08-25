@@ -2,12 +2,13 @@ import json
 import socket
 from datetime import datetime
 
-def readSourcesFile(logfile,sources):
+def readSourcesFile(logfile,sources,debug):
     """
     Leest de sources file in. De locatie van de sources file is configureerbaar in config.json
 
     :param obj logfile: het logfile bestand waar naartoe moet worden gelogd
     :param str sources: de locatie van de sources file. Deze parameter is configureerbaar in config.json
+    :param bool debug: debug toggle. Geeft uigebreidere logging in de console of de logfile
     :return: een array met lines
     :rtype: array
     """
@@ -15,6 +16,9 @@ def readSourcesFile(logfile,sources):
         logfile.write("{} Inlezen van lijst met te backuppen files en folders\n".format(datetime.today()))
         sourceFile = open(sources, 'r')
         lines = sourceFile.readlines()
+        if debug:
+            print("[DEBUG] ingelezen sources: {}".format(lines))
+            
         return lines
     except Exception:
         logfile.write("{} Er is een fout opgetreden bij het inlezen van sources file. Backup wordt afgebroken.\n".format(datetime.today()))
