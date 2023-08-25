@@ -5,13 +5,12 @@ import modules as mods
 from datetime import datetime
 from datetime import date
 
-def openArchiveWrite(filename,filetype,compression,logfile):
+def openArchiveWrite(filename,filetype,logfile,debug):
     """
     Open an archive to write to. The archive can be a tar.bz2 file or a zip file
     
     :param str filename: de naam van het archief bestand wat moet worden geopend
     :param str filetype: het bestandstype van het archief. Mogelijke opties zijn bz2 en zip. configureerbaar in config.json
-    :param str compression: het niveau van compressie. configureerbaar in config.json
     :logfile obj logfile: het open logbestand waar naartoe wordt gelogd
     :return: het geopende archief in schrijf modus
     :rtype: obj
@@ -20,10 +19,16 @@ def openArchiveWrite(filename,filetype,compression,logfile):
         if filetype == 'tar':
             # with tarfile.open(filename,'w:bz2') as bz2archive:
             bz2archive = tarfile.open(filename,'w:bz2')
-            return bz2archive
+            backuparchive = bz2archive
         elif filetype == 'zip':
             ziparchive = zipfile.ZipFile(filename,'w', allowZip64=True)
-            return ziparchive
+            backuparchive = ziparchive
+
+        if debug:
+            print("[DEBUG] het backup archief {} is gereed".format(filename))
+        
+        return backuparchive
+        
     except Exception:
         logmessage = "{} Kan {} niet openen. Backup wordt afgebroken.\n".format(datetime.today(),filename)
         logfile.write(logmessage)

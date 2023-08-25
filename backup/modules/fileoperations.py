@@ -20,13 +20,14 @@ def isDirectory(path):
     
     return isDirectory
 
-def generateFileName(hostname,filetype,compression,logfile):
+def generateFileName(hostname,filetype,compression,logfile,debug):
     """
     Genereert een archief filename aan de hand van een aantal parameters. Geeft de waarde terug.
 
     :param str hostname: de hostname van het systeem
     :param str filetype: de filetype van het archief. Is configureerbaar in config.json
     :param str compression: het type compressie van het archief. Is configureerbaar in config.json
+    :param bool debug: enable dug logging
     :param obj logfile: de logfile waar naartoe moet worden gelogd
     :return: de bestandsnaam voor het archief
     :rtype: str
@@ -39,7 +40,11 @@ def generateFileName(hostname,filetype,compression,logfile):
         # zip file
         filename = hostname+"-"+date+"."+filetype
     
+    if debug:
+        print("[DEBUG] Gegenereerde backup filename: {}".format(filename))
+        
     logfile.write("{} Backup wordt weggeschreven in bestand: {}\n".format(datetime.today(),filename))
+
     return filename
 
 def createFolder(folder):
@@ -189,11 +194,18 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
             backupFileDate = datetime.strftime(files.get(fileName),'%Y-%m-%d')
             
         elif hostType == 'host':
-            backupFileDate = mods.determineCreationDateFromFileName(file)
+            backupFileDate = mods.determineCreationDateFromFileName(file,debug)
             folderArray = fileName.split('/')
             backupFolder = folderArray[:-1]
             fileName = folderArray[-1]
             backuppath = '/'.join(backupFolder) + '/'
+
+            if debug:
+                print("[DEBUG] BackupFileDate {}".format(backupFileDate))
+                print("[DEBUG] folderArray {}".format(folderArray))
+                print("[DEBUG] backupFolder {}".format(backupFolder))
+                print("[DEBUG] fileName {}".format(fileName))
+                print("[DEBUG] backuppath {}".format(backuppath))
 
         # behouden
         dag = date.fromisoformat(backupFileDate).isocalendar()[2]
@@ -219,7 +231,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                 mods.removeBackupFile(backuppath,fileName,logfile)
                 files_cleaned.append(fileName)
             else:
-                print("[DEBUG] {} wordt verwijderd.")
+                print("[DEBUG] {} wordt verwijderd.".format(fileName))
                 logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
 
         # oudste weekbackup hernoemen naar month. max age in weeks 4
@@ -238,7 +250,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                     mods.removeBackupFile(backuppath,fileName,logfile)
                     files_cleaned.append(fileName)
                 else:
-                    print("[DEBUG] {} wordt verwijderd.")
+                    print("[DEBUG] {} wordt verwijderd.".format(fileName))
                     logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
 
         # oude maand backup verwijderen. max age in months 3 (12 weken, ~84 dagen)
@@ -247,16 +259,17 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                 mods.removeBackupFile(backuppath,fileName,logfile)
                 files_cleaned.append(fileName)
             else:
-                print("[DEBUG] {} wordt verwijderd.")
+                print("[DEBUG] {} wordt verwijderd.".format(fileName))
                 logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
 
     return files_cleaned,files_renamed
 
-def determineCreationDateFromFileName(fileName):
+def determineCreationDateFromFileName(fileName,debug):
     """
     Bepalen van de creation date van de backupfile op basis van de datum in de bestandsnaam
 
     :param fileName: het backup bestand waarvan de creation date moet worden bepaald.
+    :param debug: debug toggle voor het tonen van extra informatie.
     :return: datetime object
     :rtype: obj
     """
@@ -269,21 +282,30 @@ def determineCreationDateFromFileName(fileName):
     else:
         creationDate = datetime.strftime(datetime.strptime(creationDateString, '%Y%m%d'), '%Y-%m-%d')
     
+    if debug:
+        print("[DEBUG] creationDate of file {} is: {}".format(fileName,creationDate))
+
     return creationDate
 
-def cleanupLogs(logPath):
+def cleanupLogs(logPath,debug):
     """
     Opschonen van de log directory.
 
-    :param logPath: Het pad waar de logfiles worden opgeslagen
+    :param str logPath: Het pad waar de logfiles worden opgeslagen
+    :param bool debug: Debug toggle. Er wordt meer info weergegeven in de console of logfile
     """
     for file in os.listdir(logPath):
         logfileDate = mods.determineCreationDateFromFileName(file)
+        if debug:
+            print("[DEBUG] logfileDate: {}".format(logfileDate))
 
         ageInDays = (datetime.now() - datetime.strptime(logfileDate, '%Y-%m-%d')).days
         
         if ageInDays >= 84:
-            os.remove(os.path.abspath(file))
+            if not debug:
+                print("[DEBUG] het bestand {} zou worden verwijderd wanneer debugging=False")
+            else:
+                os.remove(os.path.abspath(file))
 
 def getArchiveFileSize(archive):
     """

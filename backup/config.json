@@ -4,7 +4,6 @@
     "logfilepath": "/home/pascal/log/backup/",
     "sourcesLocation": "/etc/server-scripts/sources",
     "compression": "bz2",
-    "filesize": "2GB",
     "backupserver": "brisbane.merel107.local",
     "copycommand": "scp",
     "remotefilepath": "/vol/data/fs/backup/",
