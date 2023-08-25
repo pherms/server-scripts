@@ -27,7 +27,7 @@ def generateFileName(hostname,filetype,compression,logfile,debug):
     :param str hostname: de hostname van het systeem
     :param str filetype: de filetype van het archief. Is configureerbaar in config.json
     :param str compression: het type compressie van het archief. Is configureerbaar in config.json
-    :param bool debug: enable dug logging
+    :param bool debug: enable debug logging
     :param obj logfile: de logfile waar naartoe moet worden gelogd
     :return: de bestandsnaam voor het archief
     :rtype: str
