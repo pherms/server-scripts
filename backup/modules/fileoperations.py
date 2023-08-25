@@ -149,7 +149,7 @@ def renameBackupFile(backuppath,fileName,logfile,type,debug):
                 os.rename(backuppath + fileName,backuppath + fileName.split('.')[0].replace('-week','') + '-month.' + fileName.split('.')[1])  
             else:
                 print("[DEBUG] {} wordt hernoemd naar {}".format(fileName,fileName.split('.')[0] + '-month.' + fileName.split('.')[1]))
-                logfile.write("{} [DEBUG] {} wordt hernoemd naar {}\n".format(datetime.today(),fileName,fileName.split('.')[0] + '-month.' + fileName.split('.')[1]))
+                logfile.write("{} [DEBUG] {} wordt hernoemd naar {}\n".format(datetime.today(),fileName,fileName.split('.')[0].replace('-week','') + '-month.' + fileName.split('.')[1]))
 
 def removeBackupFile(backuppath,fileName,logfile):
     """
