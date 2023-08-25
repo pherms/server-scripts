@@ -19,6 +19,7 @@ def main():
     sources = config["sourcesLocation"]
     logfile = mods.openLogFile(logfilepath,"backup")
     hostname = mods.getHostname(logfile)
+    debug = config["debug"]
     
     logfile.write("{} Inlezen configuratie bestand\n".format(datetime.today()))
     mods.createFolder(backuppath)

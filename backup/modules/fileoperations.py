@@ -103,7 +103,7 @@ def copyFileToServer(backupFullFile,backupserver,copycommand,remotefilepath,logf
         mods.sendMailFailedCopyToServer(mods.getHostname(logfile),logmessage)
         exit()
 
-def renameBackupFile(backuppath,fileName,logfile,type):
+def renameBackupFile(backuppath,fileName,logfile,type,debug):
     """
     Rename de backup file naar week of maand.
 
@@ -111,6 +111,7 @@ def renameBackupFile(backuppath,fileName,logfile,type):
     :param str fileName: het backup bestand wat moet worden hernoemd naar maand of week
     :param str logfile: het logfile object waar naartoe moet worden gelogd
     :param str type: Het type waar het bestand naar kan worden hernoemd. Mogelijke opties zijn: week en month
+    :param bool debug: Inschakelen van debug logging. Er worden geen bestanden hernoemd
     """
     
     if fileName.split('.')[1] == "tar":
@@ -118,21 +119,37 @@ def renameBackupFile(backuppath,fileName,logfile,type):
             logfile.write("{} Hernoemen van bestand {} naar weekbackup\n".format(datetime.today(),backuppath + fileName))
             fileNameArray = fileName.split('.')
             fileNameNew = backuppath + fileNameArray[0] + '-week.' + fileNameArray[1] + '.' + fileNameArray[2]
-            os.rename(backuppath + fileName,fileNameNew)
+            if not debug:
+                os.rename(backuppath + fileName,fileNameNew)
+            else:
+                print("[DEBUG] {} wordt hernoemd naar {}".format(fileName,fileNameNew))
+                logfile.write("{} [DEBUG] {} wordt hernoemd naar {}\n".format(datetime.today(),fileName,fileNameNew))
         
         if type == 'month':
             logfile.write("{} Hernoemen van bestand {} naar maandbackup\n".format(datetime.today(),backuppath + fileName))
             fileNameArray = fileName.split('.')
-            fileNameNew = backuppath + fileNameArray[0] + '-month.' + fileNameArray[1] + '.' + fileNameArray[2]
-            os.rename(backuppath + fileName,fileNameNew)
+            fileNameNew = backuppath + fileNameArray[0].replace('-week','') + '-month.' + fileNameArray[1] + '.' + fileNameArray[2]
+            if not debug:
+                os.rename(backuppath + fileName,fileNameNew)
+            else:
+                print("[DEBUG] {} wordt hernoemd naar {}".format(fileName,fileNameNew))
+                logfile.write("{} [DEBUG] {} wordt hernoemd naar {}\n".format(datetime.today(),fileName,fileNameNew))
 
     elif fileName.split('.')[-1] == "zip":
         if type == 'week':
             logfile.write("{} Hernoemen van bestand {} naar weekbackup\n".format(datetime.today(),backuppath + fileName))
-            os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-week.' + fileName.split('.')[1])
+            if not debug:
+                os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-week.' + fileName.split('.')[1])
+            else:
+                print("[DEBUG] {} wordt hernoemd naar {}".format(fileName,fileName.split('.')[0] + '-week.' + fileName.split('.')[1]))
+                logfile.write("{} [DEBUG] {} wordt hernoemd naar {}\n".format(datetime.today(),fileName,fileName.split('.')[0] + '-week.' + fileName.split('.')[1]))
         else:
             logfile.write("{} Hernoemen van bestand {} naar maandbackup\n".format(datetime.today(),backuppath + fileName))
-            os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-month.' + fileName.split('.')[1])  
+            if not debug:
+                os.rename(backuppath + fileName,backuppath + fileName.split('.')[0].replace('-week','') + '-month.' + fileName.split('.')[1])  
+            else:
+                print("[DEBUG] {} wordt hernoemd naar {}".format(fileName,fileName.split('.')[0] + '-month.' + fileName.split('.')[1]))
+                logfile.write("{} [DEBUG] {} wordt hernoemd naar {}\n".format(datetime.today(),fileName,fileName.split('.')[0] + '-month.' + fileName.split('.')[1]))
 
 def removeBackupFile(backuppath,fileName,logfile):
     """
@@ -147,7 +164,7 @@ def removeBackupFile(backuppath,fileName,logfile):
     os.remove(backuppath + fileName)
     logfile.write("{} Bestand {} zou verwijderd zijn\n".format(datetime.today(),backuppath + fileName))
 
-def determineRemoveOrBackup(files,hostType,logfile,backuppath):
+def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
     """
     Bepalen of de backup file moet worden hernoemd of verwijderd
 
@@ -155,6 +172,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath):
     :param str files: de array met files die moeten worden gerenamed, dan wel verwijderd
     :param str logfile: het logfile object waar naartoe moet worden gelogd
     :param str hostType: het host type waarop het script moet worden uitgevoerd. 2 opties: vm en host
+    :param bool debug: Debug toggle. Wanneer true, dan worden geen files verwijderd
     :return: een tuple, bestaande uit files_cleaned en files_renamed
     :rtype: tuple
     """
@@ -184,30 +202,50 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath):
 
         # backup dag 7 hernoemen naar week
         if dag == 7 and not ("week" in fileName or "month" in fileName):
-            mods.renameBackupFile(backuppath,fileName,logfile,"week")
-            files_renamed.append(fileName)
+            if debug:
+                    print("[DEBUG] {} wordt hernoemd naar week backup".format(fileName))
+                    logfile.write("{} [DEBUG] {} wordt hernoemd naar week backup\n".format(datetime.today(),fileName))
 
+            mods.renameBackupFile(backuppath,fileName,logfile,"week",debug)
+            files_renamed.append(fileName)
+        
         # oude dag en week backups verwijderen
         if dag < 7  and ageInDays >= 7 and not ("week" in fileName or "month" in fileName) and not dag == currentDag:
-            # remove file
-            mods.removeBackupFile(backuppath,fileName,logfile)
-            files_cleaned.append(fileName)
+            if not debug:
+                # remove file
+                mods.removeBackupFile(backuppath,fileName,logfile)
+                files_cleaned.append(fileName)
+            else:
+                print("[DEBUG] {} wordt verwijderd.")
+                logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
 
         # oudste weekbackup hernoemen naar month. max age in weeks 4
         if ageInDays >= 28 and "week" in fileName and not "month" in fileName:
+            if debug:
+                print("[DEBUG] {} wordt hernoemd naar maand backup".format(fileName))
+                logfile.write("{} [DEBUG] {} wordt hernoemd naar maand backup\n".format(datetime.today(),fileName))
+
             # rename file
-            mods.renameBackupFile(backuppath,fileName,logfile,"month")
+            mods.renameBackupFile(backuppath,fileName,logfile,"month",debug)
             files_renamed.append(fileName)
 
             # oude weekbackup verwijderen
             if ageInDays in range(7,27) and "week" in fileName:
-                mods.removeBackupFile(backuppath,fileName,logfile)
-                files_cleaned.append(fileName)
+                if not debug:
+                    mods.removeBackupFile(backuppath,fileName,logfile)
+                    files_cleaned.append(fileName)
+                else:
+                    print("[DEBUG] {} wordt verwijderd.")
+                    logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
 
         # oude maand backup verwijderen. max age in months 3 (12 weken, ~84 dagen)
         if ageInDays >= 84 and "month" in fileName:
-            mods.removeBackupFile(backuppath,fileName,logfile)
-            files_cleaned.append(fileName)
+            if not debug:
+                mods.removeBackupFile(backuppath,fileName,logfile)
+                files_cleaned.append(fileName)
+            else:
+                print("[DEBUG] {} wordt verwijderd.")
+                logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
 
     return files_cleaned,files_renamed
 
