@@ -55,7 +55,7 @@ def createFolder(folder):
     else:
         print("{} Folder {} gemaakt".format(datetime.today(),folder))
 
-def getCreationTime(directory):
+def getCreationTime(backuppath,debug):
     """
     Vraagt van ieder bestand in de directory de creation date op en slaat dit op in een dictionary object
 
@@ -66,9 +66,9 @@ def getCreationTime(directory):
     # create an empty dictionary to store the file names and creation times
     file_times = {}
     # loop through all the files in the directory
-    for file in os.listdir(directory):
+    for file in os.listdir(backuppath):
         # get the full path of the file
-        file_path = os.path.join(directory, file)
+        file_path = os.path.join(backuppath, file)
         # get the creation time of the file in seconds since epoch
         creation_time = os.path.getctime(file_path)        
         # convert the creation time to a human-readable format
@@ -77,6 +77,9 @@ def getCreationTime(directory):
         # store the file name and creation time in the dictionary
         file_times[file] = creation_datetime.date()
     # return the dictionary
+    if debug:
+        print("[DEBUG] file times dictionary {}".format(file_times))
+
     return file_times
 
 def copyFileToServer(backupFullFile,backupserver,copycommand,remotefilepath,logfile,hostname):
