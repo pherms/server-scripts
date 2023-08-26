@@ -1,6 +1,5 @@
 import modules as mods
 from datetime import datetime
-from pathlib import Path
 
 def openLogFile(logpath,logfiletype,debug):
     """
@@ -19,6 +18,8 @@ def openLogFile(logpath,logfiletype,debug):
         logfilename = "cleanuplog-" + date + ".log"
     elif logfiletype == "copy":
         logfilename = "copylog-" + date + ".log"
+    elif logfiletype == "update":
+        logfilename = "updatelog.log"
 
     try:
         logfile = open(logpath + logfilename,"w")

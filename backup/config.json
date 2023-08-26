@@ -2,6 +2,8 @@
     "filetype": "tar",
     "backuppath": "/home/pascal/backup/",
     "logfilepath": "/home/pascal/log/backup/",
+    "scriptspath": "/scripts/server-scripts/",
+    "apiurl": "https://api.github.com/repos/pherms/server-scripts/releases/latest",
     "sourcesLocation": "/etc/server-scripts/sources",
     "compression": "bz2",
     "backupserver": "brisbane.merel107.local",
