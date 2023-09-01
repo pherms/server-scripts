@@ -77,6 +77,8 @@ def main():
                     
                 if requestZip.ok:
                     zipFile = zipfile.ZipFile(io.BytesIO(requestZip.content))
+                    zipcontent = zipFile.namelist()
+                    print("[DEBUG] zipcontent: {}".format(zipcontent))
                     zipFile.extractall(".")
             except Exception as error:
                 logfile.write("{} Er is iets fout gegaan tijdens het downloaden van de zipfile\n".format(datetime.today()))
