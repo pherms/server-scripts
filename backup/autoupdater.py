@@ -30,7 +30,7 @@ def main():
 
                 logfile.write("{} API request naar {} succesvol uitgevoerd. Status code: {}\n".format(datetime.today(),apiurl,response.status_code))    
                 responseObject = json.load(response)
-                print(responseObject)
+                print(response)
                 latestVersion = responseObject.tag_name
                 zipUrl = responseObject.zipball_url
         except Exception as error:
