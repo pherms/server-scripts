@@ -76,15 +76,21 @@ def main():
                     print("[DEBUG] zipfile is gedownload. statuscode: {}".format(requestZip.status_code))
                     
                 if requestZip.ok:
+                    logfile.write("{} De zipfile {} is succesvol gedownload\n".format(datetime.today(),zipUrl))
                     zipFile = zipfile.ZipFile(io.BytesIO(requestZip.content))
                     folderInZip = zipFile.namelist()[0]
-                    print(folderInZip[:-1])
+                    tempFolder = "/tmp/" + folderInZip[:-1]
                     # zipinfo = zipFile.getinfo(zipFile)
                     # if debug:
                     # print("[DEBUG] zipcontent: {}".format(zipcontent))
                     #     print("[DEBUG] zipinfo: {}".format(zipinfo))
                     os.chdir('/tmp')
                     zipFile.extractall()
+                    logfile.write("{} De zipfile is uitgepakt naar directory /tmp/{}\n".format(datetime.today(),tempFolder))
+                
+                if os.path.exists(tempFolder):
+                    os.system("cp " + tempFolder + " /home/pascal/scripts/")
+
             except Exception as error:
                 logfile.write("{} Er is iets fout gegaan tijdens het downloaden van de zipfile\n".format(datetime.today()))
                 logfile.write("{} De foutmelding is: {}\n".format(datetime.today(),error))
