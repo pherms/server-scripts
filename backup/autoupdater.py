@@ -79,7 +79,7 @@ def main():
                 if requestZip.ok:
                     zipFile = zipfile.ZipFile(io.BytesIO(requestZip.content))
                     zipcontent = zipFile.namelist()
-                    zipinfo = zipFile.getinfo()
+                    zipinfo = zipFile.getinfo(zipFile)
                     if debug:
                         print("[DEBUG] zipcontent: {}".format(zipcontent))
                         print("[DEBUG] zipinfo: {}".format(zipinfo))
