@@ -24,8 +24,6 @@ def main():
 
         try:
             response = requests.get(apiurl)
-            if debug:
-                print(response.json())
 
             if response.status_code == 200:
                 if debug:
@@ -38,7 +36,7 @@ def main():
                 if debug:
                     prettyJson = json.dumps(responseDictionary, indent=4)
                     print(prettyJson)
-                    
+
                 latestVersion = responseDictionary.get('tag_name')
                 zipUrl = responseDictionary.get('zipball_url')
                 if debug:
