@@ -72,6 +72,7 @@ def main():
         if installedVersion == '' or installedVersion != latestVersion:
             try:
                 requestZip = requests.get(zipUrl)
+                print(requestZip)
                 if debug:
                     print("[DEBUG] zipfile is gedownload. statuscode: {}".format(requestZip.status_code))
                     
