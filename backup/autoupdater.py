@@ -89,7 +89,7 @@ def main():
                     logfile.write("{} De zipfile is uitgepakt naar directory /tmp/{}\n".format(datetime.today(),tempFolder))
                 
                 if os.path.exists(tempFolder):
-                    os.system("cp -r " + tempFolder + " /home/pascal/scripts/")
+                    os.system("cp -r " + tempFolder + "/* /home/pascal/scripts/")
 
             except Exception as error:
                 logfile.write("{} Er is iets fout gegaan tijdens het downloaden van de zipfile\n".format(datetime.today()))
