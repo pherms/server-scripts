@@ -73,9 +73,7 @@ def main():
                 logfile.write("{} Er is iets fout gegaan tijdens het downloaden van de zipfile\n".format(datetime.today()))
                 logfile.write("{} De foutmelding is: {}\n".format(datetime.today(),error))
                 
-        print(versionfile)
-        if changes != '':
-            print("Er zijn nieuwe changes gedetecteerd. De bestanden worden bijgewerkt")
+
             # https://api.github.com/repos/pherms/server-scripts/releases/latest return json
             # tag_name en zipbal_url
 # Stappen:
