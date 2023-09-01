@@ -1,4 +1,5 @@
 from datetime import *
+from json import JSONDecodeError
 import os
 import subprocess
 import requests
@@ -31,13 +32,23 @@ def main():
                     print("[DEBUG] API request succesvol uitgevoerd: {}".format(response.status_code))
 
                 logfile.write("{} API request naar {} succesvol uitgevoerd. Status code: {}\n".format(datetime.today(),apiurl,response.status_code))    
-                responseObject = json.loads(json.dumps(response.json()))
-                print(responseObject)
-                latestVersion = responseObject['tag_name']
-                zipUrl = responseObject['zipball_url']
+                # responseObject = json.loads(json.dumps(response.json()))
+                responseDictionary = response.json()
+                
+                if debug:
+                    prettyJson = json.dumps(responseDictionary, indent=4)
+                    print(prettyJson)
+                    
+                latestVersion = responseDictionary.get('tag_name')
+                zipUrl = responseDictionary.get('zipball_url')
                 if debug:
                     print("[DEBUG] latest version {}\n[DEBUG] zipUrl: {}".format(latestVersion,zipUrl))
-    
+        except JSONDecodeError as jsonerror:
+            if debug:
+                print("[DEBUG] Er is iets fout gegaan tijdens het decoden van de JSON.\n[DEBUG] De error is: {}".format(jsonerror))
+                logfile.write("{} Er is iets fout gegaan tijdens het decoden van de JSON. De error is: {}\n".format(datetime.today(),jsonerror))
+                exit()
+
         except Exception as error:
             logfile.write("{} Er is iets fout gegaan tijdens het uitvoeren van de API request. Status code: {}\n".format(datetime.today(),response.status_code))
             logfile.write("{} De error is: {}\n".format(datetime.today(),error))
