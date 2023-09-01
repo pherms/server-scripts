@@ -19,7 +19,6 @@ def main():
     hostname = mods.getHostname(logfile)
 
     try:
-        os.chdir('/tmp')
         versionfile = scriptfolder + "version.txt"
 
         try:
@@ -84,7 +83,8 @@ def main():
                     # if debug:
                     # print("[DEBUG] zipcontent: {}".format(zipcontent))
                     #     print("[DEBUG] zipinfo: {}".format(zipinfo))
-                    zipFile.extract(folderInZip)
+                    os.chdir('/tmp')
+                    zipFile.extractall()
             except Exception as error:
                 logfile.write("{} Er is iets fout gegaan tijdens het downloaden van de zipfile\n".format(datetime.today()))
                 logfile.write("{} De foutmelding is: {}\n".format(datetime.today(),error))
