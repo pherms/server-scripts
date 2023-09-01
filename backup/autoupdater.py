@@ -23,13 +23,16 @@ def main():
 
         try:
             response = requests.get(apiurl)
+            if debug:
+                print(response.json())
 
             if response.status_code == 200:
                 if debug:
                     print("[DEBUG] API request succesvol uitgevoerd: {}".format(response.status_code))
 
                 logfile.write("{} API request naar {} succesvol uitgevoerd. Status code: {}\n".format(datetime.today(),apiurl,response.status_code))    
-                responseObject = response.json()
+                responseObject = json.load(response.json())
+
                 latestVersion = responseObject.tag_name
                 zipUrl = responseObject.zipball_url
         except Exception as error:
