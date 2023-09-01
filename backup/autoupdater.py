@@ -23,7 +23,7 @@ def main():
 
         try:
             response = requests.get(apiurl)
-            print(response)
+            print(response.json())
 
             if response.status_code == 200:
                 if debug:
