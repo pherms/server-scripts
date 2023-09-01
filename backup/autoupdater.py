@@ -75,7 +75,7 @@ def main():
                 if debug:
                     print("[DEBUG] zipfile is gedownload. statuscode: {}".format(requestZip.status_code))
                     
-                if requestZip.status_code == 200:
+                if requestZip.ok:
                     zipFile = zipfile.ZipFile(io.BytesIO(requestZip.content))
                     zipcontent = zipFile.namelist()
                     zipinfo = zipFile.getinfo()
