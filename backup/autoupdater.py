@@ -29,7 +29,7 @@ def main():
                     print("[DEBUG] API request succesvol uitgevoerd: {}".format(response.status_code))
 
                 logfile.write("{} API request naar {} succesvol uitgevoerd. Status code: {}\n".format(datetime.today(),apiurl,response.status_code))    
-                responseObject = json.load(response.)
+                responseObject = json.load(response)
                 print(responseObject)
                 latestVersion = responseObject.tag_name
                 zipUrl = responseObject.zipball_url
