@@ -90,6 +90,7 @@ def main():
                 
                 if os.path.exists(tempFolder):
                     os.system("cp -r " + tempFolder + "/* /home/pascal/scripts/")
+                    logfile.write("{} De bestanden zijn gekopieerd naar directory: {}\n".format(datetime.today(),scriptfolder))
 
             except Exception as error:
                 logfile.write("{} Er is iets fout gegaan tijdens het downloaden van de zipfile\n".format(datetime.today()))
