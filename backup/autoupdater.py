@@ -28,13 +28,13 @@ def main():
                 if debug:
                     print("[DEBUG] API request succesvol uitgevoerd: {}".format(response.status_code))
 
-                logfile.write("{} API request naar {} succesvol uitgevoerd. Status code: {}".format(datetime.today(),apiurl,response.status_code))    
+                logfile.write("{} API request naar {} succesvol uitgevoerd. Status code: {}\n".format(datetime.today(),apiurl,response.status_code))    
                 responseObject = json.load(response)
                 latestVersion = responseObject.tag_name
                 zipUrl = responseObject.zipball_url
         except Exception as error:
-            logfile.write("{} Er is iets fout gegaan tijdens het uitvoeren van de API request. Status code: {}".format(datetime.today(),response.status_code))
-            logfile.write("{} De error is: {}".format(datetime.today(),error))
+            logfile.write("{} Er is iets fout gegaan tijdens het uitvoeren van de API request. Status code: {}\n".format(datetime.today(),response.status_code))
+            logfile.write("{} De error is: {}\n".format(datetime.today(),error))
             if debug:
                 print("[DEBUG] fout bij uitvoeren API request: {}. Zie logfile".format(response.status_code))
             exit()
@@ -43,8 +43,7 @@ def main():
             try:
                 installedVersion = open(versionfile,"r").readline()
                 if debug:
-                    # print("[DEBUG] Geïnstalleerde versie: {}".format(installedVersion))
-                    pass
+                    print("[DEBUG] Geïnstalleerde versie: {}".format(installedVersion))
 
             except Exception as error:
                 logfile.write("{} Er is iets fout gegaan bij het inlezen van de versiefile: {}\n".format(datetime.today(),versionfile))
@@ -66,7 +65,7 @@ def main():
                     zipFile.extractall(".")
             except Exception as error:
                 logfile.write("{} Er is iets fout gegaan tijdens het downloaden van de zipfile\n".format(datetime.today()))
-                logfile.write("{} De foutmelding is: {}".format(datetime.today(),error))
+                logfile.write("{} De foutmelding is: {}\n".format(datetime.today(),error))
                 
         print(versionfile)
         if changes != '':
