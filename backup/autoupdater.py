@@ -31,7 +31,7 @@ def main():
                     print("[DEBUG] API request succesvol uitgevoerd: {}".format(response.status_code))
 
                 logfile.write("{} API request naar {} succesvol uitgevoerd. Status code: {}\n".format(datetime.today(),apiurl,response.status_code))    
-                responseObject = json.load(response.json())
+                responseObject = json.loads(response.json())
                 print(responseObject)
     
         except Exception as error:
