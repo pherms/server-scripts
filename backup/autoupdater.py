@@ -32,15 +32,17 @@ def main():
 
                 logfile.write("{} API request naar {} succesvol uitgevoerd. Status code: {}\n".format(datetime.today(),apiurl,response.status_code))    
                 responseObject = json.load(response.json())
-
-                latestVersion = responseObject.tag_name
-                zipUrl = responseObject.zipball_url
+                print(responseObject)
+    
         except Exception as error:
             logfile.write("{} Er is iets fout gegaan tijdens het uitvoeren van de API request. Status code: {}\n".format(datetime.today(),response.status_code))
             logfile.write("{} De error is: {}\n".format(datetime.today(),error))
             if debug:
                 print("[DEBUG] fout bij uitvoeren API request: {}. Zie logfile".format(response.status_code))
             exit()
+
+                #             latestVersion = responseObject.tag_name
+                # zipUrl = responseObject.zipball_url
             
         if os.path.exists(versionfile):
             try:
