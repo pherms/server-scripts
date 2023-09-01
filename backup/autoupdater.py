@@ -43,7 +43,8 @@ def main():
             try:
                 installedVersion = open(versionfile,"r").readline()
                 if debug:
-                    print("[DEBUG] Geïnstalleerde versie: {}".format(installedVersion))
+                    # print("[DEBUG] Geïnstalleerde versie: {}".format(installedVersion))
+                    pass
 
             except Exception as error:
                 logfile.write("{} Er is iets fout gegaan bij het inlezen van de versiefile: {}\n".format(datetime.today(),versionfile))
