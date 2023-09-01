@@ -75,10 +75,11 @@ def main():
                 if debug:
                     print("[DEBUG] zipfile is gedownload. statuscode: {}".format(requestZip.status_code))
                     
-                if requestZip.ok:
+                if requestZip.status_code == 200:
                     zipFile = zipfile.ZipFile(io.BytesIO(requestZip.content))
                     zipcontent = zipFile.namelist()
-                    print("[DEBUG] zipcontent: {}".format(zipcontent))
+                    if debug:
+                        print("[DEBUG] zipcontent: {}".format(zipcontent))
                     zipFile.extractall(".")
             except Exception as error:
                 logfile.write("{} Er is iets fout gegaan tijdens het downloaden van de zipfile\n".format(datetime.today()))
