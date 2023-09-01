@@ -78,7 +78,7 @@ def main():
                 if requestZip.ok:
                     zipFile = zipfile.ZipFile(io.BytesIO(requestZip.content))
                     folderInZip = zipFile.namelist()[0]
-                    print(folderInZip[-1])
+                    print(folderInZip[:-1])
                     # zipinfo = zipFile.getinfo(zipFile)
                     # if debug:
                     # print("[DEBUG] zipcontent: {}".format(zipcontent))
