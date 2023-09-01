@@ -79,6 +79,7 @@ def main():
                 if requestZip.ok:
                     zipFile = zipfile.ZipFile(io.BytesIO(requestZip.content))
                     folderInZip = zipFile.namelist()[0]
+                    print(folderInZip)
                     # zipinfo = zipFile.getinfo(zipFile)
                     # if debug:
                     # print("[DEBUG] zipcontent: {}".format(zipcontent))
@@ -100,6 +101,8 @@ def main():
 # - wanneer versies verschillen, dan zipball downloaden
 # - zipball uitpakken of kopieren naar scriptsfolder
 # - tagname wegschrijven naar versiefile
+# - chmod +x op alle .sh files
+
 
 
         subject = "Autoupdate op server {hostname} is succesvol uitgevoerd"
