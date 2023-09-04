@@ -91,6 +91,25 @@ def main():
                 if os.path.exists(tempFolder):
                     os.system("cp -r " + tempFolder + "/* /home/pascal/scripts/")
                     logfile.write("{} De bestanden zijn gekopieerd naar directory: {}\n".format(datetime.today(),scriptfolder))
+                    if debug:
+                        print("[DEBUG] Bestanden zijn gekopieerd naar de scriptsfolder")
+            
+                if os.path.exists(versionfile):
+                    if debug:
+                        print("[DEBUG] verwijderen van bestaande versie file")
+                    os.system("rm -f " + versionfile)
+                
+                try:
+                    newversionfile = open(versionfile,"w")
+                    logfile.write("{} Latest versienummer {} schrijven naar versiefile: {}".format(datetime.today(),latestVersion,versionfile))
+                    if debug:
+                        print("[DEBUG] Versiefile {} is aangemaakt".format(newversionfile))
+
+                    newversionfile.write(latestVersion)
+                    newversionfile.close()
+                except Exception as writeError:
+                    print("Er is fout opgetreden tijdens het schrijven van de latest {} version naar de versiefile {} van de logfile".format(latestVersion,versionfile))
+                    logfile.write("{} Er is een fout opgetreden bij het schrijven van {} naar de versiefile {}\nDe foutmelding is: {}".format(datetime.today(),latestVersion,versionfile,writeError))
 
             except Exception as error:
                 logfile.write("{} Er is iets fout gegaan tijdens het downloaden van de zipfile\n".format(datetime.today()))
