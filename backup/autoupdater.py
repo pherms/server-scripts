@@ -105,10 +105,10 @@ def main():
                     with open(versionfile,"w") as vf:
                         vf.write(latestVersion)
                         vf.close()
+                        if debug:
+                            print("[DEBUG] Versiefile {} is aangemaakt".format(vf))
 
                     logfile.write("{} Latest versienummer {} schrijven naar versiefile: {}".format(datetime.today(),latestVersion,versionfile))
-                    if debug:
-                        print("[DEBUG] Versiefile {} is aangemaakt".format(newversionfile))
 
                 except Exception as writeError:
                     print("Er is fout opgetreden tijdens het schrijven van de latest {} version naar de versiefile {} van de logfile".format(latestVersion,versionfile))
