@@ -55,7 +55,9 @@ def main():
             
         if os.path.exists(versionfile):
             try:
-                installedVersion = open(versionfile,"r").readline()
+                with open(versionfile,"r") as vf:
+                    installedVersion = vf.readline()
+                    vf.close()
                 if debug:
                     print("[DEBUG] Geïnstalleerde versie: {}".format(installedVersion))
 
@@ -100,13 +102,14 @@ def main():
                     os.system("rm -f " + versionfile)
                 
                 try:
-                    newversionfile = open(versionfile,"w")
+                    with open(versionfile,"w") as vf:
+                        vf.write(latestVersion)
+                        vf.close()
+
                     logfile.write("{} Latest versienummer {} schrijven naar versiefile: {}".format(datetime.today(),latestVersion,versionfile))
                     if debug:
                         print("[DEBUG] Versiefile {} is aangemaakt".format(newversionfile))
 
-                    newversionfile.write(latestVersion)
-                    newversionfile.close()
                 except Exception as writeError:
                     print("Er is fout opgetreden tijdens het schrijven van de latest {} version naar de versiefile {} van de logfile".format(latestVersion,versionfile))
                     logfile.write("{} Er is een fout opgetreden bij het schrijven van {} naar de versiefile {}\nDe foutmelding is: {}".format(datetime.today(),latestVersion,versionfile,writeError))
