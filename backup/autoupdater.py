@@ -81,10 +81,7 @@ def main():
                     zipFile = zipfile.ZipFile(io.BytesIO(requestZip.content))
                     folderInZip = zipFile.namelist()[0]
                     tempFolder = "/tmp/" + folderInZip[:-1]
-                    # zipinfo = zipFile.getinfo(zipFile)
-                    # if debug:
-                    # print("[DEBUG] zipcontent: {}".format(zipcontent))
-                    #     print("[DEBUG] zipinfo: {}".format(zipinfo))
+
                     os.chdir('/tmp')
                     zipFile.extractall()
                     logfile.write("{} De zipfile is uitgepakt naar directory /tmp/{}\n".format(datetime.today(),tempFolder))
@@ -102,7 +99,7 @@ def main():
                         if debug:
                             print("[DEBUG] Versiefile {} is aangemaakt".format(vf.name))
 
-                    logfile.write("{} Latest versienummer {} schrijven naar versiefile: {}".format(datetime.today(),latestVersion,versionfile))
+                    logfile.write("{} Latest versienummer {} schrijven naar versiefile: {}\n".format(datetime.today(),latestVersion,versionfile))
                 except Exception as writeError:
                     print("Er is fout opgetreden tijdens het schrijven van de latest {} version naar de versiefile {} van de logfile".format(latestVersion,versionfile))
                     logfile.write("{} Er is een fout opgetreden bij het schrijven van {} naar de versiefile {}\nDe foutmelding is: {}\n".format(datetime.today(),latestVersion,versionfile,writeError))
@@ -112,7 +109,11 @@ def main():
                     logfile.write("{} Instellen van het execute bit op .sh files\n".format(datetime.today()))
                     if debug:
                         print("[DEBUG] Setting atributes van .sh files naar executable")
-                        os.system("find " + scriptfolder + " -name \"*.sh\" -exec chmod -c +x {} \;")
+                        os.system("find " + scriptfolder + " -name \"*.sh\" -exec chmod -c +x {} \; > setmode.txt")
+                        with open("setmode.txt","r") as setmode:
+                            print(setmode.read())
+                        os.system("rm setmode.txt")
+
                     else:
                         os.system("find " + scriptfolder + " -name \"*.sh\" -exec chmod +x {} \;")
 
