@@ -1,7 +1,6 @@
 from datetime import *
 from json import JSONDecodeError
 import os
-import subprocess
 import requests
 import zipfile
 import io
@@ -39,12 +38,13 @@ def main():
                 latestVersion = responseDictionary.get('tag_name')
                 zipUrl = responseDictionary.get('zipball_url')
                 if debug:
-                    print("[DEBUG] latest version {}\n[DEBUG] zipUrl: {}".format(latestVersion,zipUrl))
+                    print("[DEBUG] latest version: {}\n[DEBUG] zipUrl: {}".format(latestVersion,zipUrl))
         except JSONDecodeError as jsonerror:
             if debug:
                 print("[DEBUG] Er is iets fout gegaan tijdens het decoden van de JSON.\n[DEBUG] De error is: {}".format(jsonerror))
-                logfile.write("{} Er is iets fout gegaan tijdens het decoden van de JSON. De error is: {}\n".format(datetime.today(),jsonerror))
-                exit()
+
+            logfile.write("{} Er is iets fout gegaan tijdens het decoden van de JSON. De error is: {}\n".format(datetime.today(),jsonerror))
+            exit()
 
         except Exception as error:
             logfile.write("{} Er is iets fout gegaan tijdens het uitvoeren van de API request. Status code: {}\n".format(datetime.today(),response.status_code))
@@ -117,7 +117,10 @@ def main():
             except Exception as error:
                 logfile.write("{} Er is iets fout gegaan tijdens het downloaden van de zipfile\n".format(datetime.today()))
                 logfile.write("{} De foutmelding is: {}\n".format(datetime.today(),error))
-                
+        else:
+            if debug:
+                print("[DEBUG] Laatste versie is al geïnstalleerd. Er hoeft niets te worden gedaan.")
+            logfile.write("{} De laatste versie: {} is al geïnstalleerd. De updater wordt nu gesloten.\n".format(datetime.today(),installedVersion))
 
             # https://api.github.com/repos/pherms/server-scripts/releases/latest return json
             # tag_name en zipbal_url
