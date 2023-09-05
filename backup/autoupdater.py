@@ -27,8 +27,7 @@ def main():
                 if debug:
                     print("[DEBUG] API request succesvol uitgevoerd: {}".format(response.status_code))
 
-                logfile.write("{} API request naar {} succesvol uitgevoerd. Status code: {}\n".format(datetime.today(),apiurl,response.status_code))    
-                # responseObject = json.loads(json.dumps(response.json()))
+                logfile.write("{} API request naar {} succesvol uitgevoerd. Status code: {}\n".format(datetime.today(),apiurl,response.status_code))
                 responseDictionary = response.json()
                 
                 if debug:
@@ -95,12 +94,7 @@ def main():
                     logfile.write("{} De bestanden zijn gekopieerd naar directory: {}\n".format(datetime.today(),scriptfolder))
                     if debug:
                         print("[DEBUG] Bestanden zijn gekopieerd naar de scriptsfolder")
-            
-                # if os.path.exists(versionfile):
-                #     if debug:
-                #         print("[DEBUG] verwijderen van bestaande versie file")
-                #     os.system("rm -f " + versionfile)
-                
+                           
                 try:
                     with open(versionfile,"w") as vf:
                         vf.write(latestVersion)
@@ -109,14 +103,37 @@ def main():
                             print("[DEBUG] Versiefile {} is aangemaakt".format(vf.name))
 
                     logfile.write("{} Latest versienummer {} schrijven naar versiefile: {}".format(datetime.today(),latestVersion,versionfile))
-
                 except Exception as writeError:
                     print("Er is fout opgetreden tijdens het schrijven van de latest {} version naar de versiefile {} van de logfile".format(latestVersion,versionfile))
                     logfile.write("{} Er is een fout opgetreden bij het schrijven van {} naar de versiefile {}\nDe foutmelding is: {}".format(datetime.today(),latestVersion,versionfile,writeError))
 
+                # reset execute bit op .sh files
+                try:
+                    os.system("chmod -R +x " + scriptfolder + "/*.sh")
+                    if debug:
+                        for file in os.listdir(scriptfolder):
+                            info = os.stat(file)
+                            print("[DEBUG] Atributes of {}: {}".format(file,info.st_mode))
+
+                except Exception as error:
+                    pass
+
+                # cleanup /tmp folder
+                try:
+                    if os.path.exists(tempFolder):
+                        os.system("rm -rf " + tempFolder)
+                        logfile.write("{} De tempfolder is opgeruimd".format(datetime.today()))
+                        if debug:
+                            print("[DEBUG] Tempfolder is opgeruimd")
+                except Exception as error:
+                    print("Er is een fout opgetreden bij het opruimen van de temp folder\nError: {}".format(error))
+                    logfile.write("{} Er is een fout opgetreden tijdens het opruimen van de tempfolder. De error is: {}".format(datetime.today(),error))
+
             except Exception as error:
                 logfile.write("{} Er is iets fout gegaan tijdens het downloaden van de zipfile\n".format(datetime.today()))
                 logfile.write("{} De foutmelding is: {}\n".format(datetime.today(),error))
+                if debug:
+                    print("[DEBUG] Er is iets fout gegaan tijdens het downloaden van de zip. De error is: {}".format(error))
         else:
             if debug:
                 print("[DEBUG] Laatste versie is al geïnstalleerd. Er hoeft niets te worden gedaan.")
@@ -125,21 +142,21 @@ def main():
             # https://api.github.com/repos/pherms/server-scripts/releases/latest return json
             # tag_name en zipbal_url
 # Stappen:
-# - installeren requirements file
-# - versiefile inlezen
-# - request naar api doen
-# - inlezen response van api velden tag_name en zipball_url opslaan
-# - versie vergelijken met geïnstalleerde versie
-# - wanneer versies verschillen, dan zipball downloaden
-# - zipball uitpakken of kopieren naar scriptsfolder
-# - tagname wegschrijven naar versiefile
+# - installeren requirements file -> done
+# - versiefile inlezen -> done
+# - request naar api doen -> done
+# - inlezen response van api velden tag_name en zipball_url opslaan -> done
+# - versie vergelijken met geïnstalleerde versie -> done
+# - wanneer versies verschillen, dan zipball downloaden -> done
+# - zipball uitpakken of kopieren naar scriptsfolder -> done
+# - tagname wegschrijven naar versiefile -> done
 # - chmod +x op alle .sh files
 # - verwijderen map uit /tmp
 
 
 
-        subject = "Autoupdate op server {hostname} is succesvol uitgevoerd"
-        message = "Autoupdate op server {hostname} is succesvol uitgevoerd"
+        subject = "Autoupdate op server {hostname} is succesvol uitgevoerd".format(hostname=hostname)
+        message = "Autoupdate op server {hostname} is succesvol uitgevoerd\nZie de bijgevoegde logfile.\nDe geïnstalleerde versie is: {latestVersion}.".format(hostname=hostname,latestVersion=latestVersion)
     except Exception as error:
         if debug:
             print("[DEBUG] Error bij uitvoeren van Autoupdater")
