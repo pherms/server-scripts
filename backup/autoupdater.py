@@ -106,7 +106,7 @@ def main():
                         vf.write(latestVersion)
                         vf.close()
                         if debug:
-                            print("[DEBUG] Versiefile {} is aangemaakt".format(vf))
+                            print("[DEBUG] Versiefile {} is aangemaakt".format(vf.name))
 
                     logfile.write("{} Latest versienummer {} schrijven naar versiefile: {}".format(datetime.today(),latestVersion,versionfile))
 
