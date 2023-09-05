@@ -105,29 +105,30 @@ def main():
                     logfile.write("{} Latest versienummer {} schrijven naar versiefile: {}".format(datetime.today(),latestVersion,versionfile))
                 except Exception as writeError:
                     print("Er is fout opgetreden tijdens het schrijven van de latest {} version naar de versiefile {} van de logfile".format(latestVersion,versionfile))
-                    logfile.write("{} Er is een fout opgetreden bij het schrijven van {} naar de versiefile {}\nDe foutmelding is: {}".format(datetime.today(),latestVersion,versionfile,writeError))
+                    logfile.write("{} Er is een fout opgetreden bij het schrijven van {} naar de versiefile {}\nDe foutmelding is: {}\n".format(datetime.today(),latestVersion,versionfile,writeError))
 
                 # reset execute bit op .sh files
                 try:
-                    os.system("chmod -R +x " + scriptfolder + "/*.sh")
+                    logfile.write("{} Instellen van het execute bit op .sh files\n".format(datetime.today()))
                     if debug:
-                        for file in os.listdir(scriptfolder):
-                            info = os.stat(file)
-                            print("[DEBUG] Atributes of {}: {}".format(file,info.st_mode))
+                        print("[DEBUG] Setting atributes van .sh files naar executable")
+                        os.system("find " + scriptfolder + " -name \"*.sh\" -exec chmod -c +x {} \;")
+                    else:
+                        os.system("find " + scriptfolder + " -name \"*.sh\" -exec chmod +x {} \;")
 
                 except Exception as error:
-                    pass
+                    logfile.write("{} Er is een fout opgetreden tijdens het instellen van het execute bit op .sh files.".format(datetime.today()))
 
                 # cleanup /tmp folder
                 try:
                     if os.path.exists(tempFolder):
                         os.system("rm -rf " + tempFolder)
-                        logfile.write("{} De tempfolder is opgeruimd".format(datetime.today()))
+                        logfile.write("{} De tempfolder is opgeruimd\n".format(datetime.today()))
                         if debug:
                             print("[DEBUG] Tempfolder is opgeruimd")
                 except Exception as error:
                     print("Er is een fout opgetreden bij het opruimen van de temp folder\nError: {}".format(error))
-                    logfile.write("{} Er is een fout opgetreden tijdens het opruimen van de tempfolder. De error is: {}".format(datetime.today(),error))
+                    logfile.write("{} Er is een fout opgetreden tijdens het opruimen van de tempfolder. De error is: {}\n".format(datetime.today(),error))
 
             except Exception as error:
                 logfile.write("{} Er is iets fout gegaan tijdens het downloaden van de zipfile\n".format(datetime.today()))
@@ -150,7 +151,7 @@ def main():
 # - wanneer versies verschillen, dan zipball downloaden -> done
 # - zipball uitpakken of kopieren naar scriptsfolder -> done
 # - tagname wegschrijven naar versiefile -> done
-# - chmod +x op alle .sh files
+# - chmod +x op alle .sh files -> done
 # - verwijderen map uit /tmp
 
 
