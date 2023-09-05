@@ -96,10 +96,10 @@ def main():
                     if debug:
                         print("[DEBUG] Bestanden zijn gekopieerd naar de scriptsfolder")
             
-                if os.path.exists(versionfile):
-                    if debug:
-                        print("[DEBUG] verwijderen van bestaande versie file")
-                    os.system("rm -f " + versionfile)
+                # if os.path.exists(versionfile):
+                #     if debug:
+                #         print("[DEBUG] verwijderen van bestaande versie file")
+                #     os.system("rm -f " + versionfile)
                 
                 try:
                     with open(versionfile,"w") as vf:
