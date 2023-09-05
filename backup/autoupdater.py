@@ -112,7 +112,7 @@ def main():
                         os.system("find " + scriptfolder + " -name \"*.sh\" -exec chmod -c +x {} \; > setmode.txt")
                         with open(scriptfolder + "setmode.txt","r") as setmode:
                             print(setmode.read())
-                        # os.system("rm setmode.txt")
+                        os.system("rm " + scriptfolder + "setmode.txt")
 
                     else:
                         os.system("find " + scriptfolder + " -name \"*.sh\" -exec chmod +x {} \;")
