@@ -108,11 +108,12 @@ def main():
                 try:
                     logfile.write("{} Instellen van het execute bit op .sh files\n".format(datetime.today()))
                     if debug:
+                        setModeFile = scriptfolder + "setmode.txt"
                         print("[DEBUG] Setting atributes van .sh files naar executable")
-                        os.system("find " + scriptfolder + " -name \"*.sh\" -exec chmod -c +x {} \; > setmode.txt")
-                        with open(scriptfolder + "setmode.txt","r") as setmode:
+                        os.system("find " + scriptfolder + " -name \"*.sh\" -exec chmod -c +x {} \; > " + setModeFile)
+                        with open(setModeFile,"r") as setmode:
                             print(setmode.read())
-                        os.system("rm " + scriptfolder + "setmode.txt")
+                        os.system("rm " + setModeFile)
 
                     else:
                         os.system("find " + scriptfolder + " -name \"*.sh\" -exec chmod +x {} \;")
