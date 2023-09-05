@@ -154,9 +154,9 @@ def main():
 # - zipball uitpakken of kopieren naar scriptsfolder -> done
 # - tagname wegschrijven naar versiefile -> done
 # - chmod +x op alle .sh files -> done
-# - verwijderen map uit /tmp
-
-
+# - verwijderen map uit /tmp ->
+# - Copy system unit file en timer file naar /etc/systemd/system if different (import filecmp)
+# - systemctl daemon-reload
 
         subject = "Autoupdate op server {hostname} is succesvol uitgevoerd".format(hostname=hostname)
         message = "Autoupdate op server {hostname} is succesvol uitgevoerd\nZie de bijgevoegde logfile.\nDe geïnstalleerde versie is: {latestVersion}.".format(hostname=hostname,latestVersion=latestVersion)
