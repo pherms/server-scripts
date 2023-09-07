@@ -13,6 +13,8 @@ def main():
     debug = bool(config["debug"])
     scriptfolder = config["scriptspath"]
     apiurl = config["apiurl"]
+    timers = config["timerUnits"]
+    services = config["serviceUnits"]
 
     logfile = mods.openLogFile(logfilepath,"update",debug)
     hostname = mods.getHostname(logfile)
@@ -142,26 +144,34 @@ def main():
                 logfile.write("{} De foutmelding is: {}\n".format(datetime.today(),error))
                 if debug:
                     print("[DEBUG] Er is iets fout gegaan tijdens het downloaden van de zip. De error is: {}".format(error))
+
+            # Installeer daemons
+            for timer in timers:
+                status = mods.checkIfDaemonIsInstalled(timer,logfile,debug)
+                if status == "installed":
+                    mods.startDaemon(timer,logfile,debug)
+                if status == "updated":
+                    mods.restartDaemon(timer,logfile,debug)
+                if status == "error":
+                    logfile.write("{} Er is een fout opgetreden tijden het installeren van timer: {}\n".format(datetime.today()))
+                    if debug:
+                        print("[DEBUG] Er is een fout opgetreden bij het installeren van timer: {}".format(timer))
+
+            for service in services:
+                status = mods.checkIfDaemonIsInstalled(service,logfile,debug)
+                if status == "installed":
+                    mods.startDaemon(service,logfile,debug)
+                if status == "updated":
+                    mods.restartDaemon(service,logfile,debug)
+                if status == "error":
+                    logfile.write("{} Er is een fout opgetreden tijden het installeren van service: {}\n".format(datetime.today()))
+                    if debug:
+                        print("[DEBUG] Er is een fout opgetreden bij het installeren van service: {}".format(service))
+
         else:
             if debug:
                 print("[DEBUG] Laatste versie is al geïnstalleerd. Er hoeft niets te worden gedaan.")
             logfile.write("{} De laatste versie: {} is al geïnstalleerd. De updater wordt nu gesloten.\n".format(datetime.today(),installedVersion))
-
-            # https://api.github.com/repos/pherms/server-scripts/releases/latest return json
-            # tag_name en zipbal_url
-# Stappen:
-# - installeren requirements file -> done
-# - versiefile inlezen -> done
-# - request naar api doen -> done
-# - inlezen response van api velden tag_name en zipball_url opslaan -> done
-# - versie vergelijken met geïnstalleerde versie -> done
-# - wanneer versies verschillen, dan zipball downloaden -> done
-# - zipball uitpakken of kopieren naar scriptsfolder -> done
-# - tagname wegschrijven naar versiefile -> done
-# - chmod +x op alle .sh files -> done
-# - verwijderen map uit /tmp -> done
-# - Copy system unit file en timer file naar /etc/systemd/system if different (import filecmp)
-# - systemctl daemon-reload
 
         subject = "Autoupdate op server {hostname} is succesvol uitgevoerd".format(hostname=hostname)
         message = "Autoupdate op server {hostname} is succesvol uitgevoerd\nZie de bijgevoegde logfile.\nDe geïnstalleerde versie is: {latestVersion}.".format(hostname=hostname,latestVersion=latestVersion)
