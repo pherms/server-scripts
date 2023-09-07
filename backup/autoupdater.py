@@ -144,6 +144,7 @@ def main():
                 logfile.write("{} De foutmelding is: {}\n".format(datetime.today(),error))
                 if debug:
                     print("[DEBUG] Er is iets fout gegaan tijdens het downloaden van de zip. De error is: {}".format(error))
+                exit()
 
             # Installeer daemons
             for timer in timers:
