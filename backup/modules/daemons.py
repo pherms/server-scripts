@@ -77,8 +77,6 @@ def installDaemon(daemon,logfile,debug):
 
             logfile.write("{} Daemon {} heeft updates. De nieuwe daemon wordt geinstalleerd\n".format(datetime.today(),daemon))
             copyDaemonFiles(daemon,logfile)
-            logfile.write("{} Daemon files herladen\n".format(datetime.today()))
-            reloadDaemon(daemon,logfile,debug)
             return "updated"
         
     except Exception as error:

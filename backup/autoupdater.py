@@ -149,8 +149,10 @@ def main():
             for timer in timers:
                 status = mods.checkIfDaemonIsInstalled(timer,logfile,debug)
                 if status == "installed":
+                    mods.enableDaemon(timer,logfile,debug)
                     mods.startDaemon(timer,logfile,debug)
                 if status == "updated":
+                    mods.reloadDaemon(timer,logfile,debug)
                     mods.restartDaemon(timer,logfile,debug)
                 if status == "error":
                     logfile.write("{} Er is een fout opgetreden tijden het installeren van timer: {}\n".format(datetime.today()))
@@ -160,9 +162,9 @@ def main():
             for service in services:
                 status = mods.checkIfDaemonIsInstalled(service,logfile,debug)
                 if status == "installed":
-                    mods.startDaemon(service,logfile,debug)
+                    mods.enableDaemon(service,logfile,debug)
                 if status == "updated":
-                    mods.restartDaemon(service,logfile,debug)
+                    mods.reloadDaemon(service,logfile,debug)
                 if status == "error":
                     logfile.write("{} Er is een fout opgetreden tijden het installeren van service: {}\n".format(datetime.today()))
                     if debug:
