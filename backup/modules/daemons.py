@@ -2,20 +2,40 @@ import os
 import subprocess
 from datetime import datetime
 
-def stopDaemon(daemon,logfile):
+def stopDaemon(daemon,logfile,debug):
+    isRunning = checkIfDaemonIsRunnning(daemon,logfile,debug)
+    if isRunning:
+        if debug:
+            print("Stoppen van daemon {}".format(daemon))
+        logfile.write("{} Stoppen van daemon {}\n".format(datetime.today(),daemon))
+        os.system('systemctl stop {}'.format(daemon))
+
+def startDaemon(daemon,logfile,debug):
+    isRunning = checkIfDaemonIsRunnning(daemon,logfile,debug)
+    if not isRunning:
+        if debug:
+            print("Starten van daemon {}".format(daemon))
+        logfile.write("{} Starten van daemon {}\n".format(datetime.today(),daemon))
+        os.system('systemctl start {}'.format(daemon))
+
+def restartDaemon(daemon,logfile,debug):
+    isRunning = checkIfDaemonIsRunnning(daemon,logfile,debug)
+    if isRunning:
+        if debug:
+            print("Herstarten van daemon {}".format(daemon))
+        logfile.write("{} Herstarten van daemon {}\n".format(datetime.today(),daemon))
+        os.system('systemctl restart {}'.format(daemon))
+
+def installDaemon(daemon,logfile,debug):
     pass
 
-def startDaemon(daemon,logfile):
-    pass
-
-def restartDaemon(daemon,logfile):
-    pass
-
-def installDaemon(daemon,logfile):
-    pass
-
-def reloadDaemon(daemon,logfile):
-    pass
+def reloadDaemon(daemon,logfile,debug):
+    isRunning = checkIfDaemonIsRunnning(daemon,logfile,debug)
+    if isRunning:
+        if debug:
+            print("Herladen van daemon scripts")
+        logfile.write("{} Herladen van daemon scripts\n".format(datetime.today()))
+        os.system('systemctl daemon-reload')
 
 def checkIfDaemonIsRunnning(daemon,logfile,debug):
     ps = subprocess.Popen(('ps', '-ef'), stdout=subprocess.PIPE)

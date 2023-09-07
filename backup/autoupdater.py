@@ -115,10 +115,10 @@ def main():
                     if debug:
                         setModeFile = scriptfolder + "setmode.txt"
                         print("[DEBUG] Setting atributes van .sh files naar executable")
-                        os.system("find " + scriptfolder + " -name \"*.sh\" -exec chmod -c +x {} \; > " + setModeFile)
+                        os.system("find {folder} -name \"*.sh\" -exec chmod -c +x {} \; > {modeResult}".format(folder=scriptfolder,modeResult=setModeFile))
                         with open(setModeFile,"r") as setmode:
                             print(setmode.read())
-                        os.system("rm " + setModeFile)
+                        os.system("rm {}".format(setModeFile))
 
                     else:
                         os.system("find " + scriptfolder + " -name \"*.sh\" -exec chmod +x {} \;")
