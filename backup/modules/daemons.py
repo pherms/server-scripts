@@ -98,7 +98,7 @@ def reloadDaemon(daemon,logfile,debug):
     os.system('systemctl daemon-reload')
 
 def checkIfDaemonIsInstalled(daemon,logfile,debug):
-    daemonName = getDaemonStatus(daemon,logfile,debug)
+    daemonName = getDaemonStatus(daemon)
     if daemonName.find('could not be found'):
         if debug:
             print("[DEBUG] Daemon {} is niet geinstalleerd".format(daemon))
@@ -110,6 +110,6 @@ def checkIfDaemonIsInstalled(daemon,logfile,debug):
         logfile.write("{} Daemon {} is geinstalleerd\n".format(datetime.today(),daemon))
         return True
 
-def getDaemonStatus(daemon,logifle,debug):
+def getDaemonStatus(daemon):
     daemonName = subprocess.check_output("systemctl status {}".format(daemon), shell=True).decode()
     return daemonName
