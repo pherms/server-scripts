@@ -101,12 +101,12 @@ def checkIfDaemonIsInstalled(daemon,logfile,debug):
     daemonName = getDaemonStatus(daemon,logfile,debug)
     if daemonName.find('could not be found'):
         if debug:
-            print("[DEBUG] Daemon is niet geinstalleerd")
+            print("[DEBUG] Daemon {} is niet geinstalleerd".format(daemon))
         logfile.write("{} Daemon {} is niet geinstalleerd\n".format(datetime.today(),daemon))
         return False
     else:
         if debug:
-            print("[DEBUG] Daemon is geinstalleerd")
+            print("[DEBUG] Daemon {} is geinstalleerd".format(daemon))
         logfile.write("{} Daemon {} is geinstalleerd\n".format(datetime.today(),daemon))
         return True
 
