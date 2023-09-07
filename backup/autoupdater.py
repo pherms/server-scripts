@@ -94,7 +94,7 @@ def main():
                     logfile.write("{} De zipfile is uitgepakt naar directory /tmp/{}\n".format(datetime.today(),tempFolder))
                 
                 if os.path.exists(tempFolder):
-                    os.system("cp -r " + tempFolder + "/* /home/pascal/scripts/")
+                    os.system("cp -r {}/* {}".format(tempFolder,scriptfolder))
                     logfile.write("{} De bestanden zijn gekopieerd naar directory: {}\n".format(datetime.today(),scriptfolder))
                     if debug:
                         print("[DEBUG] Bestanden zijn gekopieerd naar de scriptsfolder")
@@ -123,7 +123,7 @@ def main():
                         os.system("rm {}".format(setModeFile))
 
                     else:
-                        os.system("find " + scriptfolder + " -name \"*.sh\" -exec chmod +x {} \;")
+                        os.system("find {scriptfolder} -name \"*.sh\" -exec chmod +x {} \;".format(scriptfolder=scriptfolder))
 
                 except Exception as error:
                     logfile.write("{} Er is een fout opgetreden tijdens het instellen van het execute bit op .sh files.".format(datetime.today()))
@@ -131,7 +131,7 @@ def main():
                 # cleanup /tmp folder
                 try:
                     if os.path.exists(tempFolder):
-                        os.system("rm -rf " + tempFolder)
+                        os.system("rm -rf {}".format(tempFolder))
                         logfile.write("{} De tempfolder is opgeruimd\n".format(datetime.today()))
                         if debug:
                             print("[DEBUG] Tempfolder is opgeruimd")
