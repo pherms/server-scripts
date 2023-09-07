@@ -14,6 +14,6 @@ def monitor_deamons():
 
    output = grep_daemon.communicate()[0]
 
-   print output
+   print(output)
 
 monitor_deamons()
