@@ -12,7 +12,7 @@ def monitor_deamons():
 
    grep.stdout.close() # Allow grep to receive a SIGPIPE if grep_daemon exits
 
-   output = grep_daemon.communicate()[1]
+   output = grep_daemon.communicate()[2]
 
    print(output)
 
