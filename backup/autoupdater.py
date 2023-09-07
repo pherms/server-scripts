@@ -38,6 +38,11 @@ def main():
                 zipUrl = responseDictionary.get('zipball_url')
                 if debug:
                     print("[DEBUG] latest version: {}\n[DEBUG] zipUrl: {}".format(latestVersion,zipUrl))
+            else:
+                print("Er is iets fout gegaan bij het uitvoeren van de API request naar Github. Het script wordt afgebroken")
+                logfile.write("{} Er is iets fout gegaan bij het uitvoeren van de API request naar Github. Het proces wordt gestopt\n".format(datetime.today()))
+                exit()
+
         except JSONDecodeError as jsonerror:
             if debug:
                 print("[DEBUG] Er is iets fout gegaan tijdens het decoden van de JSON.\n[DEBUG] De error is: {}".format(jsonerror))
@@ -154,7 +159,7 @@ def main():
 # - zipball uitpakken of kopieren naar scriptsfolder -> done
 # - tagname wegschrijven naar versiefile -> done
 # - chmod +x op alle .sh files -> done
-# - verwijderen map uit /tmp ->
+# - verwijderen map uit /tmp -> done
 # - Copy system unit file en timer file naar /etc/systemd/system if different (import filecmp)
 # - systemctl daemon-reload
 
