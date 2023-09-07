@@ -112,7 +112,7 @@ def checkIfDaemonIsInstalled(daemon,logfile,debug):
 
 def getDaemonStatus(daemon):
     try:
-        daemonName = subprocess.check_output("systemctl status {}".format(daemon), shell=True).decode()
+        daemonName = subprocess.check_output("systemctl status {}".format(daemon), shell=True)
         return daemonName
     except subprocess.CalledProcessError as e:
         raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd,e.returncode,e.output))
