@@ -1,7 +1,7 @@
 import subprocess
 
 def monitor_deamons():
-   print("starting monitor")
+#    print("starting monitor")
 
    ps = subprocess.Popen(('ps', '-ef'), stdout=subprocess.PIPE)
    grep = subprocess.Popen(('grep', '-v', 'grep'), stdin=ps.stdout, stdout=subprocess.PIPE)
