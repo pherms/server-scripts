@@ -8,7 +8,7 @@ def monitor_deamons():
 
    ps.stdout.close()  # Allow ps to receive a SIGPIPE if grep exits.
 
-   grep_daemon = subprocess.Popen(('grep', 'sshd'), stdin=grep.stdout)
+   grep_daemon = subprocess.Popen(('grep', 'sshda'), stdin=grep.stdout)
 
    grep.stdout.close() # Allow grep to receive a SIGPIPE if grep_daemon exits
 
