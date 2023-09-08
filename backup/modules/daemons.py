@@ -29,6 +29,7 @@ def startDaemon(daemon,logfile,debug):
 
         while True:
             statusDaemonActive = isDaemonActive(daemon)
+            print(type(statusDaemonActive))
             if statusDaemonActive == 'active':
                 break
 
@@ -142,7 +143,7 @@ def isDaemonActive(daemon):
 
 def isDaemonEnabled(daemon):
     try:
-        status = subprocess.check_output(["systemctl", "is-active", "{}".format(daemon)])
+        status = subprocess.check_output(["systemctl", "is-enabled", "{}".format(daemon)])
         status = status.decode("utf-8")
         print(status)
         return status

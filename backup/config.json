@@ -15,5 +15,5 @@
     "debug": true,
     "hostType": "vm",
     "timerUnits": ["autoupdate.timer","backup.timer"],
-    "serviceUnits": ["cleanup.service","autoupdate.service","backup.service","copytoserver@pascal.service"]
+    "serviceUnits": ["cleanup.service"]
 }
