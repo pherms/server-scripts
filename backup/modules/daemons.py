@@ -30,7 +30,7 @@ def startDaemon(daemon,logfile,debug):
         while True:
             statusDaemonActive = isDaemonActive(daemon)
             print(statusDaemonActive)
-            if statusDaemonActive == 'active' or statusDaemonActive == 3:
+            if not statusDaemonActive.find('active') == -1 or statusDaemonActive == 3:
                 break
 
         logfile.write("{} Daemon {} is gestart\n".format(datetime.today(),daemon))
@@ -48,7 +48,7 @@ def restartDaemon(daemon,logfile,debug):
 
         while True:
             statusDaemonActive = isDaemonActive(daemon)
-            if statusDaemonActive == 'active':
+            if not statusDaemonActive.find('active') == -1 or statusDaemonActive == 3:
                 break
 
         logfile.write("{} Daemon {} is herstart\n".format(datetime.today(),daemon))
