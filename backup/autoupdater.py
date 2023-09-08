@@ -152,7 +152,7 @@ def main():
                 status = mods.checkIfDaemonIsInstalled(timer,logfile,debug)
                 
                 if not status:
-                    installedTimer = mods.installDaemon(timer,logfile,debug)
+                    installedTimer = mods.installDaemon(timer,logfile,debug,scriptfolder)
 
                 if installedTimer == "installed":
                     mods.enableDaemon(timer,logfile,debug)
@@ -170,7 +170,7 @@ def main():
                 status = mods.checkIfDaemonIsInstalled(service,logfile,debug)
 
                 if not status:
-                    installedService = mods.installDaemon(service,logfile,debug)
+                    installedService = mods.installDaemon(service,logfile,debug,scriptfolder)
                 
                 if installedService == "installed":
                     mods.enableDaemon(service,logfile,debug)

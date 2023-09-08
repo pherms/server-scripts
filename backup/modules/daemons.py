@@ -28,8 +28,8 @@ def startDaemon(daemon,logfile,debug):
         os.system('systemctl start {}'.format(daemon))
 
         while True:
-            isDaemonActive = isDaemonActive(daemon)
-            if isDaemonActive == 'active':
+            statusDaemonActive = isDaemonActive(daemon)
+            if statusDaemonActive == 'active':
                 break
 
         logfile.write("{} Daemon {} is gestart\n".format(datetime.today(),daemon))
@@ -39,7 +39,6 @@ def startDaemon(daemon,logfile,debug):
         return False
 
 def restartDaemon(daemon,logfile,debug):
-    isDaemonActive = isDaemonActive(daemon)
     try:
         if debug:
             print("[DEBUG] Herstarten van daemon {}".format(daemon))
@@ -47,8 +46,8 @@ def restartDaemon(daemon,logfile,debug):
         os.system('systemctl restart {}'.format(daemon))
 
         while True:
-            isDaemonActive = isDaemonActive(daemon)
-            if isDaemonActive == 'active':
+            statusDaemonActive = isDaemonActive(daemon)
+            if statusDaemonActive == 'active':
                 break
 
         logfile.write("{} Daemon {} is herstart\n".format(datetime.today(),daemon))
@@ -57,13 +56,13 @@ def restartDaemon(daemon,logfile,debug):
         logfile.write("{curtime} Er is iets fout gegaan tijdens het herstarten van daemon {daemon}\n{curtime} De error is: {error}".format(curtime=datetime.today(),daemon=daemon,error=error))
         return False
 
-def installDaemon(daemon,logfile,debug):
+def installDaemon(daemon,logfile,debug,scriptfolder):
     try:
         if not os.path.exists("/etc/systemd/system/{}".format(daemon)):
             if debug:
                 print("[DEBUG] De daemon is niet geinstalleerd. De bestanden worden gekopieerd")
             logfile.write("{} Daemon {} is niet geinstalleerd. De bestanden worden gekopieerd\n".format(datetime.today(),daemon))
-            copyDaemonFiles(daemon,logfile)
+            copyDaemonFiles(daemon,scriptfolder)
             return "installed"
         else:
             with open("/etc/systemd/system/{}".format(daemon)) as iD:
@@ -79,20 +78,25 @@ def installDaemon(daemon,logfile,debug):
                 print("[DEBUG] De geinstalleerde daemon files wijken af. Nieuwe files kopieren")
 
             logfile.write("{} Daemon {} heeft updates. De nieuwe daemon wordt geinstalleerd\n".format(datetime.today(),daemon))
-            copyDaemonFiles(daemon,logfile)
+            copyDaemonFiles(daemon,scriptfolder)
             return "updated"
         
     except Exception as error:
         return "error"
 
-def copyDaemonFiles(daemon,logfile):      
-    os.system("cp ../systemd/{} /etc/systemd/system/".format(daemon))
+def copyDaemonFiles(daemon,scriptfolder):
+    # change source folder before commit to scriptfolder
+    os.system("cp /opt/server_scripts/backup/systemd/{} /etc/systemd/system/".format(daemon))
 
 def enableDaemon(daemon,logfile,debug):
-    if debug:
-        print("[DEBUG] Enablen van daemon {}".format(daemon))
-    logfile.write("{} Enablen van daemon {}".format(datetime.today(),daemon))
-    os.system("systemctl enable {}".format(daemon))
+    if os.path.exists("/etc/systemd/system/{}".format(daemon)):
+        if debug:
+            print("[DEBUG] Enablen van daemon {}".format(daemon))
+        logfile.write("{} Enablen van daemon {}\n".format(datetime.today(),daemon))
+        os.system("systemctl enable {}".format(daemon))
+    else:
+        logfile.write("{} Daemon file {} bestaat niet\n".format(datetime.today(),daemon))
+        exit()
 
 def reloadDaemon(daemon,logfile,debug):
     if debug:
@@ -102,10 +106,11 @@ def reloadDaemon(daemon,logfile,debug):
 
 def checkIfDaemonIsInstalled(daemon,logfile,debug):
     # daemonName = getDaemonStatus(daemon)
-    isDaemonActive = isDaemonActive(daemon)
-    isDaemonEnabled = isDaemonEnabled(daemon)
+    # statusDaemonActive = isDaemonActive(daemon)
+    statusDaemonEnabled = isDaemonEnabled(daemon)
+    print("[DEBUG] statusDaemonInstalled: {}".format(statusDaemonEnabled))
 
-    if not isDaemonActive.lower() == 'enabled':
+    if not statusDaemonEnabled == 'enabled':
     # if daemonName.find('could not be found'):
         if debug:
             print("[DEBUG] Daemon {} is niet geinstalleerd".format(daemon))
@@ -126,14 +131,22 @@ def checkIfDaemonIsInstalled(daemon,logfile,debug):
 
 def isDaemonActive(daemon):
     try:
-        status = subprocess.check_output("systemctl is-active {}".format(daemon),shell=True).decode("utf-8")
+        status = subprocess.check_output(["systemctl", "is-active", "{}".format(daemon)])
+        status = status.decode("utf-8")
+        print(status)
         return status
     except subprocess.CalledProcessError as e:
-        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd,e.returncode,e.output))
+        # raise RuntimeError("command '{}'\n[DEBUG] return with error (code {})\n[DEBUG] returned output: {}".format(e.cmd,e.returncode,e.output))
+        status = e.returncode
+        return status
 
 def isDaemonEnabled(daemon):
     try:
-        status = subprocess.check_output("systemctl is-active {}".format(daemon),shell=True).decode("utf-8")
+        status = subprocess.check_output(["systemctl", "is-active", "{}".format(daemon)])
+        status = status.decode("utf-8")
+        print(status)
         return status
     except subprocess.CalledProcessError as e:
-        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd,e.returncode,e.output))
+        # raise RuntimeError("command '{}'\n[DEBUG] return with error (code {})\n[DEBUG] returned output: {}".format(e.cmd,e.returncode,e.output))
+        status = e.returncode
+        return status
