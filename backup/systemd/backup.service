@@ -1,5 +1,5 @@
 [Unit]
-Description=Backup system
+Description=Backup system according to sources list
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/python3 '/scripts/server-scripts/backup/backup.py'
