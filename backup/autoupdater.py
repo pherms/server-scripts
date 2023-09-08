@@ -146,7 +146,23 @@ def main():
                     print("[DEBUG] Er is iets fout gegaan tijdens het downloaden van de zip. De error is: {}".format(error))
                 exit()
 
-            # Installeer daemons
+            # Installeer daemons. Eerst daemons, dan timers
+            for service in services:
+                installedService = ""
+                status = mods.checkIfDaemonIsInstalled(service,logfile,debug)
+
+                if not status:
+                    installedService = mods.installDaemon(service,logfile,debug,scriptfolder)
+                
+                if installedService == "installed":
+                    mods.enableDaemon(service,logfile,debug)
+                if status == "updated":
+                    mods.reloadDaemon(service,logfile,debug)
+                if status == "error":
+                    logfile.write("{} Er is een fout opgetreden tijden het installeren van service: {}\n".format(datetime.today()))
+                    if debug:
+                        print("[DEBUG] Er is een fout opgetreden bij het installeren van service: {}".format(service))
+
             for timer in timers:
                 installedTimer = ""
                 status = mods.checkIfDaemonIsInstalled(timer,logfile,debug)
@@ -164,22 +180,6 @@ def main():
                     logfile.write("{} Er is een fout opgetreden tijden het installeren van timer: {}\n".format(datetime.today()))
                     if debug:
                         print("[DEBUG] Er is een fout opgetreden bij het installeren van timer: {}".format(timer))
-
-            for service in services:
-                installedService = ""
-                status = mods.checkIfDaemonIsInstalled(service,logfile,debug)
-
-                if not status:
-                    installedService = mods.installDaemon(service,logfile,debug,scriptfolder)
-                
-                if installedService == "installed":
-                    mods.enableDaemon(service,logfile,debug)
-                if status == "updated":
-                    mods.reloadDaemon(service,logfile,debug)
-                if status == "error":
-                    logfile.write("{} Er is een fout opgetreden tijden het installeren van service: {}\n".format(datetime.today()))
-                    if debug:
-                        print("[DEBUG] Er is een fout opgetreden bij het installeren van service: {}".format(service))
 
         else:
             if debug:
