@@ -14,7 +14,7 @@ def main():
     scriptfolder = config["scriptspath"]
     apiurl = config["apiurl"]
     timers = config["timerUnits"]
-    services = config["servicesToInstall"]
+    servicesToInstall = config["servicesToInstall"]
     servicesToCopy = config["servicesToCopy"]
 
     logfile = mods.openLogFile(logfilepath,"update",debug)
@@ -148,22 +148,22 @@ def main():
                 exit()
 
             # Installeer daemons. Eerst daemons, dan timers
-            for service in services:
+            for serviceToInstall in servicesToInstall:
                 installedService = ""
-                status = mods.checkIfDaemonIsInstalled(service,logfile,debug)
+                status = mods.checkIfDaemonIsInstalled(serviceToInstall,logfile,debug)
 
                 if not status:
-                    compareResult = mods.compareDaemonFiles(service,logfile,scriptfolder,debug) # False betekent files zijn niet gelijk, dus updaten
-                    installedService = mods.installDaemon(service,logfile,debug,scriptfolder,compareResult)
+                    compareResult = mods.compareDaemonFiles(serviceToInstall,logfile,scriptfolder,debug) # False betekent files zijn niet gelijk, dus updaten
+                    installedService = mods.installDaemon(serviceToInstall,logfile,debug,scriptfolder,compareResult)
                 
                     if installedService == "installed":
-                        mods.enableDaemon(service,logfile,debug)
+                        mods.enableDaemon(serviceToInstall,logfile,debug)
                     if installedService == "updated":
-                        mods.reloadDaemon(service,logfile,debug)
+                        mods.reloadDaemon(serviceToInstall,logfile,debug)
                     if installedService == "error":
-                        logfile.write("{} Er is een fout opgetreden tijden het installeren van service: {}\n".format(datetime.today()))
+                        logfile.write("{} Er is een fout opgetreden tijden het installeren van service: {}\n".format(datetime.today(),serviceToInstall))
                         if debug:
-                            print("[DEBUG] Er is een fout opgetreden bij het installeren van service: {}".format(service))
+                            print("[DEBUG] Er is een fout opgetreden bij het installeren van service: {}".format(serviceToInstall))
             
             for serviceToCopy in servicesToCopy:
                 installedService = ""
