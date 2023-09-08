@@ -57,33 +57,42 @@ def restartDaemon(daemon,logfile,debug):
         logfile.write("{curtime} Er is iets fout gegaan tijdens het herstarten van daemon {daemon}\n{curtime} De error is: {error}".format(curtime=datetime.today(),daemon=daemon,error=error))
         return False
 
-def installDaemon(daemon,logfile,debug,scriptfolder):
+def installDaemon(daemon,logfile,debug,scriptfolder,status):
     try:
-        if not os.path.exists("/etc/systemd/system/{}".format(daemon)):
-            if debug:
-                print("[DEBUG] De daemon is niet geinstalleerd. De bestanden worden gekopieerd")
-            logfile.write("{} Daemon {} is niet geinstalleerd. De bestanden worden gekopieerd\n".format(datetime.today(),daemon))
-            copyDaemonFiles(daemon,scriptfolder)
-            return "installed"
+        if status:
+            if not os.path.exists("/etc/systemd/system/{}".format(daemon)):
+                if debug:
+                    print("[DEBUG] De daemon is niet geinstalleerd. De bestanden worden gekopieerd")
+                logfile.write("{} Daemon {} is niet geinstalleerd. De bestanden worden gekopieerd\n".format(datetime.today(),daemon))
+                copyDaemonFiles(daemon,scriptfolder)
+                return "installed"
         else:
-            with open("/etc/systemd/system/{}".format(daemon)) as iD:
-                installedDaemon = iD.read()
-                iD.close()
+            if debug:
+                print("[DEBUG] De daemon is al geinstalleerd. De bestanden worden bijgewerkt")
+            logfile.write("{} Daemon {} is al geinstalleerd. De bestanden worden bijgewerkt\n".format(datetime.today(),daemon))
+            copyDaemonFiles(daemon,scriptfolder)
+            return "updated"
+          
+    except Exception as error:
+        return "error"
 
-        with open("../systemd/{}".format(daemon)) as sD:
+def compareDaemonFiles(daemon,logfile,scriptfolder,debug):
+        with open("/etc/systemd/system/{}".format(daemon)) as iD:
+            installedDaemon = iD.read()
+            iD.close()
+
+        with open("{}backup/systemd/{}".format(scriptfolder,daemon)) as sD:
             scriptDaemon = sD.read()
             sD.close()
-
+        
         if not installedDaemon == scriptDaemon:
             if debug:
                 print("[DEBUG] De geinstalleerde daemon files wijken af. Nieuwe files kopieren")
 
             logfile.write("{} Daemon {} heeft updates. De nieuwe daemon wordt geinstalleerd\n".format(datetime.today(),daemon))
-            copyDaemonFiles(daemon,scriptfolder)
-            return "updated"
-        
-    except Exception as error:
-        return "error"
+            return False
+        else:
+            return True
 
 def copyDaemonFiles(daemon,scriptfolder):
     # change source folder before commit to scriptfolder
