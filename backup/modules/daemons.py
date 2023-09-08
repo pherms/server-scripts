@@ -111,8 +111,7 @@ def checkIfDaemonIsInstalled(daemon,logfile,debug):
     statusDaemonEnabled = isDaemonEnabled(daemon)
     print("[DEBUG] statusDaemonInstalled: {}".format(statusDaemonEnabled))
 
-    if not statusDaemonEnabled == 'enabled':
-    # if daemonName.find('could not be found'):
+    if statusDaemonEnabled.find('enabled') == -1:
         if debug:
             print("[DEBUG] Daemon {} is niet geinstalleerd".format(daemon))
         logfile.write("{} Daemon {} is niet geinstalleerd\n".format(datetime.today(),daemon))
