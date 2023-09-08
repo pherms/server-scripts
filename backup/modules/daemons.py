@@ -191,7 +191,6 @@ def isDaemonActive(daemon):
     try:
         status = subprocess.check_output(["systemctl", "is-active", "{}".format(daemon)])
         status = status.decode("utf-8")
-        print(status)
         return status
     except subprocess.CalledProcessError as e:
         # De service kan niet worden gevonden en systemctl returned code 3
