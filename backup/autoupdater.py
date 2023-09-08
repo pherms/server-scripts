@@ -167,7 +167,7 @@ def main():
             
             for serviceToCopy in servicesToCopy:
                 installedService = ""
-                compareResult = mods.compareDaemonFiles(service,logfile,scriptfolder,debug) # False betekent files zijn niet gelijk, dus updaten
+                compareResult = mods.compareDaemonFiles(serviceToCopy,logfile,scriptfolder,debug) # False betekent files zijn niet gelijk, dus updaten
 
                 if not compareResult:
                     mods.copyDaemonFiles(serviceToCopy,scriptfolder)
