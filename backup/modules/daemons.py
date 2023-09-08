@@ -86,7 +86,7 @@ def installDaemon(daemon,logfile,debug,scriptfolder):
 
 def copyDaemonFiles(daemon,scriptfolder):
     # change source folder before commit to scriptfolder
-    os.system("cp /opt/server_scripts/backup/systemd/{} /etc/systemd/system/".format(daemon))
+    os.system("cp /server_scripts/backup/systemd/{} /etc/systemd/system/".format(daemon))
 
 def enableDaemon(daemon,logfile,debug):
     if os.path.exists("/etc/systemd/system/{}".format(daemon)):
