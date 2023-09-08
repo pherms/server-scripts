@@ -153,8 +153,8 @@ def main():
                 status = mods.checkIfDaemonIsInstalled(service,logfile,debug)
 
                 if not status:
-                    checkIfUpdateIsNeeded = mods.compareDaemonFiles(service,logfile,scriptfolder,debug) # False betekent files zijn niet gelijk, dus updaten
-                    installedService = mods.installDaemon(service,logfile,debug,scriptfolder,checkIfUpdateIsNeeded)
+                    compareResult = mods.compareDaemonFiles(service,logfile,scriptfolder,debug) # False betekent files zijn niet gelijk, dus updaten
+                    installedService = mods.installDaemon(service,logfile,debug,scriptfolder,compareResult)
                 
                     if installedService == "installed":
                         mods.enableDaemon(service,logfile,debug)
@@ -167,9 +167,9 @@ def main():
             
             for serviceToCopy in servicesToCopy:
                 installedService = ""
-                status = mods.checkIfDaemonIsInstalled(serviceToCopy,logfile,debug)
+                compareResult = mods.compareDaemonFiles(service,logfile,scriptfolder,debug) # False betekent files zijn niet gelijk, dus updaten
 
-                if not status:
+                if not compareResult:
                     mods.copyDaemonFiles(serviceToCopy,scriptfolder)
 
             for timer in timers:
@@ -177,8 +177,8 @@ def main():
                 status = mods.checkIfDaemonIsInstalled(timer,logfile,debug)
                 
                 if not status:
-                    checkIfUpdateIsNeeded = mods.compareDaemonFiles(service,logfile,scriptfolder,debug) # False betekent files zijn niet gelijk, dus updaten
-                    installedTimer = mods.installDaemon(timer,logfile,debug,scriptfolder,checkIfUpdateIsNeeded)
+                    compareResult = mods.compareDaemonFiles(service,logfile,scriptfolder,debug) # False betekent files zijn niet gelijk, dus updaten
+                    installedTimer = mods.installDaemon(timer,logfile,debug,scriptfolder,compareResult)
 
                     if installedTimer == "installed":
                         mods.enableDaemon(timer,logfile,debug)
