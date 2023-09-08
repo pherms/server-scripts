@@ -14,7 +14,8 @@ def main():
     scriptfolder = config["scriptspath"]
     apiurl = config["apiurl"]
     timers = config["timerUnits"]
-    services = config["serviceUnits"]
+    services = config["servicesToInstall"]
+    servicesToCopy = config["servicesToCopy"]
 
     logfile = mods.openLogFile(logfilepath,"update",debug)
     hostname = mods.getHostname(logfile)
@@ -162,6 +163,13 @@ def main():
                     logfile.write("{} Er is een fout opgetreden tijden het installeren van service: {}\n".format(datetime.today()))
                     if debug:
                         print("[DEBUG] Er is een fout opgetreden bij het installeren van service: {}".format(service))
+            
+            for serviceToCopy in servicesToCopy:
+                installedService = ""
+                status = mods.checkIfDaemonIsInstalled(service,logfile,debug)
+
+                if not status:
+                    mods.copyDaemonFiles(serviceToCopy,scriptfolder)
 
             for timer in timers:
                 installedTimer = ""

@@ -29,8 +29,8 @@ def startDaemon(daemon,logfile,debug):
 
         while True:
             statusDaemonActive = isDaemonActive(daemon)
-            print(type(statusDaemonActive))
-            if statusDaemonActive == 'active':
+            print(statusDaemonActive)
+            if statusDaemonActive == 'active' or statusDaemonActive == 3:
                 break
 
         logfile.write("{} Daemon {} is gestart\n".format(datetime.today(),daemon))

@@ -15,5 +15,6 @@
     "debug": true,
     "hostType": "vm",
     "timerUnits": ["autoupdate.timer","backup.timer"],
-    "serviceUnits": ["cleanup.service"]
+    "servicesToInstall": ["cleanup.service"],
+    "servicesToCopy": ["autoupdate.service","backup.service"]
 }
