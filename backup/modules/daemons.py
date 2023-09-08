@@ -115,10 +115,7 @@ def reloadDaemon(daemon,logfile,debug):
     os.system('systemctl daemon-reload')
 
 def checkIfDaemonIsInstalled(daemon,logfile,debug):
-    # daemonName = getDaemonStatus(daemon)
-    # statusDaemonActive = isDaemonActive(daemon)
     statusDaemonEnabled = isDaemonEnabled(daemon)
-    print("[DEBUG] statusDaemonInstalled: {}".format(statusDaemonEnabled))
 
     if statusDaemonEnabled.find('enabled') == -1:
         if debug:
