@@ -98,8 +98,12 @@ def reloadDaemon(daemon,logfile,debug):
     os.system('systemctl daemon-reload')
 
 def checkIfDaemonIsInstalled(daemon,logfile,debug):
-    daemonName = getDaemonStatus(daemon)
-    if daemonName.find('could not be found'):
+    # daemonName = getDaemonStatus(daemon)
+    isDaemonActive = isDaemonActive(daemon)
+    isDaemonEnabled = isDaemonEnabled(daemon)
+
+    if not isDaemonActive.lower() == 'enabled':
+    # if daemonName.find('could not be found'):
         if debug:
             print("[DEBUG] Daemon {} is niet geinstalleerd".format(daemon))
         logfile.write("{} Daemon {} is niet geinstalleerd\n".format(datetime.today(),daemon))
@@ -114,5 +118,19 @@ def getDaemonStatus(daemon):
     try:
         daemonName = subprocess.check_output("systemctl status {}".format(daemon), shell=True).decode("utf-8",errors="ignore")
         return daemonName
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd,e.returncode,e.output))
+
+def isDaemonActive(daemon):
+    try:
+        status = subprocess.check_output("systemctl is-active {}".format(daemon),shell=True).decode("utf-8")
+        return status
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd,e.returncode,e.output))
+
+def isDaemonEnabled(daemon):
+    try:
+        status = subprocess.check_output("systemctl is-active {}".format(daemon),shell=True).decode("utf-8")
+        return status
     except subprocess.CalledProcessError as e:
         raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd,e.returncode,e.output))
