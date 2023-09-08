@@ -155,14 +155,14 @@ def main():
                 if not status:
                     installedService = mods.installDaemon(service,logfile,debug,scriptfolder)
                 
-                if installedService == "installed":
-                    mods.enableDaemon(service,logfile,debug)
-                if status == "updated":
-                    mods.reloadDaemon(service,logfile,debug)
-                if status == "error":
-                    logfile.write("{} Er is een fout opgetreden tijden het installeren van service: {}\n".format(datetime.today()))
-                    if debug:
-                        print("[DEBUG] Er is een fout opgetreden bij het installeren van service: {}".format(service))
+                    if installedService == "installed":
+                        mods.enableDaemon(service,logfile,debug)
+                    if status == "updated":
+                        mods.reloadDaemon(service,logfile,debug)
+                    if status == "error":
+                        logfile.write("{} Er is een fout opgetreden tijden het installeren van service: {}\n".format(datetime.today()))
+                        if debug:
+                            print("[DEBUG] Er is een fout opgetreden bij het installeren van service: {}".format(service))
             
             for serviceToCopy in servicesToCopy:
                 installedService = ""
@@ -178,16 +178,16 @@ def main():
                 if not status:
                     installedTimer = mods.installDaemon(timer,logfile,debug,scriptfolder)
 
-                if installedTimer == "installed":
-                    mods.enableDaemon(timer,logfile,debug)
-                    mods.startDaemon(timer,logfile,debug)
-                if status == "updated":
-                    mods.reloadDaemon(timer,logfile,debug)
-                    mods.restartDaemon(timer,logfile,debug)
-                if status == "error" or status == "":
-                    logfile.write("{} Er is een fout opgetreden tijden het installeren van timer: {}\n".format(datetime.today()))
-                    if debug:
-                        print("[DEBUG] Er is een fout opgetreden bij het installeren van timer: {}".format(timer))
+                    if installedTimer == "installed":
+                        mods.enableDaemon(timer,logfile,debug)
+                        mods.startDaemon(timer,logfile,debug)
+                    if status == "updated":
+                        mods.reloadDaemon(timer,logfile,debug)
+                        mods.restartDaemon(timer,logfile,debug)
+                    if status == "error" or status == "":
+                        logfile.write("{} Er is een fout opgetreden tijden het installeren van timer: {}\n".format(datetime.today()))
+                        if debug:
+                            print("[DEBUG] Er is een fout opgetreden bij het installeren van timer: {}".format(timer))
 
         else:
             if debug:
