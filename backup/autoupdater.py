@@ -167,7 +167,7 @@ def main():
             
             for serviceToCopy in servicesToCopy:
                 installedService = ""
-                status = mods.checkIfDaemonIsInstalled(service,logfile,debug)
+                status = mods.checkIfDaemonIsInstalled(serviceToCopy,logfile,debug)
 
                 if not status:
                     mods.copyDaemonFiles(serviceToCopy,scriptfolder)
