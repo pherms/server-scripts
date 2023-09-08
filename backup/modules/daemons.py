@@ -28,7 +28,8 @@ def startDaemon(daemon,logfile,debug):
         os.system('systemctl start {}'.format(daemon))
 
         while True:
-            if not getDaemonStatus(daemon,logfile,debug).find('active') == -1:
+            isDaemonActive = isDaemonActive(daemon)
+            if isDaemonActive == 'active':
                 break
 
         logfile.write("{} Daemon {} is gestart\n".format(datetime.today(),daemon))
@@ -38,6 +39,7 @@ def startDaemon(daemon,logfile,debug):
         return False
 
 def restartDaemon(daemon,logfile,debug):
+    isDaemonActive = isDaemonActive(daemon)
     try:
         if debug:
             print("[DEBUG] Herstarten van daemon {}".format(daemon))
@@ -45,7 +47,8 @@ def restartDaemon(daemon,logfile,debug):
         os.system('systemctl restart {}'.format(daemon))
 
         while True:
-            if not getDaemonStatus(daemon,logfile,debug).find('active') == -1:
+            isDaemonActive = isDaemonActive(daemon)
+            if isDaemonActive == 'active':
                 break
 
         logfile.write("{} Daemon {} is herstart\n".format(datetime.today(),daemon))
@@ -114,12 +117,12 @@ def checkIfDaemonIsInstalled(daemon,logfile,debug):
         logfile.write("{} Daemon {} is geinstalleerd\n".format(datetime.today(),daemon))
         return True
 
-def getDaemonStatus(daemon):
-    try:
-        daemonName = subprocess.check_output("systemctl status {}".format(daemon), shell=True).decode("utf-8",errors="ignore")
-        return daemonName
-    except subprocess.CalledProcessError as e:
-        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd,e.returncode,e.output))
+# def getDaemonStatus(daemon):
+#     try:
+#         daemonName = subprocess.check_output("systemctl status {}".format(daemon), shell=True).decode("utf-8",errors="ignore")
+#         return daemonName
+#     except subprocess.CalledProcessError as e:
+#         raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd,e.returncode,e.output))
 
 def isDaemonActive(daemon):
     try:
