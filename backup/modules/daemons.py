@@ -197,6 +197,8 @@ def isDaemonActive(daemon):
         # De service kan niet worden gevonden en systemctl returned code 3
         if e.returncode == 3:
             isActive = 'notactive'
+        else:
+            isActive = 'error'
         return isActive
 
 def isDaemonEnabled(daemon):
@@ -215,4 +217,6 @@ def isDaemonEnabled(daemon):
         # De service kan niet worden gevonden en systemctl returned code 3
         if e.returncode == 3:
             isEnabled = 'notinstalled'
+        else:
+            isEnabled = 'error'
         return isEnabled
