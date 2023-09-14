@@ -178,7 +178,7 @@ def main():
                     compareResult = mods.compareDaemonFiles(serviceToCopy,logfile,scriptfolder,debug) # False betekent files zijn niet gelijk, dus updaten
 
                     if not compareResult:
-                        mods.copyDaemonFiles(serviceToCopy,scriptfolder)
+                        mods.copyDaemonFiles(serviceToCopy,scriptfolder,logfile,debug)
             except Exception as error:
                 logfile.write("{} Er is iets fout gegaan tijdens het Kopieren van de service {}\n".format(datetime.today(),serviceToCopy))
                 logfile.write("{} De foutmelding is: {}\n".format(datetime.today(),error))
