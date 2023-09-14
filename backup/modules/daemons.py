@@ -223,7 +223,7 @@ def isDaemonEnabled(daemon):
     print("[DEBUG] in funtie isDaemonEnabled")
     try:
         # isEnabled = subprocess.check_output(["systemctl", "is-enabled", "{}".format(daemon)]).decode("utf-8")
-        isEnabled = subprocess.run(["systemctl", "is-enabled", "{}".format(daemon)],capture_output=True).stdout.decode("utf-8")
+        isEnabled = subprocess.run(["systemctl", "is-enabled", "{}".format(daemon)],capture_output=True).stdout.decode("utf-8").strip()
         return isEnabled
     except subprocess.CalledProcessError as e:
         print(e.stderr)
