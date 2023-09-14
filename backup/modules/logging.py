@@ -22,7 +22,7 @@ def openLogFile(logpath,logfiletype,debug):
         logfilename = "updatelog.log"
 
     try:
-        logfile = open(logpath + logfilename,"a")
+        logfile = open(logpath + logfilename,"w")
 
         if debug:
             print("[DEBUG] Logfile {} is aangemaakt".format(logfilename))
