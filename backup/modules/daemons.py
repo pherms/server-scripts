@@ -21,7 +21,7 @@ def startDaemon(daemon,logfile,debug):
         while True:
             statusDaemonActive = isDaemonActive(daemon)
             print(statusDaemonActive)
-            if not statusDaemonActive.find('active') == -1 or statusDaemonActive == 3:
+            if statusDaemonActive == 3 or not statusDaemonActive.find('active') == -1:
                 break
 
         logfile.write("{} Daemon {} is gestart\n".format(datetime.today(),daemon))
@@ -169,7 +169,7 @@ def checkIfDaemonIsInstalled(daemon,logfile,debug):
     """
     statusDaemonEnabled = isDaemonEnabled(daemon)
 
-    if not statusDaemonEnabled.find('enabled') == -1 or statusDaemonEnabled == 3:
+    if statusDaemonEnabled == 3 or not statusDaemonEnabled.find('enabled') == -1:
         if debug:
             print("[DEBUG] Daemon {} is niet geinstalleerd".format(daemon))
         logfile.write("{} Daemon {} is niet geinstalleerd\n".format(datetime.today(),daemon))
