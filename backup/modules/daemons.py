@@ -191,14 +191,14 @@ def isDaemonActive(daemon):
     print("[DEBUG] in funtie isDaemonActive")
 
     try:
-        status = subprocess.check_output(["systemctl", "is-active", "{}".format(daemon)])
-        status = status.decode("utf-8")
-        return status
+        isActive = subprocess.check_output(["systemctl", "is-active", "{}".format(daemon)])
+        isActive = isActive.decode("utf-8")
+        return isActive
     except subprocess.CalledProcessError as e:
         # De service kan niet worden gevonden en systemctl returned code 3
         if e.returncode == 3:
-            status = 'notactive'
-        return status
+            isActive = 'notactive'
+        return isActive
 
 def isDaemonEnabled(daemon):
     """
@@ -210,11 +210,11 @@ def isDaemonEnabled(daemon):
     """
     print("[DEBUG] in funtie isDaemonEnabled")
     try:
-        status = subprocess.check_output(["systemctl", "is-enabled", "{}".format(daemon)])
-        status = status.decode("utf-8")
-        return status
+        isEnabled = subprocess.check_output(["systemctl", "is-enabled", "{}".format(daemon)])
+        isEnabled = isEnabled.decode("utf-8")
+        return isEnabled
     except subprocess.CalledProcessError as e:
         # De service kan niet worden gevonden en systemctl returned code 3
         if e.returncode == 3:
-            status = 'notinstalled'
-        return status
+            isEnabled = 'notinstalled'
+        return isEnabled
