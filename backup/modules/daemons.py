@@ -178,12 +178,12 @@ def checkIfDaemonIsInstalled(daemon,logfile,debug):
     statusDaemonEnabled = isDaemonEnabled(daemon)
     print("[DEBUG] Waarde statusDaemonEnabled: {}".format(statusDaemonEnabled))
 
-    if statusDaemonEnabled.find('disabled') >= 0 or statusDaemonEnabled.find('error') >= 0 or statusDaemonEnabled.find('not-found') >= 0:
+    if statusDaemonEnabled == 'disabled' or statusDaemonEnabled == 'error' or statusDaemonEnabled == 'not-found':
         if debug:
             print("[DEBUG] Daemon {} is niet geinstalleerd".format(daemon))
         logfile.write("{} Daemon {} is niet geinstalleerd\n".format(datetime.today(),daemon))
         return False
-    elif statusDaemonEnabled.find('enabled') >= 0:
+    elif statusDaemonEnabled == 'enabled':
         if debug:
             print("[DEBUG] Daemon {} is geinstalleerd".format(daemon))
         logfile.write("{} Daemon {} is geinstalleerd\n".format(datetime.today(),daemon))
@@ -222,7 +222,6 @@ def isDaemonEnabled(daemon):
     try:
         # isEnabled = subprocess.check_output(["systemctl", "is-enabled", "{}".format(daemon)]).decode("utf-8")
         isEnabled = subprocess.run(["systemctl", "is-enabled", "{}".format(daemon)],capture_output=True).stdout.decode("utf-8")
-        print("Waarde van isEnabled: {}".format(isEnabled))
         return isEnabled
     except subprocess.CalledProcessError as e:
         # De service kan niet worden gevonden en systemctl returned code 3
