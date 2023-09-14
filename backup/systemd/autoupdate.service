@@ -1,5 +1,5 @@
 [Unit]
-Description=Autoupdate server scripts
+Description=Autoupdate server scriptjes
 [Service]
 Type=oneshot
-ExecStart=/bin/bash '/scripts/server-scripts/autoupdater.sh'
+ExecStart=/usr/bin/python3 '/scripts/server-scripts/backup/autoupdater.py'

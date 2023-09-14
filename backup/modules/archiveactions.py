@@ -1,9 +1,7 @@
-import os
 import tarfile
 import zipfile
 import modules as mods
 from datetime import datetime
-from datetime import date
 
 def openArchiveWrite(filename,filetype,logfile,debug):
     """

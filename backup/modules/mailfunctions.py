@@ -79,3 +79,13 @@ def sendMailFailedCleanup(hostname,message):
     """
     subject = "Cleanup van server {} is gefaald".format(hostname)
     sendMail(subject,message)
+
+def sendMailFailedUpdate(hostname,message):
+    """
+    Verzend een email wanneer de Autoupdate is gefaald. Er wordt geen attachment mee gestuurd
+
+    :param str hostname: de hostname waarop de update is gefaald
+    :param str message: de mail body text
+    """
+    subject = "Autoupdate op server {} is gefaald".format(hostname)
+    sendMail(subject,message)

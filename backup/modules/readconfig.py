@@ -14,8 +14,7 @@ def readSourcesFile(logfile,sources,debug):
     """
     try:
         logfile.write("{} Inlezen van lijst met te backuppen files en folders\n".format(datetime.today()))
-        sourceFile = open(sources, 'r')
-        lines = sourceFile.readlines()
+        lines = open(sources, 'r').readlines()
         if debug:
             print("[DEBUG] ingelezen sources: {}".format(lines))
             
@@ -36,8 +35,9 @@ def readConfig():
         jsonObject = json.load(f)
         f.close
         return jsonObject
-    except Exception:
+    except Exception as error:
         print("{} Er is een fout opgetreden bij het inlezen van de config file. Backup wordt afgebroken.\n".format(datetime.today()))
+        print(error)
         exit()
 
 def getHostname(logfile):

@@ -1,5 +1,5 @@
 [Unit]
-Description=Cleanup old backup files
+Description=Cleanup old backup files from server
 Requires=backup.service
 After=backup.service
 Before=copytoserver.service

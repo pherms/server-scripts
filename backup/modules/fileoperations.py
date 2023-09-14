@@ -5,7 +5,7 @@ import getpass
 import subprocess
 import modules as mods
 from pathlib import Path
-from datetime import datetime, date, timedelta
+from datetime import datetime, date
 
 def isDirectory(path):
     """
@@ -295,17 +295,18 @@ def cleanupLogs(logPath,debug):
     :param bool debug: Debug toggle. Er wordt meer info weergegeven in de console of logfile
     """
     for file in os.listdir(logPath):
-        logfileDate = mods.determineCreationDateFromFileName(file)
-        if debug:
-            print("[DEBUG] logfileDate: {}".format(logfileDate))
+        if file != 'updatelog.log':
+            logfileDate = mods.determineCreationDateFromFileName(file)
+            if debug:
+                print("[DEBUG] logfileDate: {}".format(logfileDate))
 
-        ageInDays = (datetime.now() - datetime.strptime(logfileDate, '%Y-%m-%d')).days
-        
-        if ageInDays >= 84:
-            if not debug:
-                print("[DEBUG] het bestand {} zou worden verwijderd wanneer debugging=False")
-            else:
-                os.remove(os.path.abspath(file))
+            ageInDays = (datetime.now() - datetime.strptime(logfileDate, '%Y-%m-%d')).days
+            
+            if ageInDays >= 84:
+                if not debug:
+                    print("[DEBUG] het bestand {} zou worden verwijderd wanneer debugging=False")
+                else:
+                    os.remove(os.path.abspath(file))
 
 def getArchiveFileSize(archive):
     """
