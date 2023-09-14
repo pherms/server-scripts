@@ -160,7 +160,7 @@ def main():
                         if installedService == "installed":
                             mods.enableDaemon(serviceToInstall,logfile,debug)
                         if installedService == "updated":
-                            mods.reloadDaemon(serviceToInstall,logfile,debug)
+                            mods.reloadDaemon(logfile,debug)
                         if installedService == "error":
                             logfile.write("{} Er is een fout opgetreden tijden het installeren van service: {}\n".format(datetime.today(),serviceToInstall))
                             if debug:
@@ -199,7 +199,7 @@ def main():
                             mods.enableDaemon(timer,logfile,debug)
                             mods.startDaemon(timer,logfile,debug)
                         if installedTimer == "updated":
-                            mods.reloadDaemon(timer,logfile,debug)
+                            mods.reloadDaemon(logfile,debug)
                             mods.restartDaemon(timer,logfile,debug)
                         if installedTimer == "error" or status == "":
                             logfile.write("{} Er is een fout opgetreden tijden het installeren van timer: {}\n".format(datetime.today()))
