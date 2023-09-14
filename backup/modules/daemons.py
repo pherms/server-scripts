@@ -224,6 +224,7 @@ def isDaemonEnabled(daemon):
         isEnabled = subprocess.run(["systemctl", "is-enabled", "{}".format(daemon)],capture_output=True).stdout.decode("utf-8")
         return isEnabled
     except subprocess.CalledProcessError as e:
+        print(e.stderr)
         # De service kan niet worden gevonden en systemctl returned code 3
         if e.returncode == 3:
             isEnabled = 'not-found'
