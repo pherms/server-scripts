@@ -188,6 +188,8 @@ def isDaemonActive(daemon):
     :return: String wanneer service gevonden is, active wanneer deze is gestart, inactive wanneer deze is gestopt. Int wanneer de service niet is gevonden (code 3)
     :rtype: Str or Int
     """
+    print("[DEBUG] in funtie isDaemonActive")
+
     try:
         status = subprocess.check_output(["systemctl", "is-active", "{}".format(daemon)])
         status = status.decode("utf-8")
@@ -205,6 +207,7 @@ def isDaemonEnabled(daemon):
     :return: String wanneer service gevonden is, enabled wanneer deze is geinstalleerd. Int wanneer de service niet is gevonden (code 3)
     :rtype: Str or Int
     """
+    print("[DEBUG] in funtie isDaemonEnabled")
     try:
         status = subprocess.check_output(["systemctl", "is-enabled", "{}".format(daemon)])
         status = status.decode("utf-8")
