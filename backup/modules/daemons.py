@@ -99,7 +99,7 @@ def compareDaemonFiles(daemon,logfile,scriptfolder,debug):
     :rtype: bool
     """
     if not os.path.exists("/etc/systemd/system/{}".format(daemon)):
-        return True
+        return False
     else:
         with open("/etc/systemd/system/{}".format(daemon)) as iD:
             contentInstalledDaemon = iD.read()
