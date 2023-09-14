@@ -177,7 +177,7 @@ def main():
                 status = mods.checkIfDaemonIsInstalled(timer,logfile,debug)
                 
                 if not status:
-                    compareResult = mods.compareDaemonFiles(service,logfile,scriptfolder,debug) # False betekent files zijn niet gelijk, dus updaten
+                    compareResult = mods.compareDaemonFiles(timer,logfile,scriptfolder,debug) # False betekent files zijn niet gelijk, dus updaten
                     installedTimer = mods.installDaemon(timer,logfile,debug,scriptfolder,compareResult)
 
                     if installedTimer == "installed":
