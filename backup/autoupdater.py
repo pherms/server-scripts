@@ -209,10 +209,10 @@ def main():
         {error}""".format(hostname=hostname,error=error)
         logfile.write("{} Er is een fout opgetreden bij het uitvoeren van de update\n".format(datetime.today()))
         logfile.write("{} De opgetreden error is: {}\n".format(datetime.today(),error))
-        mods.sendMailFailedUpdate(hostname,message)
+        # mods.sendMailFailedUpdate(hostname,message)
 
     mods.closeLogFile(logfile)
-    mods.sendMail(subject,message,logfile)
+    # mods.sendMail(subject,message,logfile)
 
 if __name__ == '__main__':
     main()

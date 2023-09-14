@@ -21,7 +21,7 @@ def startDaemon(daemon,logfile,debug):
         while True:
             statusDaemonActive = isDaemonActive(daemon)
             print(statusDaemonActive)
-            if statusDaemonActive == 3 or not statusDaemonActive.find('active') == -1:
+            if not statusDaemonActive.find('active') == -1:
                 break
 
         logfile.write("{} Daemon {} is gestart\n".format(datetime.today(),daemon))
@@ -169,7 +169,7 @@ def checkIfDaemonIsInstalled(daemon,logfile,debug):
     """
     statusDaemonEnabled = isDaemonEnabled(daemon)
 
-    if statusDaemonEnabled == 3 or not statusDaemonEnabled.find('enabled') == -1:
+    if not statusDaemonEnabled.find('enabled') == -1:
         if debug:
             print("[DEBUG] Daemon {} is niet geinstalleerd".format(daemon))
         logfile.write("{} Daemon {} is niet geinstalleerd\n".format(datetime.today(),daemon))
@@ -196,7 +196,8 @@ def isDaemonActive(daemon):
         return status
     except subprocess.CalledProcessError as e:
         # De service kan niet worden gevonden en systemctl returned code 3
-        status = e.returncode
+        if e.returncode == 3:
+            status = 'notactive'
         return status
 
 def isDaemonEnabled(daemon):
@@ -214,5 +215,6 @@ def isDaemonEnabled(daemon):
         return status
     except subprocess.CalledProcessError as e:
         # De service kan niet worden gevonden en systemctl returned code 3
-        status = e.returncode
+        if e.returncode == 3:
+            status = 'notinstalled'
         return status
