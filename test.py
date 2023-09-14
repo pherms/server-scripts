@@ -33,7 +33,7 @@ def check_daemon():
    # systemctl show -p Id --value cpupower  --> return service name
    # systemctl show -p LoadState --value cpupower  --> return service name
 
-check_daemon()
+# check_daemon()
 
    #  ps = subprocess.Popen(('ps', '-ef'), stdout=subprocess.PIPE)
    #  grep = subprocess.Popen(('grep', '-v', 'grep'), stdin=ps.stdout, stdout=subprocess.PIPE)
@@ -45,3 +45,13 @@ check_daemon()
    #  grep.stdout.close() # Allow grep to receive a SIGPIPE if grep_daemon exits
 
    #  output = grep_daemon.communicate()[0]
+
+def run_process():
+   # with subprocess.Popen(["systemctl", "is-enabled", "nmb.service"],stdout=subprocess.PIPE,stderr=subprocess.PIPE) as process:
+   #    return subprocess.CompletedProcess(process.args, returncode=0,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+   # return subprocess.CompletedProcess(["systemctl", "is-enabled", "nmb.service"],0, stdout=subprocess.PIPE,stderr=subprocess.PIPE).stderr
+   output = subprocess.run(["systemctl", "is-enabled", "cleanup.service"], capture_output=True).stdout.decode("utf-8")
+   return output
+
+output = run_process()
+print(output)
