@@ -178,12 +178,12 @@ def checkIfDaemonIsInstalled(daemon,logfile,debug):
     statusDaemonEnabled = isDaemonEnabled(daemon)
     print("[DEBUG] Waarde statusDaemonEnabled: {}".format(statusDaemonEnabled))
 
-    if not statusDaemonEnabled.find('enabled') == -1 or statusDaemonEnabled.find('error') >= 0:
+    if statusDaemonEnabled.find('disabled') >= 0 or statusDaemonEnabled.find('error') >= 0 or statusDaemonEnabled.find('not-found') >= 0:
         if debug:
             print("[DEBUG] Daemon {} is niet geinstalleerd".format(daemon))
         logfile.write("{} Daemon {} is niet geinstalleerd\n".format(datetime.today(),daemon))
         return False
-    else:
+    elif statusDaemonEnabled.find('enabled') >= 0:
         if debug:
             print("[DEBUG] Daemon {} is geinstalleerd".format(daemon))
         logfile.write("{} Daemon {} is geinstalleerd\n".format(datetime.today(),daemon))
@@ -215,18 +215,19 @@ def isDaemonEnabled(daemon):
     Raadpleegt via systemctl is-enabled of de daemon geinstalleerd is. Geeft str of int terug
 
     :param str daemon: de daemon die moet worden geraadpleegd
-    :return: String wanneer service gevonden is, enabled wanneer deze is geinstalleerd. Int wanneer de service niet is gevonden (code 3)
-    :rtype: Str or Int
+    :return: String wanneer service gevonden is, enabled wanneer deze is geinstalleerd. disabled wanneer deze servicefile aanwezig is, maar nog niet is ge-enabled,not-found wanneer deze niet is geinstalleerd en error wanneer er een andere status is.
+    :rtype: Str
     """
     print("[DEBUG] in funtie isDaemonEnabled")
     try:
-        isEnabled = subprocess.check_output(["systemctl", "is-enabled", "{}".format(daemon)]).decode("utf-8")
+        # isEnabled = subprocess.check_output(["systemctl", "is-enabled", "{}".format(daemon)]).decode("utf-8")
+        isEnabled = subprocess.run(["systemctl", "is-enabled", "{}".format(daemon)])
         print("Waarde van isEnabled: {}".format(isEnabled))
         return isEnabled
     except subprocess.CalledProcessError as e:
         # De service kan niet worden gevonden en systemctl returned code 3
         if e.returncode == 3:
-            isEnabled = 'notinstalled'
+            isEnabled = 'not-found'
         else:
             print("Returncode is not 3. Value: {}".format(e.returncode))
             isEnabled = 'error'
