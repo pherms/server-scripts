@@ -189,7 +189,7 @@ def checkIfDaemonIsInstalled(daemon,logfile,debug):
         logfile.write("{} Daemon {} is geinstalleerd\n".format(datetime.today(),daemon))
         return True
     else:
-        print("[DEBUG] Er is een andere status. {}".format(type(statusDaemonEnabled)))
+        print("[DEBUG] Er is een andere status. {}".format(statusDaemonEnabled))
 
 def isDaemonActive(daemon):
     """
