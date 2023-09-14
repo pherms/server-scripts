@@ -228,5 +228,6 @@ def isDaemonEnabled(daemon):
         if e.returncode == 3:
             isEnabled = 'notinstalled'
         else:
+            print("Returncode is not 3. Value: {}".format(e.returncode))
             isEnabled = 'error'
         return isEnabled
