@@ -176,6 +176,7 @@ def checkIfDaemonIsInstalled(daemon,logfile,debug):
     :rtype: bool
     """
     statusDaemonEnabled = isDaemonEnabled(daemon)
+    print("[DEBUG] Waarde statusDaemonEnabled: {}".format(statusDaemonEnabled))
 
     if not statusDaemonEnabled.find('enabled') == -1 or statusDaemonEnabled.find('No such file or directory') >= 0:
         if debug:
