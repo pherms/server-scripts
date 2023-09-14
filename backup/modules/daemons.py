@@ -229,3 +229,5 @@ def isDaemonEnabled(daemon):
         else:
             isEnabled = 'error'
         return isEnabled
+    except Exception as error:
+        print("Overige foutmeldingen: {}".format(error))
