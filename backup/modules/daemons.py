@@ -75,13 +75,13 @@ def installDaemon(daemon,logfile,debug,scriptfolder,status):
                 if debug:
                     print("[DEBUG] De daemon is niet geinstalleerd. De bestanden worden gekopieerd")
                 logfile.write("{} Daemon {} is niet geinstalleerd. De bestanden worden gekopieerd\n".format(datetime.today(),daemon))
-                copyDaemonFiles(daemon,scriptfolder)
+                copyDaemonFiles(daemon,scriptfolder,logfile,debug)
                 return "installed"
         else:
             if debug:
                 print("[DEBUG] De daemon is al geinstalleerd. De bestanden worden bijgewerkt")
             logfile.write("{} Daemon {} is al geinstalleerd. De bestanden worden bijgewerkt\n".format(datetime.today(),daemon))
-            copyDaemonFiles(daemon,scriptfolder)
+            copyDaemonFiles(daemon,scriptfolder,logfile,debug)
             return "updated"
           
     except Exception as error:
@@ -118,7 +118,7 @@ def compareDaemonFiles(daemon,logfile,scriptfolder,debug):
     else:
         return True
 
-def copyDaemonFiles(daemon,scriptfolder):
+def copyDaemonFiles(daemon,scriptfolder,logfile,debug):
     """
     Kopieert de daemon files uit de script folder naar de system folder.
 
@@ -126,7 +126,15 @@ def copyDaemonFiles(daemon,scriptfolder):
     :param str scriptfolder: de daemon die moet worden gestart
     """
     # change source folder before commit to scriptfolder
-    os.system("cp {}backup/systemd/{} /etc/systemd/system/".format(scriptfolder,daemon))
+    try:
+        os.system("cp {}backup/systemd/{} /etc/systemd/system/".format(scriptfolder,daemon))
+    except Exception as error:
+        if debug:
+            print("[DEBUG] Error tijdens kopieren van unit file: {}. De error is: {}".format(daemon,error))
+        print("Error tijdens kopieren van de unit file {}".format(daemon))
+        print("De error is: {}".format(error))
+        logfile.write("{} Fout bij kopieren unit file {}. De error is: {}\n".format(datetime.today(),daemon,error))
+
 
 def enableDaemon(daemon,logfile,debug):
     """
