@@ -159,12 +159,9 @@ def main():
                 # 1. Vergelijken geïnstalleerde daemon met daemon in scripts
                 # 2. wanneer deze verschillen, dan nieuwe file kopiëren
                 # 3. indien gekopieerd, dan daemon-reload
-                for serviceToInstall in servicesToInstall:
-                    status = mods.checkIfDaemonIsInstalled(serviceToInstall,logfile,debug)
 
                 # Service moet worden geïnstalleerd, maar wordt gestart door een timer
                 for serviceToInstall in servicesToInstall:
-                    installedService = ""
                     status = mods.checkIfDaemonIsNotInstalled(serviceToInstall,logfile,debug)
 
                     if status:
@@ -216,7 +213,6 @@ def main():
 
             try:
                 for timer in timers:
-                    installedTimer = ""
                     status = mods.checkIfDaemonIsNotInstalled(timer,logfile,debug)
                     
                     if status:
