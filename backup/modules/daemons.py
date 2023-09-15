@@ -70,7 +70,7 @@ def installDaemon(daemon,logfile,debug,scriptfolder,status):
     :rtype: str
     """
     try:
-        if status:
+        if not status:
             if not os.path.exists("/etc/systemd/system/{}".format(daemon)):
                 if debug:
                     print("[DEBUG] De daemon is niet geinstalleerd. De bestanden worden gekopieerd")
@@ -165,14 +165,14 @@ def reloadDaemon(logfile,debug):
     logfile.write("{} Herladen van daemon scripts\n".format(datetime.today()))
     os.system('systemctl daemon-reload')
 
-def checkIfDaemonIsInstalled(daemon,logfile,debug):
+def checkIfDaemonIsNotInstalled(daemon,logfile,debug):
     """
     Raadpleegt via systemctl is-enabled of een daemon is geïnstalleerd.
 
     :param str daemon: de daemon die moet worden gestart
     :param bool debug: enable debug logging
     :param obj logfile: de logfile waar naartoe moet worden gelogd
-    :return: True wanneer daemon is geinstalleerd, False wanneer deze niet is geinstalleerd
+    :return: True wanneer daemon niet is geinstalleerd, False wanneer deze is geinstalleerd
     :rtype: bool
     """
     statusDaemonEnabled = isDaemonEnabled(daemon)
@@ -182,12 +182,12 @@ def checkIfDaemonIsInstalled(daemon,logfile,debug):
         if debug:
             print("[DEBUG] Daemon {} is niet geinstalleerd".format(daemon))
         logfile.write("{} Daemon {} is niet geinstalleerd\n".format(datetime.today(),daemon))
-        return False
+        return True
     elif statusDaemonEnabled == 'enabled':
         if debug:
             print("[DEBUG] Daemon {} is geinstalleerd".format(daemon))
         logfile.write("{} Daemon {} is geinstalleerd\n".format(datetime.today(),daemon))
-        return True
+        return False
     else:
         print("[DEBUG] Er is een andere status. {}".format(statusDaemonEnabled))
 
