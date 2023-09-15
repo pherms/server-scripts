@@ -225,7 +225,7 @@ def main():
                         mods.enableDaemon(timer,logfile,debug)
                         mods.startDaemon(timer,logfile,debug)
                     if installedTimer == 'updated':
-                        mods.reloadDaemon(timer,logfile,debug)
+                        mods.reloadDaemon(timer,logfile)
                         mods.restartDaemon(timer,logfile,debug)
                     if installedTimer == 'error':
                         logfile.write("{} Er is een fout opgetreden tijden het installeren van timer: {}\n".format(datetime.today()))
