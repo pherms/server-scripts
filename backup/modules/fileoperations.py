@@ -296,7 +296,7 @@ def cleanupLogs(logPath,debug):
     """
     for file in os.listdir(logPath):
         if file != 'updatelog.log':
-            logfileDate = mods.determineCreationDateFromFileName(file)
+            logfileDate = mods.determineCreationDateFromFileName(file,debug)
             if debug:
                 print("[DEBUG] logfileDate: {}".format(logfileDate))
 
