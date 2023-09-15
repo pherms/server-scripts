@@ -21,7 +21,7 @@ def startDaemon(daemon,logfile,debug):
         while True:
             statusDaemonActive = isDaemonActive(daemon)
             print(statusDaemonActive)
-            if not statusDaemonActive.find('active') == -1 or statusDaemonActive == 3:
+            if statusDaemonActive.find('active') >= 0:
                 break
 
         logfile.write("{} Daemon {} is gestart\n".format(datetime.today(),daemon))
@@ -65,24 +65,30 @@ def installDaemon(daemon,logfile,debug,scriptfolder,status):
     :param str scriptfolder: de daemon die moet worden gestart
     :param str status: True wanneer de bestaande daemon config file afwijkt van de nieuwe. False wanneer dit niet het geval is (zie compareDaemonFiles)
     :param bool debug: enable debug logging
+    :param bool compared: de compare functie heeft verschillen gevonden, dus bijwerken.
     :param obj logfile: de logfile waar naartoe moet worden gelogd
     :return: Installed status. Geldige waarden zijn: "installed", "updated", "error"
     :rtype: str
     """
     try:
-        if status:
+        if not status:
             if not os.path.exists("/etc/systemd/system/{}".format(daemon)):
                 if debug:
                     print("[DEBUG] De daemon is niet geinstalleerd. De bestanden worden gekopieerd")
                 logfile.write("{} Daemon {} is niet geinstalleerd. De bestanden worden gekopieerd\n".format(datetime.today(),daemon))
-                copyDaemonFiles(daemon,scriptfolder)
-                return "installed"
+                copyDaemonFiles(daemon,scriptfolder,logfile,debug)
+                return 'installed'
+            else:
+                if debug:
+                    print("[DEBUG] De daemon is al geinstalleerd, maar er zijn wijzigingen.")
+                logfile.write("{} Daemon {} is al geinstalleerd, maar er zijn wijzigingen. De bestanden worden gekopieerd\n".format(datetime.today(),daemon))
+                copyDaemonFiles(daemon,scriptfolder,logfile,debug)
+                return 'updated'
         else:
             if debug:
-                print("[DEBUG] De daemon is al geinstalleerd. De bestanden worden bijgewerkt")
-            logfile.write("{} Daemon {} is al geinstalleerd. De bestanden worden bijgewerkt\n".format(datetime.today(),daemon))
-            copyDaemonFiles(daemon,scriptfolder)
-            return "updated"
+                print("[DEBUG] De daemon is al geinstalleerd of er zijn geen wijzigingen.")
+            logfile.write("{} Daemon {} is al geinstalleerd of er zijn geen wijzigingen\n".format(datetime.today(),daemon))
+            return 'done'
           
     except Exception as error:
         return "error"
@@ -95,11 +101,11 @@ def compareDaemonFiles(daemon,logfile,scriptfolder,debug):
     :param str scriptfolder: de daemon die moet worden gestart
     :param bool debug: enable debug logging
     :param obj logfile: de logfile waar naartoe moet worden gelogd
-    :return: True wanneer files ongelijk zijn, wat betekent dat de nieuwe moet worden geïnstalleerd. False er hoeft niets te worden gedaan
+    :return: False wanneer files ongelijk zijn, wat betekent dat de nieuwe moet worden geïnstalleerd. True er hoeft niets te worden gedaan
     :rtype: bool
     """
     if not os.path.exists("/etc/systemd/system/{}".format(daemon)):
-        return True
+        return False
     else:
         with open("/etc/systemd/system/{}".format(daemon)) as iD:
             contentInstalledDaemon = iD.read()
@@ -118,7 +124,7 @@ def compareDaemonFiles(daemon,logfile,scriptfolder,debug):
     else:
         return True
 
-def copyDaemonFiles(daemon,scriptfolder):
+def copyDaemonFiles(daemon,scriptfolder,logfile,debug):
     """
     Kopieert de daemon files uit de script folder naar de system folder.
 
@@ -126,7 +132,15 @@ def copyDaemonFiles(daemon,scriptfolder):
     :param str scriptfolder: de daemon die moet worden gestart
     """
     # change source folder before commit to scriptfolder
-    os.system("cp {}backup/systemd/{} /etc/systemd/system/".format(scriptfolder,daemon))
+    try:
+        os.system("cp {}backup/systemd/{} /etc/systemd/system/".format(scriptfolder,daemon))
+    except Exception as error:
+        if debug:
+            print("[DEBUG] Error tijdens kopieren van unit file: {}. De error is: {}".format(daemon,error))
+        print("Error tijdens kopieren van de unit file {}".format(daemon))
+        print("De error is: {}".format(error))
+        logfile.write("{} Fout bij kopieren unit file {}. De error is: {}\n".format(datetime.today(),daemon,error))
+
 
 def enableDaemon(daemon,logfile,debug):
     """
@@ -155,30 +169,34 @@ def reloadDaemon(logfile,debug):
     if debug:
         print("[DEBUG] Herladen van daemon scripts")
     logfile.write("{} Herladen van daemon scripts\n".format(datetime.today()))
+    
     os.system('systemctl daemon-reload')
 
-def checkIfDaemonIsInstalled(daemon,logfile,debug):
+def checkIfDaemonIsNotInstalled(daemon,logfile,debug):
     """
     Raadpleegt via systemctl is-enabled of een daemon is geïnstalleerd.
 
     :param str daemon: de daemon die moet worden gestart
     :param bool debug: enable debug logging
     :param obj logfile: de logfile waar naartoe moet worden gelogd
-    :return: True wanneer daemon is geinstalleerd, False wanneer deze niet is geinstalleerd
+    :return: True wanneer daemon niet is geinstalleerd, False wanneer deze is geinstalleerd
     :rtype: bool
     """
     statusDaemonEnabled = isDaemonEnabled(daemon)
+    print("[DEBUG] Waarde statusDaemonEnabled: {}".format(statusDaemonEnabled))
 
-    if not statusDaemonEnabled.find('enabled') == -1 or statusDaemonEnabled == 3:
+    if statusDaemonEnabled == 'disabled' or statusDaemonEnabled == 'error' or statusDaemonEnabled == 'not-found':
         if debug:
             print("[DEBUG] Daemon {} is niet geinstalleerd".format(daemon))
         logfile.write("{} Daemon {} is niet geinstalleerd\n".format(datetime.today(),daemon))
-        return False
-    else:
+        return True
+    elif statusDaemonEnabled == 'enabled':
         if debug:
             print("[DEBUG] Daemon {} is geinstalleerd".format(daemon))
         logfile.write("{} Daemon {} is geinstalleerd\n".format(datetime.today(),daemon))
-        return True
+        return False
+    else:
+        print("[DEBUG] Er is een andere status. {}".format(statusDaemonEnabled))
 
 def isDaemonActive(daemon):
     """
@@ -189,27 +207,35 @@ def isDaemonActive(daemon):
     :rtype: Str or Int
     """
     try:
-        status = subprocess.check_output(["systemctl", "is-active", "{}".format(daemon)])
-        status = status.decode("utf-8")
-        return status
+        # isActive = subprocess.check_output(["systemctl", "is-active", "{}".format(daemon)]).decode("utf-8")
+        isActive = subprocess.run(["systemctl", "is-active", "{}".format(daemon)],capture_output=True).stdout.decode("utf-8").strip()
+        return isActive
     except subprocess.CalledProcessError as e:
         # De service kan niet worden gevonden en systemctl returned code 3
-        status = e.returncode
-        return status
+        if e.returncode == 3:
+            isActive = 'notactive'
+        else:
+            isActive = 'error'
+        return isActive
 
 def isDaemonEnabled(daemon):
     """
     Raadpleegt via systemctl is-enabled of de daemon geinstalleerd is. Geeft str of int terug
 
     :param str daemon: de daemon die moet worden geraadpleegd
-    :return: String wanneer service gevonden is, enabled wanneer deze is geinstalleerd. Int wanneer de service niet is gevonden (code 3)
-    :rtype: Str or Int
+    :return: String wanneer service gevonden is, enabled wanneer deze is geinstalleerd. disabled wanneer deze servicefile aanwezig is, maar nog niet is ge-enabled,not-found wanneer deze niet is geinstalleerd en error wanneer er een andere status is.
+    :rtype: Str
     """
     try:
-        status = subprocess.check_output(["systemctl", "is-enabled", "{}".format(daemon)])
-        status = status.decode("utf-8")
-        return status
+        # isEnabled = subprocess.check_output(["systemctl", "is-enabled", "{}".format(daemon)]).decode("utf-8")
+        isEnabled = subprocess.run(["systemctl", "is-enabled", "{}".format(daemon)],capture_output=True).stdout.decode("utf-8").strip()
+        return isEnabled
     except subprocess.CalledProcessError as e:
+        print(e.stderr)
         # De service kan niet worden gevonden en systemctl returned code 3
-        status = e.returncode
-        return status
+        if e.returncode == 3:
+            isEnabled = 'not-found'
+        else:
+            print("Returncode is not 3. Value: {}".format(e.returncode))
+            isEnabled = 'error'
+        return isEnabled

@@ -147,49 +147,74 @@ def main():
                     print("[DEBUG] Er is iets fout gegaan tijdens het downloaden van de zip. De error is: {}".format(error))
                 exit()
 
-            # Installeer daemons. Eerst daemons, dan timers
-            for serviceToInstall in servicesToInstall:
-                installedService = ""
-                status = mods.checkIfDaemonIsInstalled(serviceToInstall,logfile,debug)
+            try:
+                # Installeer daemons. Eerst daemons, dan timers
+                # Service moet worden geïnstalleerd, maar wordt gestart door een timer
+                for serviceToInstall in servicesToInstall:
+                    status = mods.checkIfDaemonIsNotInstalled(serviceToInstall,logfile,debug)
 
-                if not status:
-                    compareResult = mods.compareDaemonFiles(serviceToInstall,logfile,scriptfolder,debug) # False betekent files zijn niet gelijk, dus updaten
-                    installedService = mods.installDaemon(serviceToInstall,logfile,debug,scriptfolder,compareResult)
-                
-                    if installedService == "installed":
+                    if status:
+                        installedService = mods.installDaemon(serviceToInstall,logfile,debug,scriptfolder,status)
+                    else:
+                        compareResult = mods.compareDaemonFiles(serviceToInstall,logfile,scriptfolder,debug) # False betekent files zijn niet gelijk, nieuwe kopieren
+                        installedService = mods.installDaemon(serviceToInstall,logfile,debug,scriptfolder,compareResult)
+
+                    if installedService == 'installed':
                         mods.enableDaemon(serviceToInstall,logfile,debug)
-                    if installedService == "updated":
-                        mods.reloadDaemon(serviceToInstall,logfile,debug)
-                    if installedService == "error":
+                    if installedService == 'updated':
+                        mods.reloadDaemon(logfile,debug)
+                    if installedService == 'error':
                         logfile.write("{} Er is een fout opgetreden tijden het installeren van service: {}\n".format(datetime.today(),serviceToInstall))
                         if debug:
                             print("[DEBUG] Er is een fout opgetreden bij het installeren van service: {}".format(serviceToInstall))
-            
-            for serviceToCopy in servicesToCopy:
-                installedService = ""
-                compareResult = mods.compareDaemonFiles(serviceToCopy,logfile,scriptfolder,debug) # False betekent files zijn niet gelijk, dus updaten
 
-                if not compareResult:
-                    mods.copyDaemonFiles(serviceToCopy,scriptfolder)
+            except Exception as error:
+                logfile.write("{} Er is iets fout gegaan tijdens het installeren van de service {}\n".format(datetime.today(),servicesToInstall))
+                logfile.write("{} De foutmelding is: {}\n".format(datetime.today(),error))
+                if debug:
+                    print("[DEBUG] Er is iets fout gegaan tijdens het installeren van de service {}. De error is: {}".format(servicesToInstall,error))
+                exit()
 
-            for timer in timers:
-                installedTimer = ""
-                status = mods.checkIfDaemonIsInstalled(timer,logfile,debug)
-                
-                if not status:
-                    compareResult = mods.compareDaemonFiles(service,logfile,scriptfolder,debug) # False betekent files zijn niet gelijk, dus updaten
-                    installedTimer = mods.installDaemon(timer,logfile,debug,scriptfolder,compareResult)
+            try:          
+                for serviceToCopy in servicesToCopy:
+                    compareResult = mods.compareDaemonFiles(serviceToCopy,logfile,scriptfolder,debug) # False betekent files zijn niet gelijk, dus updaten
 
-                    if installedTimer == "installed":
+                    if not compareResult:
+                        mods.copyDaemonFiles(serviceToCopy,scriptfolder,logfile,debug)
+            except Exception as error:
+                logfile.write("{} Er is iets fout gegaan tijdens het Kopieren van de service {}\n".format(datetime.today(),serviceToCopy))
+                logfile.write("{} De foutmelding is: {}\n".format(datetime.today(),error))
+                if debug:
+                    print("[DEBUG] Er is iets fout gegaan tijdens het installeren van de service {}. De error is: {}".format(serviceToCopy,error))
+                exit()
+
+            try:
+                for timer in timers:
+                    status = mods.checkIfDaemonIsNotInstalled(timer,logfile,debug)
+                    
+                    if status:
+                        installedTimer = mods.installDaemon(timer,logfile,debug,scriptfolder,status)
+                    else:
+                        compareResult = mods.compareDaemonFiles(timer,logfile,scriptfolder,debug)
+                        installedTimer = mods.installDaemon(timer,logfile,debug,scriptfolder,compareResult)
+                    
+                    if installedTimer == 'installed':
                         mods.enableDaemon(timer,logfile,debug)
                         mods.startDaemon(timer,logfile,debug)
-                    if installedTimer == "updated":
-                        mods.reloadDaemon(timer,logfile,debug)
+                    if installedTimer == 'updated':
+                        mods.reloadDaemon(logfile,debug)
                         mods.restartDaemon(timer,logfile,debug)
-                    if installedTimer == "error" or status == "":
+                    if installedTimer == 'error':
                         logfile.write("{} Er is een fout opgetreden tijden het installeren van timer: {}\n".format(datetime.today()))
                         if debug:
                             print("[DEBUG] Er is een fout opgetreden bij het installeren van timer: {}".format(timer))
+
+            except Exception as error:
+                logfile.write("{} Er is iets fout gegaan tijdens het installeren van de timer {}\n".format(datetime.today(),timer))
+                logfile.write("{} De foutmelding is: {}\n".format(datetime.today(),error))
+                if debug:
+                    print("[DEBUG] Er is iets fout gegaan tijdens het installeren van de timer {}. De error is: {}".format(timer,error))
+                exit()            
 
         else:
             if debug:
