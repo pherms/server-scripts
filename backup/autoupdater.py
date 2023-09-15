@@ -149,17 +149,6 @@ def main():
 
             try:
                 # Installeer daemons. Eerst daemons, dan timers
-                # stappen:
-                # 1. controleer of daemon is geïnstalleerd
-                # Wanneer niet is geïnstalleerd:
-                # 1. installdaemon
-                # 2. Wanneer daemoninstalled status is installed, dan enabledaemon
-                # 3. start daemon (alleen timers)
-                # Wanneer wel is geïnstalleerd
-                # 1. Vergelijken geïnstalleerde daemon met daemon in scripts
-                # 2. wanneer deze verschillen, dan nieuwe file kopiëren
-                # 3. indien gekopieerd, dan daemon-reload
-
                 # Service moet worden geïnstalleerd, maar wordt gestart door een timer
                 for serviceToInstall in servicesToInstall:
                     status = mods.checkIfDaemonIsNotInstalled(serviceToInstall,logfile,debug)
@@ -179,18 +168,6 @@ def main():
                         if debug:
                             print("[DEBUG] Er is een fout opgetreden bij het installeren van service: {}".format(serviceToInstall))
 
-                    # if not status:
-                    #     compareResult = mods.compareDaemonFiles(serviceToInstall,logfile,scriptfolder,debug) # False betekent files zijn niet gelijk, dus updaten
-                    #     installedService = mods.installDaemon(serviceToInstall,logfile,debug,scriptfolder,compareResult)
-                    
-                    #     if installedService == "installed":
-                    #         mods.enableDaemon(serviceToInstall,logfile,debug)
-                    #     if installedService == "updated":
-                    #         mods.reloadDaemon(logfile,debug)
-                    #     if installedService == "error":
-                    #         logfile.write("{} Er is een fout opgetreden tijden het installeren van service: {}\n".format(datetime.today(),serviceToInstall))
-                    #         if debug:
-                    #             print("[DEBUG] Er is een fout opgetreden bij het installeren van service: {}".format(serviceToInstall))
             except Exception as error:
                 logfile.write("{} Er is iets fout gegaan tijdens het installeren van de service {}\n".format(datetime.today(),servicesToInstall))
                 logfile.write("{} De foutmelding is: {}\n".format(datetime.today(),error))
@@ -231,21 +208,7 @@ def main():
                         logfile.write("{} Er is een fout opgetreden tijden het installeren van timer: {}\n".format(datetime.today()))
                         if debug:
                             print("[DEBUG] Er is een fout opgetreden bij het installeren van timer: {}".format(timer))
-                    
-                    # if not status:
-                    #     compareResult = mods.compareDaemonFiles(timer,logfile,scriptfolder,debug) # False betekent files zijn niet gelijk, dus updaten
-                    #     installedTimer = mods.installDaemon(timer,logfile,debug,scriptfolder,compareResult)
 
-                    #     if installedTimer == "installed":
-                    #         mods.enableDaemon(timer,logfile,debug)
-                    #         mods.startDaemon(timer,logfile,debug)
-                    #     if installedTimer == "updated":
-                    #         mods.reloadDaemon(logfile,debug)
-                    #         mods.restartDaemon(timer,logfile,debug)
-                    #     if installedTimer == "error" or status == "":
-                    #         logfile.write("{} Er is een fout opgetreden tijden het installeren van timer: {}\n".format(datetime.today()))
-                    #         if debug:
-                    #             print("[DEBUG] Er is een fout opgetreden bij het installeren van timer: {}".format(timer))
             except Exception as error:
                 logfile.write("{} Er is iets fout gegaan tijdens het installeren van de timer {}\n".format(datetime.today(),timer))
                 logfile.write("{} De foutmelding is: {}\n".format(datetime.today(),error))
@@ -271,10 +234,10 @@ def main():
         {error}""".format(hostname=hostname,error=error)
         logfile.write("{} Er is een fout opgetreden bij het uitvoeren van de update\n".format(datetime.today()))
         logfile.write("{} De opgetreden error is: {}\n".format(datetime.today(),error))
-        # mods.sendMailFailedUpdate(hostname,message)
+        mods.sendMailFailedUpdate(hostname,message)
 
     mods.closeLogFile(logfile)
-    # mods.sendMail(subject,message,logfile)
+    mods.sendMail(subject,message,logfile)
 
 if __name__ == '__main__':
     main()
