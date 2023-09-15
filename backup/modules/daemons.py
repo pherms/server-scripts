@@ -169,7 +169,10 @@ def reloadDaemon(logfile,debug):
     if debug:
         print("[DEBUG] Herladen van daemon scripts")
     logfile.write("{} Herladen van daemon scripts\n".format(datetime.today()))
-    os.system('systemctl daemon-reload')
+    try:
+        os.system('systemctl daemon-reload')
+    except Exception as error:
+        print(error)
 
 def checkIfDaemonIsNotInstalled(daemon,logfile,debug):
     """
