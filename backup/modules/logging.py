@@ -1,5 +1,6 @@
 import modules as mods
 from datetime import datetime
+from pathlib import Path
 
 def openLogFile(logpath,logfiletype,debug):
     """
