@@ -172,7 +172,7 @@ def reloadDaemon(logfile,debug):
     try:
         os.system('systemctl daemon-reload')
     except Exception as error:
-        print(error)
+        print(error.with_traceback())
 
 def checkIfDaemonIsNotInstalled(daemon,logfile,debug):
     """
