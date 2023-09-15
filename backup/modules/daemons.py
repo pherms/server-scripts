@@ -65,6 +65,7 @@ def installDaemon(daemon,logfile,debug,scriptfolder,status):
     :param str scriptfolder: de daemon die moet worden gestart
     :param str status: True wanneer de bestaande daemon config file afwijkt van de nieuwe. False wanneer dit niet het geval is (zie compareDaemonFiles)
     :param bool debug: enable debug logging
+    :param bool compared: de compare functie heeft verschillen gevonden, dus bijwerken.
     :param obj logfile: de logfile waar naartoe moet worden gelogd
     :return: Installed status. Geldige waarden zijn: "installed", "updated", "error"
     :rtype: str
@@ -76,13 +77,18 @@ def installDaemon(daemon,logfile,debug,scriptfolder,status):
                     print("[DEBUG] De daemon is niet geinstalleerd. De bestanden worden gekopieerd")
                 logfile.write("{} Daemon {} is niet geinstalleerd. De bestanden worden gekopieerd\n".format(datetime.today(),daemon))
                 copyDaemonFiles(daemon,scriptfolder,logfile,debug)
-                return "installed"
+                return 'installed'
+            else:
+                if debug:
+                    print("[DEBUG] De daemon is al geinstalleerd, maar er zijn wijzigingen.")
+                logfile.write("{} Daemon {} is al geinstalleerd, maar er zijn wijzigingen. De bestanden worden gekopieerd\n".format(datetime.today(),daemon))
+                copyDaemonFiles(daemon,scriptfolder,logfile,debug)
+                return 'updated'
         else:
             if debug:
-                print("[DEBUG] De daemon is al geinstalleerd. De bestanden worden bijgewerkt")
-            logfile.write("{} Daemon {} is al geinstalleerd. De bestanden worden bijgewerkt\n".format(datetime.today(),daemon))
-            copyDaemonFiles(daemon,scriptfolder,logfile,debug)
-            return "updated"
+                print("[DEBUG] De daemon is al geinstalleerd of er zijn geen wijzigingen.")
+            logfile.write("{} Daemon {} is al geinstalleerd of er zijn geen wijzigingen\n".format(datetime.today(),daemon))
+            return 'done'
           
     except Exception as error:
         return "error"
@@ -95,7 +101,7 @@ def compareDaemonFiles(daemon,logfile,scriptfolder,debug):
     :param str scriptfolder: de daemon die moet worden gestart
     :param bool debug: enable debug logging
     :param obj logfile: de logfile waar naartoe moet worden gelogd
-    :return: True wanneer files ongelijk zijn, wat betekent dat de nieuwe moet worden geïnstalleerd. False er hoeft niets te worden gedaan
+    :return: False wanneer files ongelijk zijn, wat betekent dat de nieuwe moet worden geïnstalleerd. True er hoeft niets te worden gedaan
     :rtype: bool
     """
     if not os.path.exists("/etc/systemd/system/{}".format(daemon)):
