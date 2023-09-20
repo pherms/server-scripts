@@ -11,9 +11,10 @@ def main():
     copycommand = config['copycommand']
     remotefilepath = config['remotefilepath']
     hostType = config['hostType']
+    debug = config['debug']
 
     if hostType == 'vm':
-        logfile = mods.openLogFile(logfiledir,"copy")
+        logfile = mods.openLogFile(logfiledir,"copy",debug)
         hostname = mods.getHostname(logfile)
 
         logfile.write("{} Beginnen met kopieren van backupfiles naar server {}\n".format(datetime.today(),backupserver))
