@@ -19,6 +19,9 @@ def main():
     debug = bool(config["debug"])
     logfile = mods.openLogFile(logfilepath,"backup",debug)
     hostname = mods.getHostname(logfile)
+    exclusionList = []
+    inclusionList = []
+    listToBackup = []
     
     logfile.write("{} Inlezen configuratie bestand\n".format(datetime.today()))
     mods.createFolder(backuppath)
@@ -28,9 +31,14 @@ def main():
     archive = mods.openArchiveWrite(filename,filetype,logfile,debug)
 
     for line in lines:
-        if mods.determineInclusion(line):
-            line = mods.prepareFileToZip(line)
-            mods.addFilesToArchive(archive,Path(line),filetype,logfile)
+        mods.determineFolderlists(line,exclusionList,inclusionList,debug)
+
+    mods.prepareSourceListToBackup(logfile,listToBackup,exclusionList,inclusionList,debug)
+    
+    if debug:
+        print("[DEBUG] Exclusion list: {}".format(exclusionList))
+
+    mods.addFilesToArchive(archive,filetype,logfile,listToBackup,debug)
 
     mods.closeArchiveWrite(archive,filetype)
     archiveFileSize = mods.getArchiveFileSize(archive)

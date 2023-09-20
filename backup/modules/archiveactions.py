@@ -1,7 +1,9 @@
 import tarfile
 import zipfile
+import os
 import modules as mods
 from datetime import datetime
+from pathlib import Path
 
 def openArchiveWrite(filename,filetype,logfile,debug):
     """
@@ -45,33 +47,40 @@ def closeArchiveWrite(archive,filetype):
     elif filetype == 'zip':
         archive.close()
 
-def addFilesToArchive(archive,fileToZip,filetype,logfile):
+def addFilesToArchive(archive,filetype,logfile,listToBackup,debug):
     """
     Toevoegen van bestand aan archief
     
     :param obj archive: het archief bestand waar het bestand naar toe moet worden geschreven
-    :param str fileToZip: het bestand wat naar het archief moet worden geschreven
     :param str filetype: het type archief wat moet worden gesloten. Mogelijke opties zijn bz2 en zip. configureerbaar in config.json
-    :logfile obj logfile: het open logbestand waar naartoe wordt gelogd
+    :param obj logfile: het open logbestand waar naartoe wordt gelogd
+    :param list listToBackup: Lijst met te backuppen bestanden en directories
+    :param bool debug: Enable debug print in de console
     """
-    if mods.isDirectory(fileToZip):
-        logfile.write("{} Backup directory {}\n".format(datetime.today(),fileToZip))
-    else:
-        logfile.write("{} Backup file {}\n".format(datetime.today(),fileToZip))
+    for folderToBackup in listToBackup:
+        folderToBackup = Path(folderToBackup)
 
-    try:
-        if filetype == 'tar':
-            archive.add(fileToZip)
-        elif filetype == 'zip':
-            archive.write(fileToZip)
-    except Exception:
-        logmessage = "{} Kan {} niet naar backup archief schrijven. Backup wordt afgebroken.\n".format(datetime.today(),fileToZip)
-        logfile.write(logmessage)
-        mods.sendMailFailedBackup(mods.getHostname(logfile),logmessage)
-        closeArchiveWrite(archive,fileToZip)
-        exit()
+        if debug:
+            print("[DEBUG] Backuppen van folder: {}".format(folderToBackup))
 
-def determineInclusion(fileToZip):
+        if mods.isDirectory(folderToBackup):
+            logfile.write("{} Backup directory {}\n".format(datetime.today(),folderToBackup))
+        else:
+            logfile.write("{} Backup file {}\n".format(datetime.today(),folderToBackup))
+
+        try:
+            if filetype == 'tar':
+                archive.add(folderToBackup)
+            elif filetype == 'zip':
+                archive.write(folderToBackup)
+        except Exception:
+            logmessage = "{} Kan {} niet naar backup archief schrijven. Backup wordt afgebroken.\n".format(datetime.today(),folderToBackup)
+            logfile.write(logmessage)
+            mods.sendMailFailedBackup(mods.getHostname(logfile),logmessage)
+            closeArchiveWrite(archive,folderToBackup)
+            exit()
+
+def determineFolderlists(line,exclusionList,inclusionList,debug): # line uit sources
     """
     Bepaal of een bestand of directory moet worden meegenomen in de backup of uitgesloten.
     De notatie in het sources bestand is:
@@ -80,25 +89,19 @@ def determineInclusion(fileToZip):
 
     Dit zorgt ervoor dat de volledige folder /etc wordt gebackupped, met uitzondering van de default folder in de /etc folder
 
-    :param str fileToZip: de regel uit het sources bestand, welke moet worden geevalueerd
-    :return: True of False
-    :rtype: bool
+    :param str line: de regel uit het sources bestand, welke moet worden geevalueerd
+    :param list inclusionList: een lijst met te backup bestanden
+    :param list exclusionList: een lijst met te skippen bestanden en directories
+    :param bool debug: enable debug logging
     """
-    if str(fileToZip).startswith("+"):
-        return True
-    else:
-        return False
-    
-def prepareFileToZip(line):
-    """
-    Verwijdert de verborgen tekens aan het einde van een regel uit het sources bestand
-
-    :param str line: de regel uit het sources bestand, waarvan de verborgen tekens moeten worden verwijderd
-    :return: de 'line' string
-    :rtype: str
-    """
-    line = line[1:].rstrip()
-    return line
+    if str(line).startswith("-"):
+        if debug:
+            print("[DEBUG] toevoegen pad {} aan exclusionlist.".format(line))
+        exclusionList.insert(len(exclusionList),line[1:].rstrip())
+    elif str(line).startswith("+"):
+        if debug:
+            print("[DEBUG] toevoegen pad {} aan inclusionlist.".format(line))
+        inclusionList.insert(len(inclusionList),line[1:].rstrip())
 
 def archiveSize(num, suffix="B"):
     """
@@ -113,3 +116,34 @@ def archiveSize(num, suffix="B"):
             return f"{num:3.1f}{unit}{suffix}"
         num /= 1024.0
     return f"{num:.1f}Yi{suffix}"
+
+def prepareSourceListToBackup(logfile,listToBackup,exclusionList,inclusionList,debug):
+    """
+    Prepare sources to bakup and exclude de exclusions
+
+    :param str line: de folder uit de sources file
+    :param list listToBackup: Lijst met folders welke moet worden gebackupped
+    :param list exclusionList: Lijst met folders welke moeten worden geskipped
+    :param bool debug: debug print op console. true is aan
+    """
+    logfile.write("{} Bepalen van te backuppen folders\n".format(datetime.today()))
+    for inclusion in inclusionList:
+        for root, dirs, files in os.walk(Path(inclusion)):
+            listToBackup.insert(len(listToBackup),root)
+
+    if debug:
+        print("[DEBUG] lijst met folders die worden gebackupped: {}".format(listToBackup))
+
+    logfile.write("{} Filteren van de exclusies\n".format(datetime.today()))
+    for exclusion in exclusionList:
+        while True:
+            indexes = [index for index in range(len(listToBackup)) if exclusion in listToBackup[index]]
+            if not len(indexes) == 0:
+                if debug:
+                    print("[DEBUG] found matches: {}".format(indexes))
+                for index in indexes:
+                    listToBackup.pop(indexes[0])
+            else:
+                break
+    
+    print("[DEBUG] List to Backup: {}".format(listToBackup))
