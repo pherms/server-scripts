@@ -23,9 +23,6 @@ def openLogFile(logpath,logfiletype,debug):
         logfilename = "updatelog.log"
 
     try:
-        # if Path(logpath + logfilename).exists():
-        #     logfile = open(logpath + logfilename,"a")
-        # else:
         logfile = open(logpath + logfilename,"w")
 
         if debug:
