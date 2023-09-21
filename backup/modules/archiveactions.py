@@ -129,10 +129,8 @@ def prepareSourceListToBackup(logfile,listToBackup,exclusionList,inclusionList,d
     logfile.write("{} Bepalen van te backuppen folders\n".format(datetime.today()))
     for inclusion in inclusionList:
         for root, dirs, files in os.walk(Path(inclusion)):
-            listToBackup.insert(len(listToBackup),root)
-
-    if debug:
-        print("[DEBUG] lijst met folders die worden gebackupped: {}".format(listToBackup))
+            for file in files:
+                listToBackup.append(os.path.join(root,file))
 
     logfile.write("{} Filteren van de exclusies\n".format(datetime.today()))
     for exclusion in exclusionList:
@@ -145,5 +143,6 @@ def prepareSourceListToBackup(logfile,listToBackup,exclusionList,inclusionList,d
                     listToBackup.pop(indexes[0])
             else:
                 break
-    
-    print("[DEBUG] List to Backup: {}".format(listToBackup))
+
+    if debug:
+        print("[DEBUG] lijst met folders die worden gebackupped: {}".format(listToBackup))
