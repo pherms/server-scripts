@@ -214,15 +214,18 @@ def main():
                 logfile.write("{} De foutmelding is: {}\n".format(datetime.today(),error))
                 if debug:
                     print("[DEBUG] Er is iets fout gegaan tijdens het installeren van de timer {}. De error is: {}".format(timer,error))
-                exit()            
+                exit()
+
+            subject = "Autoupdate op server {hostname} is succesvol uitgevoerd".format(hostname=hostname)
+            message = "Autoupdate op server {hostname} is succesvol uitgevoerd\nZie de bijgevoegde logfile.\nDe geïnstalleerde versie is: {latestVersion}.".format(hostname=hostname,latestVersion=latestVersion)
+            mods.sendMail(subject,message,logfile)
 
         else:
             if debug:
                 print("[DEBUG] Laatste versie is al geïnstalleerd. Er hoeft niets te worden gedaan.")
             logfile.write("{} De laatste versie: {} is al geïnstalleerd. De updater wordt nu gesloten.\n".format(datetime.today(),installedVersion))
 
-        subject = "Autoupdate op server {hostname} is succesvol uitgevoerd".format(hostname=hostname)
-        message = "Autoupdate op server {hostname} is succesvol uitgevoerd\nZie de bijgevoegde logfile.\nDe geïnstalleerde versie is: {latestVersion}.".format(hostname=hostname,latestVersion=latestVersion)
+        
     except Exception as error:
         if debug:
             print("[DEBUG] Error bij uitvoeren van Autoupdater")
@@ -237,7 +240,6 @@ def main():
         mods.sendMailFailedUpdate(hostname,message)
 
     mods.closeLogFile(logfile)
-    mods.sendMail(subject,message,logfile)
 
 if __name__ == '__main__':
     main()
