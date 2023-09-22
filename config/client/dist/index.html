@@ -10,30 +10,86 @@
 <body onload="loadData()">
     <h1 class="text-3xl font-bold underline">Hello World!!</h1>
     
-        <form action="" id="form">
-            <div class="flex flex-col justify-center items-center">
-                <label for="filetype" class="mr-1">filetype</label><input type="text" name="filetype" id="filetype">
-                <label for="backuppath" class="mr-1">Backuppath</label><input type="text" name="backuppath" id="backuppath">
-                <label for="logfilepath" class="mr-1">logfilepath</label><input type="text" name="logfilepath" id="logfilepath">
-                <label for="scriptspath" class="mr-1">scriptspath</label><input type="text" name="scriptspath" id="scriptspath">
-                <label for="apiurl" class="mr-1">apiurl</label><input type="text" name="apiurl" id="apiurl">
-                <label for="sourcesLocation" class="mr-1">sourcesLocation</label><input type="text" name="sourcesLocation" id="sourcesLocation">
-                <label for="compression" class="mr-1">compression</label><input type="text" name="compression" id="compression">
-                <label for="backupserver" class="mr-1">backupserver</label><input type="text" name="backupserver" id="backupserver">
-                <label for="copycommand" class="mr-1">copycommand</label><input type="text" name="copycommand" id="copycommand">
-                <label for="remotefilepath" class="mr-1">remotefilepath</label><input type="text" name="remotefilepath" id="remotefilepath">
-                <label for="mailserver" class="mr-1">mailserver</label><input type="text" name="mailserver" id="mailserver">
-                <label for="mailRecipient" class="mr-1">mailRecipient</label><input type="text" name="mailRecipient" id="mailRecipient">
-                <label for="mailSender" class="mr-1">mailSender</label><input type="text" name="mailSender" id="mailSender">
-                <label for="debug" class="mr-1">debug</label><input type="text" name="debug" id="debug">
-                <label for="hostType" class="mr-1">hostType</label><input type="text" name="hostType" id="hostType">
-                <label for="timerUnits" class="mr-1">timerUnits</label><input type="text" name="timerUnits" id="timerUnits">
-                <label for="servicesToInstall" class="mr-1">servicesToInstall</label><input type="text" name="servicesToInstall" id="servicesToInstall">
-                <label for="servicesToCopy" class="mr-1">servicesToCopy</label><input type="text" name="servicesToCopy" id="servicesToCopy">
-                <button id="button" class="mr-1">Get data</button>
-                <button id="submit" class="mr-1">Save data</button>
-            </div>
+
+        <form action="#" id="form" class="grid grid-cols-[25rem_minmax(25rem,_1fr)] gap-4 w-fit">
+            
+                <div class="flex items-center">
+                    <div class="justify-items-start"><label for="filetype" class="mr-2 w-fit">filetype</label></div>
+                    <div class="justify-items-end"><input type="text" name="filetype" id="filetype" class="border border-gray-300 rounded-md w-80"></div>
+                </div>
+                <div class="flex items-center">
+                    <label for="backuppath" class="relative mr-2 w-fit">Backuppath</label>
+                    <input type="text" name="backuppath" id="backuppath" class="border border-gray-300 rounded-md block w-80 col-start-2">
+                </div>
+                <div class="flex items-center">
+                    <label for="logfilepath" class="relative mr-2 w-fit">logfilepath</label>
+                    <input type="text" name="logfilepath" id="logfilepath" class="border border-gray-300 rounded-md block w-80 col-start-2">
+                </div>
+                <div class="flex items-center">
+                    <label for="scriptspath" class="relative mr-2 w-fit">scriptspath</label>
+                    <input type="text" name="scriptspath" id="scriptspath" class="border border-gray-300 rounded-md block w-80 col-start-2">
+                </div>
+                <div class="flex items-center">
+                    <label for="apiurl" class="relative mr-2 w-fit">apiurl</label>
+                    <input type="text" name="apiurl" id="apiurl" class="border border-gray-300 rounded-md block w-80 col-start-2">
+                </div>
+                <div class="flex items-center">
+                    <label for="sourcesLocation" class="relative mr-2 w-fit">sourcesLocation</label>
+                    <input type="text" name="sourcesLocation" id="sourcesLocation" class="border border-gray-300 rounded-md block w-80 col-start-2">
+                </div>
+                <div class="flex items-center">
+                    <label for="compression" class="relative mr-2 w-fit">compression</label>
+                    <input type="text" name="compression" id="compression" class="border border-gray-300 rounded-md block w-80 col-start-2">
+                </div>
+                <div class="flex items-center">    
+                    <label for="backupserver" class="relative mr-2 w-fit">backupserver</label>
+                    <input type="text" name="backupserver" id="backupserver" class="border border-gray-300 rounded-md block w-80 col-start-2">
+                </div>
+                <div class="flex items-center">
+                    <label for="copycommand" class="relative mr-2 w-fit">copycommand</label>
+                    <input type="text" name="copycommand" id="copycommand" class="border border-gray-300 rounded-md block w-80 col-start-2">
+                </div>
+                <div class="flex items-center">
+                    <label for="remotefilepath" class="relative mr-2 w-fit">remotefilepath</label>
+                    <input type="text" name="remotefilepath" id="remotefilepath" class="border border-gray-300 rounded-md block w-80 col-start-2">
+                </div>
+                <div class="flex items-center">
+                    <label for="mailserver" class="relative mr-2 w-fit">mailserver</label>
+                    <input type="text" name="mailserver" id="mailserver" class="border border-gray-300 rounded-md block w-80 col-start-2">
+                </div>
+                <div class="flex items-center">
+                    <label for="mailRecipient" class="relative mr-2 w-fit">mailRecipient</label>
+                    <input type="text" name="mailRecipient" id="mailRecipient" class="border border-gray-300 rounded-md block w-80 col-start-2">
+                </div>
+                <div class="flex items-center">
+                    <label for="mailSender" class="relative mr-2 w-fit">mailSender</label>
+                    <input type="text" name="mailSender" id="mailSender" class="border border-gray-300 rounded-md block w-80 col-start-2">
+                </div>
+                <div class="flex items-center">
+                    <label for="debug" class="relative mr-2 w-fit">debug</label>
+                    <input type="text" name="debug" id="debug" class="border border-gray-300 rounded-md block w-80 col-start-2">
+                </div>
+                <div class="flex items-center">
+                    <label for="hostType" class="relative mr-2 w-fit">hostType</label>
+                    <input type="text" name="hostType" id="hostType" class="border border-gray-300 rounded-md block w-80 col-start-2">
+                </div>
+                <div class="flex items-center">
+                    <label for="timerUnits" class="relative mr-2 w-fit">timerUnits</label>
+                    <input type="text" name="timerUnits" id="timerUnits" class="border border-gray-300 rounded-md block w-80 col-start-2">
+                </div>
+                <div class="flex items-center">
+                    <label for="servicesToInstall" class="relative mr-2 w-fit">servicesToInstall</label>
+                    <input type="text" name="servicesToInstall" id="servicesToInstall" class="border border-gray-300 rounded-md block w-80 col-start-2">
+                </div>
+                <div class="flex items-center">
+                    <label for="servicesToCopy" class="relative mr-2 w-fit">servicesToCopy</label>
+                    <input type="text" name="servicesToCopy" id="servicesToCopy" class="border border-gray-300 rounded-md block w-80 col-start-2">
+                </div>
+            
+                <button id="button" class="">Get data</button>
+                <button id="submit" class="">Save data</button>
         </form>
+        
     
     
 </body>
