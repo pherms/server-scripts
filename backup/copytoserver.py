@@ -32,7 +32,7 @@ def main():
         De backup files van {hostname} zijn succesvol naar de server gekopieerd.\n
         Het totaal aantal gekopieerde bestanden is: {totalFilesCopied}\n
         Zie ook bijgande logfile\n""".format(hostname=hostname,totalFilesCopied=len(filesCopied))
-        subject = "Kopieren van {} naar server {} succesvol".format(hostname,backupserver)
+        subject = "Kopieren van {hostname} naar server {backupserver} succesvol".format(hostname=hostname,backupserver=backupserver)
 
     mods.closeLogFile(logfile)
     mods.sendMail(subject,message_text,logfile)
