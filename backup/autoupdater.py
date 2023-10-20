@@ -218,12 +218,14 @@ def main():
 
             subject = "Autoupdate op server {hostname} is succesvol uitgevoerd".format(hostname=hostname)
             message = "Autoupdate op server {hostname} is succesvol uitgevoerd\nZie de bijgevoegde logfile.\nDe geïnstalleerde versie is: {latestVersion}.".format(hostname=hostname,latestVersion=latestVersion)
+            mods.closeLogFile(logfile)
             mods.sendMail(subject,message,logfile)
 
         else:
             if debug:
                 print("[DEBUG] Laatste versie is al geïnstalleerd. Er hoeft niets te worden gedaan.")
             logfile.write("{} De laatste versie: {} is al geïnstalleerd. De updater wordt nu gesloten.\n".format(datetime.today(),installedVersion))
+            mods.closeLogFile(logfile)
 
         
     except Exception as error:
