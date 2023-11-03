@@ -15,7 +15,7 @@ app.get('/', function (req,res) {
 app.get('/config', function(req,res){
     fs.readFile(config,'utf-8',function (err, data) {
         console.log(data);
-        res.end(data);
+        res.send(data);
     });
 });
 
