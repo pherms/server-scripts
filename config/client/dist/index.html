@@ -9,103 +9,109 @@
 </head>
 <body onload="loadData()">
     <header>
-        <h1 class="">Configure Server</h1>
+        <div class="flex flex-row justify-between">
+            <h1 class="p-8">Configure Server</h1>
+            <div class="p-8">
+                <form action="#" method="post" id="login">
+                    <input type="email" name="emailAddress" id="emailAddress" class="input-border w-60">
+                    <input type="password" name="password" id="password" class="ml-1 input-border w-60">
+                    <input type="submit" value="Login" class="ml-1">
+                </form>
+            </div>
+        </div>
     </header>
 
 
     
     <main class="flex flex-row">
-        <div id="main-menu" class="border-t border-b border-solid border-x-slate-800 w-1/4">
-            <div class="flex flex-col justify-start">
-                <div class="px-8 py-4 border-solid border-x-slate-800">Backup</div>
-                <div class="px-8 py-4 border-solid border-x-slate-800">Other</div>
-            </div>
+        <div id="main-menu" class="main-menu">
+            <div class="main-menu-item">Backup</div>
+            <div class="main-menu-item">Other</div>
         </div>
-        <div id="backup-menu" class="flex border-b border-solid border-x-slate-800">
-            <div class="flex flex-row justify-center">
-                <div class="px-8 py-4 border-solid border-x-slate-800">Backup</div>
-                <div class="px-8 py-4 border-solid border-x-slate-800">Sources</div>
+        <div id="config-section" class="config-section">
+            <div id="backup-menu" class="backup-menu">
+                <div class="backup-menu-item">Backup</div>
+                <div class="backup-menu-item">Sources</div>
             </div>
 
 <!-- [minmax(25rem,_1fr)_minmax(25rem,_1fr)] w-fit mx-auto-->
             <div>
-                <form action="#" id="form" class="grid grid-cols-2 gap-4">
+                <form action="#" id="form" class="config-form grid grid-cols-2 gap-4">
                     <!-- <div class="grid grid-flow-row grid-cols-2 gap-4"></div> -->
-                    <div class="flex place-content-between items-center">
-                        <div class=""><label for="filetype" class="mr-2 w-fit">filetype</label></div>
-                        <div class=""><input type="text" name="filetype" id="filetype" class="border border-gray-300 rounded-md w-80"></div>
+                    <div class="config-form-fields">
+                        <div class=""><label for="filetype" class="config-form-label w-fit">filetype</label></div>
+                        <div class=""><input type="text" name="filetype" id="filetype" class="input-border"></div>
                     </div>
-                    <div class="col-start-2 flex place-content-between items-center">
-                        <label for="backuppath" class="relative mr-2 w-fit">Backuppath</label>
-                        <input type="text" name="backuppath" id="backuppath" class="border border-gray-300 rounded-md w-80">
+                    <div class="config-form-col2 config-form-fields">
+                        <label for="backuppath" class="config-form-label w-fit">Backuppath</label>
+                        <input type="text" name="backuppath" id="backuppath" class="input-border">
                     </div>
-                    <div class="flex place-content-between items-center">
-                        <label for="logfilepath" class="relative mr-2 w-fit">logfilepath</label>
-                        <input type="text" name="logfilepath" id="logfilepath" class="border border-gray-300 rounded-md w-80">
+                    <div class="config-form-fields">
+                        <label for="logfilepath" class="config-form-label w-fit">logfilepath</label>
+                        <input type="text" name="logfilepath" id="logfilepath" class="input-border">
                     </div>
-                    <div class="flex place-content-between items-center">
-                        <label for="scriptspath" class="relative mr-2 w-fit">scriptspath</label>
-                        <input type="text" name="scriptspath" id="scriptspath" class="border border-gray-300 rounded-md w-80">
+                    <div class="config-form-fields">
+                        <label for="scriptspath" class="config-form-label w-fit">scriptspath</label>
+                        <input type="text" name="scriptspath" id="scriptspath" class="input-border">
                     </div>
-                    <div class="flex place-content-between items-center">
-                        <label for="apiurl" class="">apiurl</label>
-                        <input type="text" name="apiurl" id="apiurl" class="border border-gray-300 rounded-md w-80">
+                    <div class="config-form-fields">
+                        <label for="apiurl" class="config-form-label w-fit">apiurl</label>
+                        <input type="text" name="apiurl" id="apiurl" class="input-border">
                     </div>
-                    <div class="flex place-content-between items-center">
-                        <label for="sourcesLocation" class="relative mr-2 w-fit">sourcesLocation</label>
-                        <input type="text" name="sourcesLocation" id="sourcesLocation" class="border border-gray-300 rounded-md w-80">
+                    <div class="config-form-fields">
+                        <label for="sourcesLocation" class="config-form-label w-fit">sourcesLocation</label>
+                        <input type="text" name="sourcesLocation" id="sourcesLocation" class="input-border">
                     </div>
-                    <div class="flex place-content-between items-center">
-                        <label for="compression" class="relative mr-2 w-fit">compression</label>
-                        <input type="text" name="compression" id="compression" class="border border-gray-300 rounded-md w-80">
+                    <div class="config-form-fields">
+                        <label for="compression" class="config-form-label w-fit">compression</label>
+                        <input type="text" name="compression" id="compression" class="input-border">
                     </div>
-                    <div class="flex place-content-between items-center">    
-                        <label for="backupserver" class="relative mr-2 w-fit">backupserver</label>
-                        <input type="text" name="backupserver" id="backupserver" class="border border-gray-300 rounded-md w-80">
+                    <div class="config-form-fields">    
+                        <label for="backupserver" class="config-form-label w-fit">backupserver</label>
+                        <input type="text" name="backupserver" id="backupserver" class="input-border">
                     </div>
-                    <div class="flex place-content-between items-center">
-                        <label for="copycommand" class="relative mr-2 w-fit">copycommand</label>
-                        <input type="text" name="copycommand" id="copycommand" class="border border-gray-300 rounded-md w-80">
+                    <div class="config-form-fields">
+                        <label for="copycommand" class="config-form-label w-fit">copycommand</label>
+                        <input type="text" name="copycommand" id="copycommand" class="input-border">
                     </div>
-                    <div class="flex place-content-between items-center">
-                        <label for="remotefilepath" class="relative mr-2 w-fit">remotefilepath</label>
-                        <input type="text" name="remotefilepath" id="remotefilepath" class="border border-gray-300 rounded-md w-80">
+                    <div class="config-form-fields">
+                        <label for="remotefilepath" class="config-form-label w-fit">remotefilepath</label>
+                        <input type="text" name="remotefilepath" id="remotefilepath" class="input-border">
                     </div>
-                    <div class="flex place-content-between items-center">
-                        <label for="mailserver" class="relative mr-2 w-fit">mailserver</label>
-                        <input type="text" name="mailserver" id="mailserver" class="border border-gray-300 rounded-md w-80">
+                    <div class="config-form-fields">
+                        <label for="mailserver" class="config-form-label w-fit">mailserver</label>
+                        <input type="text" name="mailserver" id="mailserver" class="input-border">
                     </div>
-                    <div class="flex place-content-between items-center">
-                        <label for="mailRecipient" class="relative mr-2 w-fit">mailRecipient</label>
-                        <input type="text" name="mailRecipient" id="mailRecipient" class="border border-gray-300 rounded-md w-80">
+                    <div class="config-form-fields">
+                        <label for="mailRecipient" class="config-form-label w-fit">mailRecipient</label>
+                        <input type="text" name="mailRecipient" id="mailRecipient" class="input-border">
                     </div>
-                    <div class="flex place-content-between items-center">
-                        <label for="mailSender" class="relative mr-2 w-fit">mailSender</label>
-                        <input type="text" name="mailSender" id="mailSender" class="border border-gray-300 rounded-md w-80">
+                    <div class="config-form-fields">
+                        <label for="mailSender" class="config-form-label w-fit">mailSender</label>
+                        <input type="text" name="mailSender" id="mailSender" class="input-border">
                     </div>
-                    <div class="flex place-content-between items-center">
-                        <label for="debug" class="relative mr-2 w-fit">debug</label>
-                        <input type="text" name="debug" id="debug" class="border border-gray-300 rounded-md w-80">
+                    <div class="config-form-fields">
+                        <label for="debug" class="config-form-label w-fit">debug</label>
+                        <input type="text" name="debug" id="debug" class="input-border">
                     </div>
-                    <div class="flex place-content-between items-center">
-                        <label for="hostType" class="relative mr-2 w-fit">hostType</label>
-                        <input type="text" name="hostType" id="hostType" class="border border-gray-300 rounded-md w-80">
+                    <div class="config-form-fields">
+                        <label for="hostType" class="config-form-label w-fit">hostType</label>
+                        <input type="text" name="hostType" id="hostType" class="input-border">
                     </div>
-                    <div class="flex place-content-between items-center">
-                        <label for="timerUnits" class="relative mr-2 w-fit">timerUnits</label>
-                        <input type="text" name="timerUnits" id="timerUnits" class="border border-gray-300 rounded-md w-80">
+                    <div class="config-form-fields">
+                        <label for="timerUnits" class="config-form-label w-fit">timerUnits</label>
+                        <input type="text" name="timerUnits" id="timerUnits" class="input-border">
                     </div>
-                    <div class="flex place-content-between items-center">
-                        <label for="servicesToInstall" class="relative mr-2 w-fit">servicesToInstall</label>
-                        <input type="text" name="servicesToInstall" id="servicesToInstall" class="border border-gray-300 rounded-md w-80">
+                    <div class="config-form-fields">
+                        <label for="servicesToInstall" class="config-form-label w-fit">servicesToInstall</label>
+                        <input type="text" name="servicesToInstall" id="servicesToInstall" class="input-border">
                     </div>
-                    <div class="flex place-content-between items-center">
-                        <label for="servicesToCopy" class="relative mr-2 w-fit">servicesToCopy</label>
-                        <input type="text" name="servicesToCopy" id="servicesToCopy" class="border border-gray-300 rounded-md w-80">
+                    <div class="config-form-fields">
+                        <label for="servicesToCopy" class="config-form-label w-fit">servicesToCopy</label>
+                        <input type="text" name="servicesToCopy" id="servicesToCopy" class="input-border">
                     </div>
-                    <div class="flex place-content-between items-center">
-                        <button id="button" class="">Get data</button>
-                        <button id="submit" class="">Save data</button>
+                    <div class="config-form-fields">
+                        <button id="submit" class="button">Save data</button>
                     </div>
                 
                 </form>
