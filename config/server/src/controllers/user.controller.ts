@@ -1,15 +1,13 @@
 import crypto from 'crypto';
 import type { Request, Response } from "express";
 import { db } from "../utils/db.server";
-import { Prisma } from '@prisma/client';
 
 export const createUser = async (req: Request, res: Response) => {
     let salt = crypto.randomBytes(16).toString('base64');
     let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest("base64");
     req.body.password = salt + "$" + hash;
-    req.body.permissionLevel = 1;
+    // req.body.permissionLevel = 1;
   
-    // const {firstName, lastName, emailAddress, password, permissionLevel} = req.body;
     try {
         const newUser = await db.user.create({
             data: req.body
@@ -19,10 +17,6 @@ export const createUser = async (req: Request, res: Response) => {
         // return error.message;
         return res.status(500).json(error.message);
     }
-
-    // .then((result) => {
-    //     res.status(201).send({id: result.id});
-    // })
 };
 
 export const getAllUsers = async (req: Request, res: Response) => {
@@ -38,7 +32,7 @@ export const getUserByEmail = async (req: Request, res: Response) => {
     try {
         const foundUser = await db.user.findMany({
             where: {
-                emailAddress: req.body.emailAddress
+                emailAddress: req.params.emailAddress
             },
         });
         return res.status(200).json(foundUser);
@@ -49,10 +43,11 @@ export const getUserByEmail = async (req: Request, res: Response) => {
 
 export const getUserByID = async (req: Request, res: Response) => {
     try {
-        const id: number = parseInt(req.params.id);
+        const userId: number = parseInt(req.params.userId);
+        console.log('User ID: ' + userId);
         const foundUser = await db.user.findMany({
             where: {
-                id: id
+                id: userId
             },
         });
         return res.status(200).json(foundUser);
@@ -65,12 +60,11 @@ export const updateUserById = async (req: Request, res: Response) => {
     let salt = crypto.randomBytes(16).toString('base64');
     let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest("base64");
     req.body.password = salt + "$" + hash;
-    // req.body.permissionLevel = 1;
-    const id: number = parseInt(req.params.id);
+    const userId: number = parseInt(req.params.userId);
     try {
         const updatedUser = await db.user.update({
             where: {
-                id: id,
+                id: userId,
             },
             data: req.body
         });
@@ -81,11 +75,11 @@ export const updateUserById = async (req: Request, res: Response) => {
 };
 
 export const deleteUserById = async (req: Request, res: Response) => {
-    const id: number = parseInt(req.params.id);
+    const userId: number = parseInt(req.params.userId);
     try {
         await db.user.delete({
             where: {
-                id: id,
+                id: userId,
             },
         });
         return res.status(200).json('user deleted');

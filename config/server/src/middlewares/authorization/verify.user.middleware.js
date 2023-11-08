@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 // import { db } from '../../utils/db.server';
+const { validationResult } = require('express-validator');
 const db = require('../../utils/db.server').db;
 
 exports.hasAuthValidFields = (req, res, next) => {

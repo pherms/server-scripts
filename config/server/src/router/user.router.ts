@@ -12,32 +12,32 @@ const router = express.Router();
 
 router.post('/', createUser);
 
-router.get('/', [
-    ValidationMiddleware.validJWTNeeded,
-    PermissionMiddleware.minimumPermissionLevelRequired(PAID),
-    getAllUsers
-]);
 router.get('/:emailAddress', [
     ValidationMiddleware.validJWTNeeded,
     PermissionMiddleware.minimumPermissionLevelRequired(PAID),
     PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
     getUserByEmail
 ]);
-router.get('/:id', [
+router.get('/:userId', [
     ValidationMiddleware.validJWTNeeded,
     PermissionMiddleware.minimumPermissionLevelRequired(PAID),
     PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
     getUserByID
 ]);
-router.put('/:id', [
+router.get('/', [
+    ValidationMiddleware.validJWTNeeded,
+    PermissionMiddleware.minimumPermissionLevelRequired(PAID),
+    getAllUsers
+]);
+router.patch('/:userId', [
     ValidationMiddleware.validJWTNeeded,
     PermissionMiddleware.minimumPermissionLevelRequired(PAID),
     PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
     updateUserById
 ]);
-router.delete('/:id', [
+router.delete('/:userId', [
     ValidationMiddleware.validJWTNeeded,
-    PermissionMiddleware.minimumPermissionLevelRequired(PAID),
+    PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
     PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
     deleteUserById
 ]);
