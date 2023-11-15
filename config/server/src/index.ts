@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import express from 'express';
 import http from 'http';
-import bodyParser from 'body-parser';
+import bodyParser, { urlencoded } from 'body-parser';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import cors from 'cors';
@@ -19,14 +19,20 @@ if (!process.env.PORT) {
 const PORT: number = parseInt(process.env.PORT as string, 10);
 
 const app = express();
-
-app.use(cors({
-    credentials: true,
+const corsOptions = {
     origin: true,
-}));
-
+    credentials: true
+}
+// app.use(cors({
+//     credentials: true,
+//     origin: true,
+// }));
+app.use(cors(corsOptions));
 app.use(compression());
 app.use(cookieParser());
+app.use(urlencoded({
+    extended: true
+}));
 app.use(bodyParser.json());
 
 app.use('/api/v1/auth',authRouter);

@@ -19,8 +19,40 @@ export default {
         SubmitButton
     },
     methods: {
-        submitData() {
-            console.log('Submit login button press');
+        // submitData() {
+        //     console.log('Submit login button press');
+        //     const enteredEmailAddress = this.$refs.emailAddress.value;
+        //     const enteredPassword = this.$refs.password.value;
+
+        //     console.log('Entered emailadres: ' + enteredEmailAddress);
+        //     console.log('Entered password: ' + enteredPassword);
+
+        //     const requestOptions = {
+        //         method: 'POST',
+        //         // headers: { 'Content-Type': 'application/json' },
+        //         headers: { 'Content-Type': 'x-www-form-urlencoded' },
+        //         body: JSON.stringify({ emailAddress: enteredEmailAddress, password: enteredPassword })
+        //     };
+        //     fetch('http://127.0.0.1:8081/api/v1/auth', requestOptions)
+        //         .then(async response => {
+        //             const isJson = response.headers.get('content-type')?.includes('application/json');
+        //             const data = isJson && await response.json();
+
+        //             // check for error response
+        //             if (!response.ok) {
+        //                 const error = (data && data.message) || response.status;
+        //                 return Promise.reject(error);
+        //             }
+
+        //             // console.log(data.accessToken);
+        //             // this.$refs.accessToken = data.accessToken;
+        //         })
+        //         .catch(error => {
+        //             console.error("Er is iets fout gegaan!", error);
+        //         });
+        // }
+        async submitData() {
+          try {
             const enteredEmailAddress = this.$refs.emailAddress.value;
             const enteredPassword = this.$refs.password.value;
 
@@ -28,27 +60,24 @@ export default {
             console.log('Entered password: ' + enteredPassword);
 
             const requestOptions = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ emailAddress: enteredEmailAddress, password: enteredPassword })
+              method: 'POST',
+              // headers: { 'Content-Type': 'application/json' },
+              headers: { 'Content-Type': 'x-www-form-urlencoded' },
+              body: new URLSearchParams({
+                'emailAddress': enteredEmailAddress,
+                'password': enteredPassword
+              }).toString()
+              // JSON.stringify({ emailAddress: enteredEmailAddress, password: enteredPassword })
             };
-            fetch('http://127.0.0.1:8081/api/v1/auth', requestOptions)
-                .then(async response => {
-                    const isJson = response.headers.get('content-type')?.includes('application/json');
-                    const data = isJson && await response.json();
 
-                    // check for error response
-                    if (!response.ok) {
-                        const error = (data && data.message) || response.status;
-                        return Promise.reject(error);
-                    }
+            const response = await fetch('http://127.0.0.1:8081/api/v1/auth', requestOptions);
+            if (!response.ok) {
+              console.log("Error");
+            }
 
-                    // console.log(data.accessToken);
-                    this.$refs.accessToken = data.accessToken;
-                })
-                .catch(error => {
-                    console.error("Er is iets fout gegaan!", error);
-                });
+          } catch (error) {
+            console.error("Er is iets fout gegaan!!", error);
+          }
         }
     }
 }
