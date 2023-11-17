@@ -6,7 +6,7 @@ export const createUser = async (req: Request, res: Response) => {
     let salt = crypto.randomBytes(16).toString('base64');
     let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest("base64");
     req.body.password = salt + "$" + hash;
-    // req.body.permissionLevel = 1;
+    req.body.permissionLevel = 257;
   
     try {
         const newUser = await db.user.create({
@@ -17,6 +17,17 @@ export const createUser = async (req: Request, res: Response) => {
         // return error.message;
         return res.status(500).json(error.message);
     }
+    // const newUser = await db.user.create({
+    //     data: req.body
+    //     })
+    //     .catch(error => {
+    //         console.error(error)
+    //         return res.status(500).json(error.message);
+    //     })
+    
+    // if (newUser) {
+    //     return res.status(201).json(newUser);
+    // }
 };
 
 export const getAllUsers = async (req: Request, res: Response) => {
