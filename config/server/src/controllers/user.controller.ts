@@ -1,38 +1,42 @@
 import crypto from 'crypto';
 import type { Request, Response } from "express";
 import { db } from "../utils/db.server";
-
+const excludehelper = require('../utils/helperfunctions.js');
+  
 export const createUser = async (req: Request, res: Response) => {
     let salt = crypto.randomBytes(16).toString('base64');
     let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest("base64");
     req.body.password = salt + "$" + hash;
     req.body.permissionLevel = 257;
   
-    try {
-        const newUser = await db.user.create({
-            data: req.body
-        });
-        return res.status(201).json(newUser);
-    } catch (error) {
-        // return error.message;
+    const { firstName, lastName, emailAddress, password, permissionLevel } = req.body;
+
+    const newUser = await db.registeredUsers.upsert({
+        where: {
+            emailAddress: emailAddress
+        },
+        update: {},
+        create: {
+            firstName: firstName,
+            lastName: lastName,
+            emailAddress: emailAddress,
+            password: password,
+            permissionLevel: permissionLevel
+        },
+    })
+    .catch((error) => {
+        console.error(error);
         return res.status(500).json(error.message);
-    }
-    // const newUser = await db.user.create({
-    //     data: req.body
-    //     })
-    //     .catch(error => {
-    //         console.error(error)
-    //         return res.status(500).json(error.message);
-    //     })
-    
-    // if (newUser) {
-    //     return res.status(201).json(newUser);
-    // }
+    });
+
+    const newUserWithoutPassword = excludehelper.exclude(newUser, ['password']);
+    return res.status(201).json(newUserWithoutPassword);
+
 };
 
 export const getAllUsers = async (req: Request, res: Response) => {
     try {
-        const allUsers = await db.user.findMany();
+        const allUsers = await db.registeredUsers.findMany();
         return res.status(200).json(allUsers);
     } catch (error) {
         return res.status(500).json(error.message);
@@ -41,12 +45,13 @@ export const getAllUsers = async (req: Request, res: Response) => {
 
 export const getUserByEmail = async (req: Request, res: Response) => {
     try {
-        const foundUser = await db.user.findMany({
+        const foundUser = await db.registeredUsers.findMany({
             where: {
                 emailAddress: req.params.emailAddress
             },
         });
-        return res.status(200).json(foundUser);
+        const newUserWithoutPassword = excludehelper.exclude(foundUser, ['password']);
+        return res.status(200).json(newUserWithoutPassword);
     } catch (error) {
         return res.status(500).json(error.message);
     }
@@ -56,12 +61,13 @@ export const getUserByID = async (req: Request, res: Response) => {
     try {
         const userId: number = parseInt(req.params.userId);
         console.log('User ID: ' + userId);
-        const foundUser = await db.user.findMany({
+        const foundUser = await db.registeredUsers.findMany({
             where: {
                 id: userId
             },
         });
-        return res.status(200).json(foundUser);
+        const newUserWithoutPassword = excludehelper.exclude(foundUser, ['password']);
+        return res.status(200).json(newUserWithoutPassword);
     } catch (error) {
         return res.status(500).json(error.message);
     }
@@ -73,13 +79,14 @@ export const updateUserById = async (req: Request, res: Response) => {
     req.body.password = salt + "$" + hash;
     const userId: number = parseInt(req.params.userId);
     try {
-        const updatedUser = await db.user.update({
+        const updatedUser = await db.registeredUsers.update({
             where: {
                 id: userId,
             },
             data: req.body
         });
-        return res.status(200).json(updatedUser);
+        const newUserWithoutPassword = excludehelper.exclude(updatedUser, ['password']);
+        return res.status(200).json(newUserWithoutPassword);
     } catch (error) {
         return res.status(500).json(error.message);
     }
@@ -88,7 +95,7 @@ export const updateUserById = async (req: Request, res: Response) => {
 export const deleteUserById = async (req: Request, res: Response) => {
     const userId: number = parseInt(req.params.userId);
     try {
-        await db.user.delete({
+        await db.registeredUsers.delete({
             where: {
                 id: userId,
             },

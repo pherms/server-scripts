@@ -26,7 +26,7 @@ exports.hasAuthValidFields = (req, res, next) => {
 
 exports.isPasswordAndUserMatch = async (req, res, next) => {
     console.log(req.body.emailAddress);
-    await db.user.findMany({
+    await db.registeredUsers.findMany({
         where: {
             emailAddress: req.body.emailAddress,
         }
