@@ -20,7 +20,9 @@ const PORT: number = parseInt(process.env.PORT as string, 10);
 
 const app = express();
 const corsOptions = {
+    // origin: "*",
     origin: true,
+    optionsSuccessStatus: 200,
     credentials: true
 }
 // app.use(cors({

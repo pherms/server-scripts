@@ -10,28 +10,28 @@ export const createUser = async (req: Request, res: Response) => {
     req.body.permissionLevel = 257;
   
     const { firstName, lastName, emailAddress, password, permissionLevel } = req.body;
-
-    const newUser = await db.registeredUsers.upsert({
+    
+    const foundUser = await db.registeredUsers.findMany({
         where: {
             emailAddress: emailAddress
         },
-        update: {},
-        create: {
-            firstName: firstName,
-            lastName: lastName,
-            emailAddress: emailAddress,
-            password: password,
-            permissionLevel: permissionLevel
-        },
     })
-    .catch((error) => {
-        console.error(error);
-        return res.status(500).json(error.message);
-    });
 
-    const newUserWithoutPassword = excludehelper.exclude(newUser, ['password']);
-    return res.status(201).json(newUserWithoutPassword);
+    if (Object.keys(foundUser).length === 0) {
+        // user bestaat nog niet, aanmaken.
+        const newUser = await db.registeredUsers.create({
+            data: req.body
+        })
+        .catch((error) => {
+            console.error(error);
+            return res.status(500).json(error.message);
+        });
 
+        const newUserWithoutPassword = excludehelper.exclude(newUser, ['password']);
+        return res.status(201).json(newUserWithoutPassword);
+    } else {
+        return res.status(400).json('email address al aanwezig in database');
+    }
 };
 
 export const getAllUsers = async (req: Request, res: Response) => {

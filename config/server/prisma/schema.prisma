@@ -13,7 +13,7 @@ model registeredUsers {
   updatedAt       DateTime @updatedAt
   firstName       String
   lastName        String
-  emailAddress    String   @unique
+  emailAddress    String
   password        String
   permissionLevel Int
 }
