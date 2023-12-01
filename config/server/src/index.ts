@@ -9,6 +9,7 @@ import cors from 'cors';
 import userRouter from './router/user.router';
 import authRouter from './router/auth.router';
 import configurationRouter from './router/configuration.router';
+import sourcesRouter from './router/sources.router';
 
 dotenv.config();
 
@@ -40,6 +41,7 @@ app.use(bodyParser.json());
 app.use('/api/v1/auth',authRouter);
 app.use('/api/v1/users',userRouter);
 app.use('/api/v1/configuration',configurationRouter);
+app.use('/api/v1/sources',sourcesRouter);
 
 const server = http.createServer(app);
 
