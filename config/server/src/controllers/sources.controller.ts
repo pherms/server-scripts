@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import fs from 'fs';
 
-const sources = '../../../sources.txt';
+const sources = '../../../sources-example.txt';
 
 export const getSources = async function(req: Request, res: Response){
     fs.readFile(sources,'utf-8',function (err, data) {
