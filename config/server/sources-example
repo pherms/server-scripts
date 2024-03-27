@@ -1,0 +1,9 @@
++/etc
++/home
++/var
+-/var/backup
+-/var/cache
++/opt
++/root
++/scripts
+

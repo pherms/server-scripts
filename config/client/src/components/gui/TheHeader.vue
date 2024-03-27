@@ -1,6 +1,10 @@
 <template>
-    <h1>Header</h1>
-    <login-form></login-form>
+    <div class="header">
+        <h1>Header</h1>
+        <div class="loginform">
+            <login-form></login-form>
+        </div>
+    </div>
 </template>
 <script>
 import LoginForm from '../forms/LoginForm.vue'
@@ -15,5 +19,9 @@ export default {
 }
 </script>
 <style scoped>
-
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
 </style>

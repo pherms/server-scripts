@@ -1,12 +1,16 @@
 <template>
+  <div>
     <div class="config-form-fields">
-        <label for="emailAddress" class="config-form-label w-fit">Email:</label>
-        <input type="email" name="emailAddress" id="emailAddress" ref="emailAddress">
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password" ref="password">
+      <label for="emailAddress" class="config-form-label w-fit">Login/Email:</label>
+      <input type="email" name="emailAddress" id="emailAddress" ref="emailAddress">
+      <label for="password" class="config-form-label">Password:</label>
+      <input type="password" name="password" id="password" ref="password">
     </div>
-    <submit-button @click="submitData">Login</submit-button>
-    <h5 id="accessToken" ref="accessToken">{{ accessToken }}</h5>
+    <div class="formbutton">
+      <submit-button @click="submitData">Login</submit-button>
+      <h5 id="accessToken" ref="accessToken">{{ accessToken }}</h5>
+    </div>
+  </div>
 </template>
 <script>
 import SubmitButton from '../ui/SubmitButton.vue'
@@ -104,16 +108,23 @@ export default {
   width: 20rem;
 }
 
+.formbutton {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.75rem;
+}
 .config-form-fields {
   display: flex;
   justify-content: space-between;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-  padding-left: 1rem;
+  align-items: center;
 }
 
 .config-form-label {
+  display: inline-block;
   position: relative;
+  margin: 0.25rem 0.75rem;
 }
 
 .w-fit {

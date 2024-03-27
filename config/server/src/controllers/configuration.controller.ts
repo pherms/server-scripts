@@ -1,12 +1,14 @@
 import type { Request, Response } from "express";
 import fs from 'fs';
+import path from 'path';
 
-const config = '../../../config-example.json';
+const config = path.join(__dirname + '../../../config-example.json');
 
 export const getConfiguration = async function(req: Request, res: Response){
     fs.readFile(config,'utf-8',function (err, data) {
         console.log(data);
-        res.send(data);
+        res.send(JSON.stringify(data));
+        // res.json.stringify(data).send;
     });
 };
 

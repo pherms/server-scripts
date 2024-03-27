@@ -1,12 +1,13 @@
 import type { Request, Response } from "express";
 import fs from 'fs';
+import path from 'path';
 
-const sources = '../../../sources-example.txt';
+const sources = path.join(__dirname + '../../../sources-example');
 
 export const getSources = async function(req: Request, res: Response){
     fs.readFile(sources,'utf-8',function (err, data) {
         console.log(data);
-        res.send(data);
+        res.json({sourcesData: data}).send;
     });
 };
 
