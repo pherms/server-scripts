@@ -1,9 +1,7 @@
 <template>
     <div class="header">
         <h1>Header</h1>
-        <div class="loginform">
-            <login-form></login-form>
-        </div>
+        <login-form></login-form>
     </div>
 </template>
 <script>
@@ -19,9 +17,5 @@ export default {
 }
 </script>
 <style scoped>
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
+
 </style>
