@@ -65,6 +65,12 @@ case $role in
       echo "Installeren $role specifieke regel set"
       ./roles/fw-rules/firewall-smtp.sh
       ;;
+    kubernetes)
+      echo "Installeren basis firewall regel set"
+      ./roles/fw-rules/firewall-base.sh
+      echo "Installeren $role specifieke regel set"
+      ./roles/fw-rules/firewall-kubernetes.sh
+      ;;
     *)
       echo "Rol niet gevonden. Script wordt afgebroken"
       exit 1
