@@ -304,7 +304,7 @@ def cleanupLogs(logPath,debug):
             
             if ageInDays >= 84:
                 if not debug:
-                    print("[DEBUG] het bestand {} zou worden verwijderd wanneer debugging=False")
+                    print("[DEBUG] het bestand {} zou worden verwijderd wanneer debugging=True".format(file))
                 else:
                     os.remove(logPath + file)
 
