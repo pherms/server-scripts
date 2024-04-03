@@ -58,6 +58,7 @@ def addFilesToArchive(archive,filetype,logfile,listToBackup,debug):
     :param bool debug: Enable debug print in de console
     """
     for folderToBackup in listToBackup:
+        errorMessage = ""
         folderToBackup = Path(folderToBackup)
 
         if debug:
@@ -70,10 +71,17 @@ def addFilesToArchive(archive,filetype,logfile,listToBackup,debug):
 
         try:
             if filetype == 'tar':
-                archive.add(folderToBackup)
+                try:
+                    archive.add(folderToBackup)
+                except IOError as ioError:
+                    errorMessage = str(ioError)
+                    pass
             elif filetype == 'zip':
                 archive.write(folderToBackup)
         except Exception:
+            if errorMessage != "":
+                logmessage = "{}\n".format(datetime.today(),errorMessage)
+
             logmessage = "{} Kan {} niet naar backup archief schrijven. Backup wordt afgebroken.\n".format(datetime.today(),folderToBackup)
             logfile.write(logmessage)
             mods.sendMailFailedBackup(mods.getHostname(logfile),logmessage)
