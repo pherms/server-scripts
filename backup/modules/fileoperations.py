@@ -278,9 +278,9 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                 else:
                     print("[DEBUG] {} wordt verwijderd.".format(fileName))
                     logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
-        except Exception:
+        except Exception as error:
             
-            print(Exception)
+            print(error)
             
             
             exit()
