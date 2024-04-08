@@ -195,7 +195,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
             backupFileDate = datetime.strftime(files.get(fileName),'%Y-%m-%d')
             
         elif hostType == 'host':
-            backupFileDate = mods.determineCreationDateFromFileName(file,debug)
+            backupFileDate = mods.determineCreationDateFromFileName(fileName,debug)
             folderArray = fileName.split('/')
             backupFolder = folderArray[:-1]
             fileName = folderArray[-1]
