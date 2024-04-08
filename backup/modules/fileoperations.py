@@ -268,8 +268,9 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                         mods.removeBackupFile(backuppath,fileName,logfile)
                         files_cleaned.append(fileName)
                 else:
-                    print("[DEBUG] {} wordt verwijderd.".format(fileName))
-                    logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
+                    if dag != laatsteZondag:
+                        print("[DEBUG] {} wordt verwijderd.".format(fileName))
+                        logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
 
             # oude maand backup verwijderen. max age in months 3 (12 weken, ~84 dagen)
             if ageInDays >= 84 and "month" in fileName:
