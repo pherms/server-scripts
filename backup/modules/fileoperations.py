@@ -261,10 +261,10 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                 maand = dateobject.month
                 dag = int(dateobject.day)
 
-                laatsteDag = int(determineLastDayOfMonth(jaar,maand))
-                print("Laatste dag: {}".format(laatsteDag))
+                laatsteZondag = int(determineLastSundayOfMonth(jaar,maand))
+                print("Laatste dag: {}".format(laatsteZondag))
                 if not debug:
-                    if dag != laatsteDag:
+                    if dag != laatsteZondag:
                         mods.removeBackupFile(backuppath,fileName,logfile)
                         files_cleaned.append(fileName)
                 else:
@@ -311,7 +311,7 @@ def determineCreationDateFromFileName(fileName,debug):
 
     return creationDate
 
-def determineLastDayOfMonth(year,month):
+def determineLastSundayOfMonth(year,month):
     """
     Functie om de laatste dag van de maand te bepalen
 
@@ -321,8 +321,9 @@ def determineLastDayOfMonth(year,month):
     """
     last_day = calendar.monthrange(year, month)[1]
     last_weekday = calendar.weekday(year, month, last_day)
+    last_sunday = last_day - ((7 - (7 - last_weekday)) % 7)
 
-    return last_weekday
+    return last_sunday
 
 def cleanupLogs(logPath,debug):
     """
