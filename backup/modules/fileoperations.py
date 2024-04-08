@@ -215,69 +215,75 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
         ageInDays = (datetime.now() - datetime.strptime(backupFileDate, '%Y-%m-%d')).days
 
         logfile.write("{} Beoordelen van bestand: {}\n".format(datetime.today(),file))
+        try:
+            # backup dag 7 hernoemen naar week
+            if dag == 7 and not ("week" in fileName or "month" in fileName):
+                if debug:
+                        print("[DEBUG] {} wordt hernoemd naar week backup".format(fileName))
+                        logfile.write("{} [DEBUG] {} wordt hernoemd naar week backup\n".format(datetime.today(),fileName))
 
-        # backup dag 7 hernoemen naar week
-        if dag == 7 and not ("week" in fileName or "month" in fileName):
-            if debug:
-                    print("[DEBUG] {} wordt hernoemd naar week backup".format(fileName))
-                    logfile.write("{} [DEBUG] {} wordt hernoemd naar week backup\n".format(datetime.today(),fileName))
+                mods.renameBackupFile(backuppath,fileName,logfile,"week",debug)
+                files_renamed.append(fileName)
+            
+            # oude dag en week backups verwijderen
+            if dag < 7  and ageInDays >= 7 and not ("week" in fileName or "month" in fileName) and not dag == currentDag:
+                if not debug:
+                    # remove file
+                    mods.removeBackupFile(backuppath,fileName,logfile)
+                    files_cleaned.append(fileName)
+                else:
+                    print("[DEBUG] {} wordt verwijderd.".format(fileName))
+                    logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
 
-            mods.renameBackupFile(backuppath,fileName,logfile,"week",debug)
-            files_renamed.append(fileName)
-        
-        # oude dag en week backups verwijderen
-        if dag < 7  and ageInDays >= 7 and not ("week" in fileName or "month" in fileName) and not dag == currentDag:
-            if not debug:
-                # remove file
-                mods.removeBackupFile(backuppath,fileName,logfile)
-                files_cleaned.append(fileName)
-            else:
-                print("[DEBUG] {} wordt verwijderd.".format(fileName))
-                logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
+            # oudste weekbackup hernoemen naar month. max age in weeks 4
+            if ageInDays >= 28 and "week" in fileName and not "month" in fileName:
+                if debug:
+                    print("[DEBUG] {} wordt hernoemd naar maand backup".format(fileName))
+                    logfile.write("{} [DEBUG] {} wordt hernoemd naar maand backup\n".format(datetime.today(),fileName))
 
-        # oudste weekbackup hernoemen naar month. max age in weeks 4
-        if ageInDays >= 28 and "week" in fileName and not "month" in fileName:
-            if debug:
-                print("[DEBUG] {} wordt hernoemd naar maand backup".format(fileName))
-                logfile.write("{} [DEBUG] {} wordt hernoemd naar maand backup\n".format(datetime.today(),fileName))
+                # rename file
+                mods.renameBackupFile(backuppath,fileName,logfile,"month",debug)
+                files_renamed.append(fileName)
 
-            # rename file
-            mods.renameBackupFile(backuppath,fileName,logfile,"month",debug)
-            files_renamed.append(fileName)
+                # oude weekbackup verwijderen
+                if ageInDays in range(7,27) and "week" in fileName:
+                    if not debug:
+                        mods.removeBackupFile(backuppath,fileName,logfile)
+                        files_cleaned.append(fileName)
+                    else:
+                        print("[DEBUG] {} wordt verwijderd.".format(fileName))
+                        logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
 
-            # oude weekbackup verwijderen
-            if ageInDays in range(7,27) and "week" in fileName:
+            # Oude Maand backup verwijderen, welke niet de laatste vrijdag van de maand als datum heeft.
+            if "month" in fileName:
+                jaar = backupFileDate.year
+                maand = backupFileDate.month
+                dag = int(backupFileDate.day)
+
+                laatsteVrijdag = int(determineLastFridayOfMonth(jaar,maand))
+                print("Laatste vrijdag: {}".format(laatsteVrijdag))
+                if not debug:
+                    if dag != laatsteVrijdag:
+                        mods.removeBackupFile(backuppath,fileName,logfile)
+                        files_cleaned.append(fileName)
+                else:
+                    print("[DEBUG] {} wordt verwijderd.".format(fileName))
+                    logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
+
+            # oude maand backup verwijderen. max age in months 3 (12 weken, ~84 dagen)
+            if ageInDays >= 84 and "month" in fileName:
                 if not debug:
                     mods.removeBackupFile(backuppath,fileName,logfile)
                     files_cleaned.append(fileName)
                 else:
                     print("[DEBUG] {} wordt verwijderd.".format(fileName))
                     logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
-                    
-        # Oude Maand backup verwijderen, welke niet de laatste vrijdag van de maand als datum heeft.
-        if "month" in fileName:
-            jaar = backupFileDate.year
-            maand = backupFileDate.month
-            dag = int(backupFileDate.day)
-
-            laatsteVrijdag = int(determineLastFridayOfMonth(jaar,maand))
-            print("Laatste vrijdag: {}".format(laatsteVrijdag))
-            if not debug:
-                if dag != laatsteVrijdag:
-                    mods.removeBackupFile(backuppath,fileName,logfile)
-                    files_cleaned.append(fileName)
-            else:
-                print("[DEBUG] {} wordt verwijderd.".format(fileName))
-                logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
-
-        # oude maand backup verwijderen. max age in months 3 (12 weken, ~84 dagen)
-        if ageInDays >= 84 and "month" in fileName:
-            if not debug:
-                mods.removeBackupFile(backuppath,fileName,logfile)
-                files_cleaned.append(fileName)
-            else:
-                print("[DEBUG] {} wordt verwijderd.".format(fileName))
-                logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
+        except Exception:
+            
+            print(Exception)
+            
+            
+            exit()
 
     return files_cleaned,files_renamed
 
