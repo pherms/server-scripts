@@ -263,6 +263,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
 
                 laatsteZondag = int(determineLastSundayOfMonth(jaar,maand))
                 print("Laatste dag: {}".format(laatsteZondag))
+                print("Dag: {}".format(dag))
                 if not debug:
                     if dag != laatsteZondag:
                         mods.removeBackupFile(backuppath,fileName,logfile)
