@@ -254,17 +254,17 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                         print("[DEBUG] {} wordt verwijderd.".format(fileName))
                         logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
 
-            # Oude Maand backup verwijderen, welke niet de laatste vrijdag van de maand als datum heeft.
+            # Oude Maand backup verwijderen, welke niet de laatste dag van de maand als datum heeft.
             if "month" in fileName:
                 dateobject = datetime.strptime(backupFileDate, '%Y-%m-%d').date()
                 jaar = dateobject.year
                 maand = dateobject.month
                 dag = int(dateobject.day)
 
-                laatsteVrijdag = int(determineLastFridayOfMonth(jaar,maand))
-                print("Laatste vrijdag: {}".format(laatsteVrijdag))
+                laatsteDag = int(determineLastDayOfMonth(jaar,maand))
+                print("Laatste dag: {}".format(laatsteDag))
                 if not debug:
-                    if dag != laatsteVrijdag:
+                    if dag != laatsteDag:
                         mods.removeBackupFile(backuppath,fileName,logfile)
                         files_cleaned.append(fileName)
                 else:
@@ -311,19 +311,18 @@ def determineCreationDateFromFileName(fileName,debug):
 
     return creationDate
 
-def determineLastFridayOfMonth(year,month):
+def determineLastDayOfMonth(year,month):
     """
-    Functie om de laatste vrijdag van de maand te bepalen
+    Functie om de laatste dag van de maand te bepalen
 
     :param int year: Het jaar
-    :param bool month: De maand waarvan de laatste vrijdag moet worden bepaald.
+    :param bool month: De maand waarvan de laatste dag moet worden bepaald.
     :return: integer dagnummer
     """
     last_day = calendar.monthrange(year, month)[1]
     last_weekday = calendar.weekday(year, month, last_day)
-    last_friday = last_day - ((7 - (4 - last_weekday)) % 7)
 
-    return last_friday
+    return last_weekday
 
 def cleanupLogs(logPath,debug):
     """
