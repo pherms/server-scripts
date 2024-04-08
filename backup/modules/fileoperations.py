@@ -256,9 +256,10 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
 
             # Oude Maand backup verwijderen, welke niet de laatste vrijdag van de maand als datum heeft.
             if "month" in fileName:
-                jaar = backupFileDate.year
-                maand = backupFileDate.month
-                dag = int(backupFileDate.day)
+                dateobject = datetime.strptime(backupFileDate, '%Y-%m-%d').date()
+                jaar = dateobject.year
+                maand = dateobject.month
+                dag = int(dateobject.day)
 
                 laatsteVrijdag = int(determineLastFridayOfMonth(jaar,maand))
                 print("Laatste vrijdag: {}".format(laatsteVrijdag))
