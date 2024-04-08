@@ -191,22 +191,22 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
     for file in files.keys():
         fileName = file
         
-        if hostType == 'vm':
-            backupFileDate = datetime.strftime(files.get(fileName),'%Y-%m-%d')
+        # if hostType == 'vm':
+        #     backupFileDate = datetime.strftime(files.get(fileName),'%Y-%m-%d')
             
-        elif hostType == 'host':
-            backupFileDate = mods.determineCreationDateFromFileName(fileName,debug)
-            folderArray = fileName.split('/')
-            backupFolder = folderArray[:-1]
-            fileName = folderArray[-1]
-            backuppath = '/'.join(backupFolder) + '/'
+        # elif hostType == 'host':
+        backupFileDate = mods.determineCreationDateFromFileName(fileName,debug)
+        folderArray = fileName.split('/')
+        backupFolder = folderArray[:-1]
+        fileName = folderArray[-1]
+        backuppath = '/'.join(backupFolder) + '/'
 
-            if debug:
-                print("[DEBUG] BackupFileDate {}".format(backupFileDate))
-                print("[DEBUG] folderArray {}".format(folderArray))
-                print("[DEBUG] backupFolder {}".format(backupFolder))
-                print("[DEBUG] fileName {}".format(fileName))
-                print("[DEBUG] backuppath {}".format(backuppath))
+        if debug:
+            print("[DEBUG] BackupFileDate {}".format(backupFileDate))
+            print("[DEBUG] folderArray {}".format(folderArray))
+            print("[DEBUG] backupFolder {}".format(backupFolder))
+            print("[DEBUG] fileName {}".format(fileName))
+            print("[DEBUG] backuppath {}".format(backuppath))
 
         # behouden
         dag = date.fromisoformat(backupFileDate).isocalendar()[2]
