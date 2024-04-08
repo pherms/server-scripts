@@ -256,6 +256,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
 
             # Oude Maand backup verwijderen, welke niet de laatste dag van de maand als datum heeft.
             if "month" in fileName:
+                print("BackupfileDate: {}".format(backupFileDate))
                 dateobject = datetime.strptime(backupFileDate, '%Y-%m-%d').date()
                 jaar = dateobject.year
                 maand = dateobject.month
