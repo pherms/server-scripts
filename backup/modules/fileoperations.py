@@ -3,6 +3,7 @@ import re
 import time
 import getpass
 import subprocess
+import calendar
 import modules as mods
 from pathlib import Path
 from datetime import datetime, date
@@ -252,6 +253,21 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                 else:
                     print("[DEBUG] {} wordt verwijderd.".format(fileName))
                     logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
+        # Oude Maand backup verwijderen, welke niet de laatste vrijdag van de maand als datum heeft.
+        if "month" in fileName:
+            jaar = backupFileDate.year
+            maand = backupFileDate.month
+            dag = int(backupFileDate.day)
+
+            laatsteVrijdag = int(determineLastFridayOfMonth(jaar,maand))
+            print("Laatste vrijdag: {}".format(laatsteVrijdag))
+            if not debug:
+                if dag != laatsteVrijdag:
+                    mods.removeBackupFile(backuppath,fileName,logfile)
+                    files_cleaned.append(fileName)
+            else:
+                print("[DEBUG] {} wordt verwijderd.".format(fileName))
+                logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
 
         # oude maand backup verwijderen. max age in months 3 (12 weken, ~84 dagen)
         if ageInDays >= 84 and "month" in fileName:
@@ -286,6 +302,20 @@ def determineCreationDateFromFileName(fileName,debug):
         print("[DEBUG] creationDate of file {} is: {}".format(fileName,creationDate))
 
     return creationDate
+
+def determineLastFridayOfMonth(year,month):
+    """
+    Functie om de laatste vrijdag van de maand te bepalen
+
+    :param int year: Het jaar
+    :param bool month: De maand waarvan de laatste vrijdag moet worden bepaald.
+    :return: integer dagnummer
+    """
+    last_day = calendar.monthrange(year, month)[1]
+    last_weekday = calendar.weekday(year, month, last_day)
+    last_friday = last_day - ((7 - (4 - last_weekday)) % 7)
+
+    return last_friday
 
 def cleanupLogs(logPath,debug):
     """
