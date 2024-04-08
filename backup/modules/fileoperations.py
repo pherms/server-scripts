@@ -253,6 +253,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                 else:
                     print("[DEBUG] {} wordt verwijderd.".format(fileName))
                     logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
+                    
         # Oude Maand backup verwijderen, welke niet de laatste vrijdag van de maand als datum heeft.
         if "month" in fileName:
             jaar = backupFileDate.year
