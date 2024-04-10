@@ -200,7 +200,6 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
         backupFolder = folderArray[:-1]
         fileName = folderArray[-1]
         backuppath = '/'.join(backupFolder) + '/'
-        arrToDeleteMonth = []
 
         if debug:
             print("[DEBUG] BackupFileDate {}".format(backupFileDate))
@@ -271,7 +270,6 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                         files_cleaned.append(fileName)
                 else:
                     if dag != laatsteZondag:
-                        arrToDeleteMonth.append(fileName)
                         print("[DEBUG] {} wordt verwijderd.".format(fileName))
                         logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
                 
@@ -289,7 +287,6 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
             
             
             exit()
-    print("Debugging: Month backups to be deleted: {}".format(arrToDeleteMonth))
     return files_cleaned,files_renamed
 
 def determineCreationDateFromFileName(fileName,debug):
