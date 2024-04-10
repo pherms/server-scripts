@@ -255,6 +255,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
 
             # Oude Maand backup verwijderen, welke niet de laatste dag van de maand als datum heeft.
             if "month" in fileName:
+                arrToDeleteMonth = []
                 print("BackupfileDate: {}".format(backupFileDate))
                 dateobject = datetime.strptime(backupFileDate, '%Y-%m-%d').date()
                 jaar = dateobject.year
@@ -270,9 +271,10 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                         files_cleaned.append(fileName)
                 else:
                     if dag != laatsteZondag:
+                        arrToDeleteMonth.append(fileName)
                         print("[DEBUG] {} wordt verwijderd.".format(fileName))
                         logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
-
+                print("Debugging: Month backups to be deleted: {}".format(arrToDeleteMonth))
             # oude maand backup verwijderen. max age in months 3 (12 weken, ~84 dagen)
             if ageInDays >= 84 and "month" in fileName:
                 if not debug:
