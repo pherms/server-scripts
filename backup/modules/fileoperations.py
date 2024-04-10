@@ -168,7 +168,6 @@ def removeBackupFile(backuppath,fileName,logfile):
     :param str fileName: het backup bestand wat moet worden hernoemd naar maand of week
     :param str logfile: het logfile object waar naartoe moet worden gelogd
     """
-    print("[DEBUG] backuppath: {}".format(backuppath))
     print(f"verwijderen dagbackup file: {fileName}")
     logfile.write("{} Verwijderen van bestand {}\n".format(datetime.today(),fileName))
     os.remove(backuppath + fileName)
@@ -201,7 +200,8 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
         backupFolder = folderArray[:-1]
         fileName = folderArray[-1]
         backuppath = '/'.join(backupFolder) + '/'
-
+        print("[DEBUG] backuppath: {}".format(backuppath))
+        
         if debug:
             print("[DEBUG] BackupFileDate {}".format(backupFileDate))
             print("[DEBUG] folderArray {}".format(folderArray))
