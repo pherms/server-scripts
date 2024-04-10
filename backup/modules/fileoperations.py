@@ -170,7 +170,8 @@ def removeBackupFile(backuppath,fileName,logfile):
     """
     print(f"verwijderen dagbackup file: {fileName}")
     logfile.write("{} Verwijderen van bestand {}\n".format(datetime.today(),fileName))
-    os.remove(backuppath + fileName)
+    fullPath = backuppath + fileName
+    os.remove(fullPath)
     logfile.write("{} Bestand {} zou verwijderd zijn\n".format(datetime.today(),backuppath + fileName))
 
 def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
