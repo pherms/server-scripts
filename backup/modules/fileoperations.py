@@ -189,6 +189,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
     files_renamed = []
 
     for file in files.keys():
+        print("[DEBUG] file: {}".format(file))
         fileName = file
         
         # if hostType == 'vm':
@@ -200,8 +201,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
         backupFolder = folderArray[:-1]
         fileName = folderArray[-1]
         backuppath = '/'.join(backupFolder) + '/'
-        print("[DEBUG] backuppath: {}".format(backuppath))
-        
+
         if debug:
             print("[DEBUG] BackupFileDate {}".format(backupFileDate))
             print("[DEBUG] folderArray {}".format(folderArray))
