@@ -190,7 +190,6 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
     files_renamed = []
 
     for file in files.keys():
-        print("[DEBUG] file: {}".format(file))
         fileName = file
         
         # if hostType == 'vm':
@@ -304,7 +303,7 @@ def determineCreationDateFromFileName(fileName,debug):
     regexPattern = "(?<=-)\d+"
     match = re.search(regexPattern,fileName)
     creationDateString = match[0]
-    print("[DEBUGGING]CreationDateString: {}".format(creationDateString))
+    
     if len(creationDateString) == 6:
         creationDate = datetime.strftime(datetime.strptime(creationDateString, '%y%m%d'), '%Y-%m-%d')
     else:
