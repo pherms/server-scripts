@@ -201,7 +201,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
         # backupFolder = folderArray[:-1]
         # fileName = folderArray[-1]
         # backuppath = '/'.join(backupFolder) + '/'
-        fullPath = '/' + backuppath + '/' + fileName
+        fullPath = backuppath + fileName
 
 
         if debug:
