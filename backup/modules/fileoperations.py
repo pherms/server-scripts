@@ -207,7 +207,6 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
             print("[DEBUG] backupFolder {}".format(backupFolder))
             print("[DEBUG] fileName {}".format(fileName))
             print("[DEBUG] backuppath {}".format(backuppath))
-
         # behouden
         dag = date.fromisoformat(backupFileDate).isocalendar()[2]
         currentDag = date.fromisoformat(datetime.strftime(datetime.now(),'%Y-%m-%d')).isocalendar()[2]
@@ -324,7 +323,7 @@ def determineLastSundayOfMonth(year,month):
     """
     last_day = calendar.monthrange(year, month)[1]
     last_weekday = calendar.weekday(year, month, last_day)
-    last_sunday = last_day - ((7 - (7 - last_weekday)) % 7)
+    last_sunday = last_day - ((7 - (6 - last_weekday)) % 7)
 
     return last_sunday
 
