@@ -197,17 +197,20 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
             
         # elif hostType == 'host':
         backupFileDate = mods.determineCreationDateFromFileName(fileName,debug)
-        folderArray = fileName.split('/')
-        backupFolder = folderArray[:-1]
-        fileName = folderArray[-1]
-        backuppath = '/'.join(backupFolder) + '/'
+        # folderArray = fileName.split('/')
+        # backupFolder = folderArray[:-1]
+        # fileName = folderArray[-1]
+        # backuppath = '/'.join(backupFolder) + '/'
+        fullPath = '/'.join(backuppath) + '/'.join(fileName)
+
 
         if debug:
             print("[DEBUG] BackupFileDate {}".format(backupFileDate))
-            print("[DEBUG] folderArray {}".format(folderArray))
-            print("[DEBUG] backupFolder {}".format(backupFolder))
+            # print("[DEBUG] folderArray {}".format(folderArray))
+            # print("[DEBUG] backupFolder {}".format(backupFolder))
             print("[DEBUG] fileName {}".format(fileName))
             print("[DEBUG] backuppath {}".format(backuppath))
+            print("[DEBUG] fullPath {}".format(fullPath))
         # behouden
         dag = date.fromisoformat(backupFileDate).isocalendar()[2]
         currentDag = date.fromisoformat(datetime.strftime(datetime.now(),'%Y-%m-%d')).isocalendar()[2]
