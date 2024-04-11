@@ -192,7 +192,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
     for file in files.keys():
         fileName = file
         backupFileDate = mods.determineCreationDateFromFileName(fileName,debug)
-        fullPath = backuppath + fileName
+        fullPath = os.path.join(str(backuppath), str(fileName))
 
 
         if debug:
@@ -210,6 +210,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
         try:
             # backup dag 7 hernoemen naar week
             if dag == 7 and not ("week" in fileName or "month" in fileName):
+
                 if debug:
                         print("[DEBUG] {} wordt hernoemd naar week backup".format(fileName))
                         logfile.write("{} [DEBUG] {} wordt hernoemd naar week backup\n".format(datetime.today(),fileName))
@@ -291,6 +292,7 @@ def determineCreationDateFromFileName(fileName,debug):
     """
     regexPattern = "(?<=-)\d+"
     match = re.search(regexPattern,fileName)
+    
     creationDateString = match[0]
     
     if len(creationDateString) == 6:

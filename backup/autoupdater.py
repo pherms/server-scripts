@@ -5,9 +5,11 @@ import requests
 import zipfile
 import io
 import json
+import shutil
 import modules as mods
 
 def main():
+    
     config = mods.readConfig()
     logfilepath = config["logfilepath"]
     debug = bool(config["debug"])
@@ -92,7 +94,9 @@ def main():
 
                     os.chdir('/tmp')
                     zipFile.extractall()
-                    logfile.write("{} De zipfile is uitgepakt naar directory /tmp/{}\n".format(datetime.today(),tempFolder))
+                    logfile.write("{} De zipfile is uitgepakt naar directory {}\n".format(datetime.today(),tempFolder))
+                    # delete tests directory
+                    shutil.rmtree(os.path.join(tempFolder,"/backup/tests/"))
                 
                 if os.path.exists(tempFolder):
                     os.system("cp -r {}/* {}".format(tempFolder,scriptfolder))
