@@ -1,9 +1,11 @@
 <template>
-    <div>
+    <div class="main">
         <side-bar>
             <span></span>
         </side-bar>
-        <router-view/>
+        <div class="configpages">
+            <router-view></router-view>
+        </div>
     </div>
 </template>
 <script>
@@ -20,11 +22,12 @@ export default {
 }
 </script>
 <style scoped>
-.material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 300,
-  'GRAD' 0,
-  'opsz' 32
+.main {
+    display: flex;
+    gap: 4rem;
+}
+
+.configpages {
+    justify-content: center;
 }
 </style>

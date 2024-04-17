@@ -1,5 +1,5 @@
 <template>
-    <h1>Backup COnfig</h1>
+    <h1>Backup Config</h1>
     <backup-configform></backup-configform>
 </template>
 <script>
