@@ -14,42 +14,37 @@ def main():
 
     logfile = mods.openLogFile(logfilepath,"cleanup",debug)
     hostname = mods.getHostname(logfile)
-    
-    files_cleaned = []
-    files_renamed = []
 
     try:
+        g_files_cleaned = []
+        g_files_renamed = []
+
         if hostType == 'vm':
             files = mods.getCreationTime(backuppath,debug)
 
-            files_cleaned,files_renamed = mods.determineRemoveOrBackup(files,hostType,logfile,backuppath,debug)
+            g_files_cleaned,g_files_renamed = mods.determineRemoveOrBackup(files,hostType,logfile,backuppath,debug)
         elif hostType == 'host':
-            filesArray = {}
             backupRootPath = str(Path(backuppath).parent)
-            
             for folder in os.listdir(backupRootPath):
-                currentFolder = backupRootPath + '/' + folder
+                currentFolder = os.path.join(str(backupRootPath),str(folder))
                 if mods.isDirectory(currentFolder):
-                    for file in os.listdir(currentFolder):
-                        fullFile = os.path.abspath(currentFolder + '/' + file)
-                        filesArray[fullFile] = "nothing"
-
+                    files = mods.getCreationTime(currentFolder,debug)
+                    files_cleaned_currentFolder,files_renamed_currentFolder = mods.determineRemoveOrBackup(files,hostType,logfile,currentFolder,debug)
+                g_files_cleaned.append(files_cleaned_currentFolder)
+                g_files_renamed.append(files_renamed_currentFolder)
+                        
             if debug:
                 print("[DEBUG] HostType: {}".format(hostType))
-                print("[DEBUG] filesArray: {}".format(filesArray))
                 print("[DEBUG] backupRootPath: {}".format(backupRootPath))
-                print("[DEBUG] fullFile: {}".format(fullFile))
 
-            files_cleaned,files_renamed = mods.determineRemoveOrBackup(filesArray,hostType,logfile,backupRootPath,debug)
-            
-        logfile.write("{} Files verwijderd: {}\n".format(datetime.today(),len(files_cleaned)))
-        logfile.write("{} Files hernoemd: {}\n".format(datetime.today(),len(files_renamed)))
+        logfile.write("{} Files verwijderd: {}\n".format(datetime.today(),len(g_files_cleaned)))
+        logfile.write("{} Files hernoemd: {}\n".format(datetime.today(),len(g_files_renamed)))
 
         message_text = """\
         De cleanup van oude files van {hostname} is succesvol voltooid.\n\n
         Het totaal aantal verwijderde bestanden is: {totalFilesCleaned}\n
         Het totaal aantal hernoemde bestanden is: {totalFilesRenamed}\n\n
-        Zie ook bijgande logfile\n""".format(hostname=hostname,totalFilesCleaned=len(files_cleaned),totalFilesRenamed=len(files_renamed))
+        Zie ook bijgande logfile\n""".format(hostname=hostname,totalFilesCleaned=len(g_files_cleaned),totalFilesRenamed=len(g_files_renamed))
         subject = "Cleanup van files op server {} succesvol".format(hostname)
         
         mods.closeLogFile(logfile)
