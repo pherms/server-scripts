@@ -2,7 +2,6 @@
   <the-header></the-header>
   <main-nav></main-nav>
   <main-content></main-content>
-  <router-view/>
 </template>
 <script>
 import MainNav from './components/nav/MainNav.vue'

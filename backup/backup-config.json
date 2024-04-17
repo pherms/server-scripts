@@ -1,0 +1,20 @@
+{
+    "filetype": "tar",
+    "backuppath": "/home/pascal/backup/",
+    "logfilepath": "/home/pascal/log/backup/",
+    "scriptspath": "/home/pascal/projects/server-scripts/",
+    "apiurl": "https://api.github.com/repos/pherms/server-scripts/releases/latest",
+    "sourcesLocation": "/etc/server-scripts/sources",
+    "compression": "bz2",
+    "backupserver": "brisbane.merel107.local",
+    "copycommand": "scp",
+    "remotefilepath": "/vol/data/fs/backup/",
+    "mailserver": "adelaide.merel107.local",
+    "mailRecipient": "pherms@outlook.com",
+    "mailSender": "no_reply@pascalherms.nl",
+    "debug": true,
+    "hostType": "host",
+    "timerUnits": ["autoupdate.timer","backup.timer"],
+    "servicesToInstall": ["cleanup.service"],
+    "servicesToCopy": ["autoupdate.service","backup.service"]
+}
