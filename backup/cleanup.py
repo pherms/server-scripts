@@ -29,7 +29,9 @@ def main():
                 currentFolder = os.path.join(str(backupRootPath),str(folder))
                 if mods.isDirectory(currentFolder):
                     files = mods.getCreationTime(currentFolder,debug)
-                    files_cleaned,files_renamed = mods.determineRemoveOrBackup(files,hostType,logfile,currentFolder,debug)
+                    files_cleaned_currentFolder,files_renamed_currentFolder = mods.determineRemoveOrBackup(files,hostType,logfile,currentFolder,debug)
+                files_cleaned.append(files_cleaned_currentFolder)
+                files_renamed.append(files_renamed_currentFolder)
                         
             if debug:
                 print("[DEBUG] HostType: {}".format(hostType))
