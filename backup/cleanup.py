@@ -32,7 +32,7 @@ def main():
                 print("[DEBUG] folder {} in backuppath {}".format(folder,backupRootPath))
                 if mods.isDirectory(folder):
                     # for file in os.listdir(folder):
-                    currentFolder = backupRootPath + '/' + folder
+                    currentFolder = os.path.join(str(backupRootPath),str(folder))
                         # fullFile = os.path.abspath(currentFolder + '/' + file)
                         # filesArray[fullFile] = "nothing"
                     files = mods.getCreationTime(currentFolder,debug)
