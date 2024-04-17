@@ -279,6 +279,8 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
             
             
             exit()
+    print("[DEBUG] Files cleaned in function determineRemoveOrBackup: {}".format(files_cleaned))
+    print("[DEBUG] Files renamed in function determineRemoveOrBackup: {}".format(files_renamed))
     return files_cleaned,files_renamed
 
 def determineCreationDateFromFileName(fileName,debug):
