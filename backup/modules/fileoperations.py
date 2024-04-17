@@ -226,6 +226,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                     files_cleaned.append(fileName)
                 else:
                     print("[DEBUG] {} wordt verwijderd.".format(fileName))
+                    files_cleaned.append(fileName)
                     logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
 
             # oudste weekbackup hernoemen naar month. max age in weeks 4
@@ -245,6 +246,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                         files_cleaned.append(fileName)
                     else:
                         print("[DEBUG] {} wordt verwijderd.".format(fileName))
+                        files_cleaned.append(fileName)
                         logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
 
             # Oude Maand backup verwijderen, welke niet de laatste dag van de maand als datum heeft.
@@ -263,6 +265,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                 else:
                     if dag != laatsteZondag:
                         print("[DEBUG] {} wordt verwijderd.".format(fileName))
+                        files_cleaned.append(fileName)
                         logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
                 
             # oude maand backup verwijderen. max age in months 3 (12 weken, ~84 dagen)
@@ -272,6 +275,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                     files_cleaned.append(fileName)
                 else:
                     print("[DEBUG] {} wordt verwijderd.".format(fileName))
+                    files_cleaned.append(fileName)
                     logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
         except Exception as error:
             
@@ -279,8 +283,6 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
             
             
             exit()
-    print("[DEBUG] Files cleaned in function determineRemoveOrBackup: {}".format(files_cleaned))
-    print("[DEBUG] Files renamed in function determineRemoveOrBackup: {}".format(files_renamed))
     return files_cleaned,files_renamed
 
 def determineCreationDateFromFileName(fileName,debug):
