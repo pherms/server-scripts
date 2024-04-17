@@ -14,11 +14,11 @@ def main():
 
     logfile = mods.openLogFile(logfilepath,"cleanup",debug)
     hostname = mods.getHostname(logfile)
-    
-    g_files_cleaned = []
-    g_files_renamed = []
 
     try:
+        g_files_cleaned = []
+        g_files_renamed = []
+        
         if hostType == 'vm':
             files = mods.getCreationTime(backuppath,debug)
 
