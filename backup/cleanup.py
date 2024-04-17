@@ -24,30 +24,16 @@ def main():
 
             files_cleaned,files_renamed = mods.determineRemoveOrBackup(files,hostType,logfile,backuppath,debug)
         elif hostType == 'host':
-            # filesArray = {}
             backupRootPath = str(Path(backuppath).parent)
-            
             for folder in os.listdir(backupRootPath):
-                # currentFolder = backupRootPath + '/' + folder
-                print("[DEBUG] folder {} in backuppath {}".format(folder,backupRootPath))
                 currentFolder = os.path.join(str(backupRootPath),str(folder))
                 if mods.isDirectory(currentFolder):
-                    # for file in os.listdir(folder):
-                    
-                        # fullFile = os.path.abspath(currentFolder + '/' + file)
-                        # filesArray[fullFile] = "nothing"
                     files = mods.getCreationTime(currentFolder,debug)
-                    print("[DEBUG] files: {} in folder {}".format(files,currentFolder))
                     files_cleaned,files_renamed = mods.determineRemoveOrBackup(files,hostType,logfile,currentFolder,debug)
                         
-
             if debug:
                 print("[DEBUG] HostType: {}".format(hostType))
-                print("[DEBUG] filesArray: {}".format(filesArray))
                 print("[DEBUG] backupRootPath: {}".format(backupRootPath))
-                print("[DEBUG] fullFile: {}".format(fullFile))
-
-            # files_cleaned,files_renamed = mods.determineRemoveOrBackup(filesArray,hostType,logfile,backupRootPath,debug)
             
         logfile.write("{} Files verwijderd: {}\n".format(datetime.today(),len(files_cleaned)))
         logfile.write("{} Files hernoemd: {}\n".format(datetime.today(),len(files_renamed)))
