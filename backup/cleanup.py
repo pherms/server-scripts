@@ -25,14 +25,14 @@ def main():
             files_cleaned,files_renamed = mods.determineRemoveOrBackup(files,hostType,logfile,backuppath,debug)
         elif hostType == 'host':
             # filesArray = {}
-            # backupRootPath = str(Path(backuppath).parent)
+            backupRootPath = str(Path(backuppath).parent)
             
-            for folder in os.listdir(backuppath):
+            for folder in os.listdir(backupRootPath):
                 # currentFolder = backupRootPath + '/' + folder
-                print("[DEBUG] folder {} in backuppath {}".format(folder,backuppath))
+                print("[DEBUG] folder {} in backuppath {}".format(folder,backupRootPath))
                 if mods.isDirectory(folder):
                     # for file in os.listdir(folder):
-                    currentFolder = backuppath + '/' + folder
+                    currentFolder = backupRootPath + '/' + folder
                         # fullFile = os.path.abspath(currentFolder + '/' + file)
                         # filesArray[fullFile] = "nothing"
                     files = mods.getCreationTime(currentFolder,debug)
