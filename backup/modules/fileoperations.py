@@ -190,15 +190,10 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
     files_renamed = []
 
     for file in files.keys():
-        
+        fileName = file
         backupFileDate = mods.determineCreationDateFromFileName(fileName,debug)
+        fullPath = os.path.join(str(backuppath), str(fileName))
 
-        if hostType == "vm":
-            fileName = file
-            fullPath = os.path.join(str(backuppath), str(fileName))
-        elif hostType == "host":
-            fileName = file.split('/')[-1]
-            fullPath = file
 
         if debug:
             print("[DEBUG] BackupFileDate {}".format(backupFileDate))
