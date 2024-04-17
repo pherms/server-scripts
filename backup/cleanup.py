@@ -30,9 +30,10 @@ def main():
             for folder in os.listdir(backupRootPath):
                 # currentFolder = backupRootPath + '/' + folder
                 print("[DEBUG] folder {} in backuppath {}".format(folder,backupRootPath))
-                if mods.isDirectory(folder):
+                currentFolder = os.path.join(str(backupRootPath),str(folder))
+                if mods.isDirectory(currentFolder):
                     # for file in os.listdir(folder):
-                    currentFolder = os.path.join(str(backupRootPath),str(folder))
+                    
                         # fullFile = os.path.abspath(currentFolder + '/' + file)
                         # filesArray[fullFile] = "nothing"
                     files = mods.getCreationTime(currentFolder,debug)
