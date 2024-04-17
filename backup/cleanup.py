@@ -18,7 +18,7 @@ def main():
     try:
         g_files_cleaned = []
         g_files_renamed = []
-        
+
         if hostType == 'vm':
             files = mods.getCreationTime(backuppath,debug)
 
@@ -37,8 +37,6 @@ def main():
                 print("[DEBUG] HostType: {}".format(hostType))
                 print("[DEBUG] backupRootPath: {}".format(backupRootPath))
 
-        print("[DEBUG] Files cleaned: {}".format(len(g_files_cleaned)))
-        print("[DEBUG] Files renamed: {}".format(len(g_files_renamed)))
         logfile.write("{} Files verwijderd: {}\n".format(datetime.today(),len(g_files_cleaned)))
         logfile.write("{} Files hernoemd: {}\n".format(datetime.today(),len(g_files_renamed)))
 
