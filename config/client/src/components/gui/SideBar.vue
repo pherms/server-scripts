@@ -80,6 +80,10 @@ export default {
     text-decoration: none;
 }
 
+a:visited {
+    color: #E1F7F5;
+}
+
 .button:hover {
     background: #0E46A3;
     font-size: 40px

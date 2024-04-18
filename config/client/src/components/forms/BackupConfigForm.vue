@@ -73,17 +73,18 @@
             <label for="servicesToCopy" class="config-form-label w-fit">servicesToCopy</label>
             <input type="text" name="servicesToCopy" id="servicesToCopy" class="input-border config-form-input">
         </div>
-    </form>
+    
     <div class="config-form-fields">
         <!-- <button id="submit" class="button">Save data</button> -->
-        <submit-button></submit-button>
+        <submit-button>Opslaan</submit-button>
     </div>
-                
+</form>  
                 
     
 </template>
 <script>
 import SubmitButton from '../ui/SubmitButton.vue'
+
 export default {
   components: { SubmitButton },
     setup() {
@@ -93,11 +94,19 @@ export default {
 </script>
 <style scoped>
 .input-border {
-  border-color: rgb(30 41 59/0,8);
+  border-color: #1E0342;
   border: solid 1px;
   border-radius: 5px;
-  padding: 0.25rem;
+  padding: 0.4rem;
+  line-height: 32px;
+  font-size: 18px;
+  color: #1E0342;
 }
+
+.input-border:focus {
+    border-color: #0E46A3;
+}
+
 .config-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -116,6 +125,7 @@ export default {
 .config-form-fields {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
   padding-left: 1rem;
@@ -123,6 +133,7 @@ export default {
 
 .config-form-label {
   position: relative;
+  margin-right: 1rem;
 }
 
 .w-fit {

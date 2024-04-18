@@ -15,5 +15,7 @@ export default ({
 })
 </script>
 <style scoped>
-
+* {
+    color: #1E0342;
+}
 </style>

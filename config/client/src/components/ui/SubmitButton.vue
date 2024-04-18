@@ -1,11 +1,11 @@
 <template>
-    <button type="submit" class="button">Submit</button>
+    <button type="submit" class="button"><slot></slot></button>
 </template>
 <script>
 export default {
-    setup() {
-        
-    },
+  setup() {
+      
+  },
 }
 </script>
 <style scoped>
