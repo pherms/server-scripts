@@ -26,7 +26,6 @@ input[type=submit] {
 
 .button:hover,
 input[type=submit]:hover {
-  text-shadow: 0 0 5px #E1F7F5;
   background-color: #0E46A3;
   cursor: pointer;
 }

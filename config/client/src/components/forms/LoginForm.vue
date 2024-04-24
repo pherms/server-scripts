@@ -6,21 +6,17 @@
       <label for="password" class="config-form-label">Password:</label>
       <input type="password" name="password" id="password" ref="password">
     </div>
-    <div class="formbutton">
-      <submit-button @click="submitData">Login</submit-button>
-      <h5 id="accessToken" ref="accessToken">{{ accessToken }}</h5>
-    </div>
   </div>
 </template>
 <script>
-import SubmitButton from '../ui/SubmitButton.vue'
+
 
 export default {
     setup() {
 
     },
     components: {
-        SubmitButton
+        
     },
     methods: {
         // submitData() {
@@ -88,35 +84,22 @@ export default {
 </script>
 <style scoped>
 .input-border {
-  border-color: rgb(30 41 59/0,8);
+  border-color: #1E0342;
   border: solid 1px;
   border-radius: 5px;
-  padding: 0.25rem;
-}
-.config-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.25rem;
+  padding: 0.4rem;
+  line-height: 32px;
+  font-size: 18px;
+  color: #1E0342;
 }
 
-.config-form-col2 {
-  grid-column-start: 2;
+.input-border:focus {
+    border-color: #0E46A3;
 }
 
-.config-form-input {
-  position: relative;
-  width: 20rem;
-}
-
-.formbutton {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 0.75rem;
-}
 .config-form-fields {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
 }
