@@ -13,12 +13,12 @@ backupfolder=/vol/backup
 logfolder=/home/$Username/log
 
 # create backup directory
-if [[ ! -d $backupfolder ]]:
+if [[ ! -d $backupfolder ]]; then
   mkdir -p $backupfolder
 fi
 
 # create backup directory
-if [[ ! -d $logfolder ]]:
+if [[ ! -d $logfolder ]]; then
   mkdir -p $logfolder
 fi
 
