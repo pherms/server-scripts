@@ -32,7 +32,7 @@ fi
 isContrib=$(grep "main contrib non-free" /etc/apt/sources.list)
 if [[ -z "$isContrib" ]]; then
   echo "non-free repos not enabled; enabling..."
-  sed -i 's/main/main contrib non-free/' /etc/apt/sources.list
+  sed -i 's/main/main non-free-firmware/' /etc/apt/sources.list
 fi
 
 apt update -y
