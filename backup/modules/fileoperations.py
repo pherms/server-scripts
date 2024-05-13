@@ -174,7 +174,7 @@ def removeBackupFile(backuppath,fileName,logfile):
     os.remove(fullPath)
     logfile.write("{} Bestand {} zou verwijderd zijn\n".format(datetime.today(),backuppath + fileName))
 
-def determineRemoveOrBackup(files,logfile,backuppath,debug):
+def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
     """
     Bepalen of de backup file moet worden hernoemd of verwijderd
 
