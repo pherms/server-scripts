@@ -262,6 +262,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                     logfile.write("{} Dag backup. Bepalen of deze op zondag is gemaakt.\n".format(datetime.today()))
                     print("[DEBUG] backupdag: {}".format(backupDag))
                     if backupDag == sunday:
+                        print("[DEBUG] Backupdag is zondag -> hernoemen naar week")
                         logfile.write("{} Backup gemaakt op zondag. Hernoemen naar week backup\n".format(datetime.today()))
 
                         if debug:
@@ -271,6 +272,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                             mods.renameBackupFile(backuppath,fileName,logfile,"week",debug)
                             files_renamed.append(fileName)
                     else:
+                        print("[DEBUG] Backupdag is een andere dag -> verwijderen")
                         logfile.write("{} Backup gemaakt op een andere dag. Verwijderen {}\n".format(datetime.today(),fileName))
 
                         if debug:
