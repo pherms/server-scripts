@@ -45,11 +45,12 @@ export default {
 @keyframes iconsize {
     0% {
         font-size: 24px;
-        background-color: #1E0342;
+        background-color: #0E46A3;
     }
     100% {
         font-size: 32px;
-        background-color: #0E46A3;
+        background-color: #9AC8CD;
+        color: #1E0342;
     }
 }
 
@@ -57,9 +58,9 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100vh;
+    height: 90vh;
     width: 4rem;
-    background-color: #1E0342;
+    background-color: #0E46A3;
     color: #E1F7F5;
     padding: 0.25rem;
     text-decoration: none;
@@ -85,7 +86,8 @@ a:visited {
 }
 
 .button:hover {
-    background: #0E46A3;
+    background: #9AC8CD;
+    color: #1E0342;
     font-size: 40px
     /* animation-name: iconsize;
     animation-duration: 0.2s; */
