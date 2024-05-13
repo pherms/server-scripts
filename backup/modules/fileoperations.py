@@ -192,6 +192,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
     sunday = 6
 
     for file in files.keys():
+        print("---------------")
         fileName = file
         backupFileDate = mods.determineCreationDateFromFileName(fileName,debug)
         fullPath = os.path.join(str(backuppath), str(fileName))
@@ -228,6 +229,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                 case "month":
                     print("[DEBUG] maand type gedetecteerd")
                     if ageInDays < 84:
+                        print("[DEBUG] backupdate kleiner dan 84 dagen")
                         dateobject = datetime.strptime(backupFileDate, '%Y-%m-%d').date()
                         jaar = dateobject.year
                         maand = dateobject.month
@@ -245,6 +247,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                                 files_cleaned.append(fileName)
                             
                     elif ageInDays >= 84:
+                        print("[DEBUG] backupdate groter dan 84 dagen")
                         if debug:
                             print("[DEBUG] {} wordt verwijderd.".format(fileName))
                             files_cleaned.append(fileName)
