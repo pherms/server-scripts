@@ -197,6 +197,8 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
         fullPath = os.path.join(str(backuppath), str(fileName))
         backupDag = date.fromisoformat(backupFileDate).isocalendar()[2]
         ageInDays = (datetime.now() - datetime.strptime(backupFileDate, '%Y-%m-%d')).days
+        regexPattern = "(?<=-)[A-Z,a-z]"
+        weekOrMonth = re.search(regexPattern,fileName)[0]
 
         if debug:
             print("[DEBUG] BackupFileDate {}".format(backupFileDate))
@@ -206,7 +208,6 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
 
         logfile.write("{} Beoordelen van bestand: {}\n".format(datetime.today(),file))
         try:
-            weekOrMonth = fileName.split('-')[2]
             print("[DEBUG] Week or Month value: {}".format(weekOrMonth))
             match weekOrMonth:
                 case "week":
