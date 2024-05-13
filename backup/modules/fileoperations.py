@@ -197,7 +197,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
         fullPath = os.path.join(str(backuppath), str(fileName))
         backupDag = date.fromisoformat(backupFileDate).isocalendar()[2]
         ageInDays = (datetime.now() - datetime.strptime(backupFileDate, '%Y-%m-%d')).days
-        regexPattern = "(?<=-)[A-Z,a-z]"
+        regexPattern = "(?<=-)[A-Z,a-z]+"
         weekOrMonth = re.search(regexPattern,fileName)
 
         if debug:
