@@ -215,6 +215,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
             print("[DEBUG] Week or Month value: {}".format(weekOrMonth))
             match weekOrMonth:
                 case "week":
+                    print("[DEBUG] week type gedetecteerd")
                     if ageInDays >= 28:
                         if debug:
                             print("[DEBUG] {} wordt hernoemd naar maand backup".format(fileName))
@@ -225,6 +226,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                             files_renamed.append(fileName)
                         
                 case "month":
+                    print("[DEBUG] maand type gedetecteerd")
                     if ageInDays < 84:
                         dateobject = datetime.strptime(backupFileDate, '%Y-%m-%d').date()
                         jaar = dateobject.year
@@ -252,6 +254,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                             files_cleaned.append(fileName)
 
                 case _:
+                    print("[DEBUG] ander type gedetecteerd")
                     # Er zit geen month of week in de bestandsnaam
                     logfile.write("{} Dag backup. Bepalen of deze op zondag is gemaakt.\n".format(datetime.today()))
                     if backupDag == sunday:
