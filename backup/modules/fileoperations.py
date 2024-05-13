@@ -236,7 +236,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                         dag = int(dateobject.day)
 
                         laatsteZondag = int(determineLastSundayOfMonth(jaar,maand))
-
+                        print("Dag is: {}, laatste zondag is: {}".format(dag,laatsteZondag))
                         if dag != laatsteZondag:
                             if debug:
                                 print("[DEBUG] {} wordt verwijderd.".format(fileName))
