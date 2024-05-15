@@ -95,8 +95,10 @@ def main():
                     os.chdir('/tmp')
                     zipFile.extractall()
                     logfile.write("{} De zipfile is uitgepakt naar directory {}\n".format(datetime.today(),tempFolder))
+                    
                     # delete tests directory
-                    shutil.rmtree(os.path.join(tempFolder,"/backup/tests/"))
+                    if os.path.exists(os.path.join(tempFolder,"/backup/tests/")):
+                        shutil.rmtree(os.path.join(tempFolder,"/backup/tests/"))
                 
                 if os.path.exists(tempFolder):
                     os.system("cp -r {}/* {}".format(tempFolder,scriptfolder))
