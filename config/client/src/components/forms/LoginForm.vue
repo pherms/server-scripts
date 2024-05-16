@@ -51,34 +51,34 @@ export default {
         //             console.error("Er is iets fout gegaan!", error);
         //         });
         // }
-        async submitData() {
-          try {
-            const enteredEmailAddress = this.$refs.emailAddress.value;
-            const enteredPassword = this.$refs.password.value;
+        // async submitData() {
+        //   try {
+        //     const enteredEmailAddress = this.$refs.emailAddress.value;
+        //     const enteredPassword = this.$refs.password.value;
 
-            console.log('Entered emailadres: ' + enteredEmailAddress);
-            console.log('Entered password: ' + enteredPassword);
+        //     console.log('Entered emailadres: ' + enteredEmailAddress);
+        //     console.log('Entered password: ' + enteredPassword);
 
-            const requestOptions = {
-              method: 'POST',
-              // headers: { 'Content-Type': 'application/json' },
-              headers: { 'Content-Type': 'x-www-form-urlencoded' },
-              body: new URLSearchParams({
-                'emailAddress': enteredEmailAddress,
-                'password': enteredPassword
-              }).toString()
-              // JSON.stringify({ emailAddress: enteredEmailAddress, password: enteredPassword })
-            };
+        //     const requestOptions = {
+        //       method: 'POST',
+        //       // headers: { 'Content-Type': 'application/json' },
+        //       headers: { 'Content-Type': 'x-www-form-urlencoded' },
+        //       body: new URLSearchParams({
+        //         'emailAddress': enteredEmailAddress,
+        //         'password': enteredPassword
+        //       }).toString()
+        //       // JSON.stringify({ emailAddress: enteredEmailAddress, password: enteredPassword })
+        //     };
 
-            const response = await fetch('http://127.0.0.1:8081/api/v1/auth', requestOptions);
-            if (!response.ok) {
-              console.log("Error");
-            }
+        //     const response = await fetch('http://127.0.0.1:8081/api/v1/auth', requestOptions);
+        //     if (!response.ok) {
+        //       console.log("Error");
+        //     }
 
-          } catch (error) {
-            console.error("Er is iets fout gegaan!!", error);
-          }
-        }
+        //   } catch (error) {
+        //     console.error("Er is iets fout gegaan!!", error);
+        //   }
+        // }
     }
 }
 </script>

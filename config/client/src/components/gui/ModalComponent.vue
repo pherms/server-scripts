@@ -4,14 +4,19 @@
             <div class="modal-container" ref="target">
                 <div class="modal-body">
                     <slot name="content">
-                        <login-form></login-form>
+                        <login-form v-if="!isSignup"></login-form>
+                        <signup-form v-if="isSignup"></signup-form>
                     </slot>
                 </div>
                 <div class="modal-footer">
-                    <slot name="footer">
-                        <submit-button @click="emit('modal-submit')">Login</submit-button>
-                        <submit-button @click.stop="emit('modal-close')">Annuleren</submit-button>
-                    </slot>
+                    <div class="modal-buttons">
+                        <slot name="footer">
+                            <submit-button v-if="!isSignup" @click="emit('modal-submit')">Login</submit-button>
+                            <submit-button v-if="isSignup" @click="emit('modal-submitSignup')">Opslaan</submit-button>
+                            <submit-button @click.stop="emit('modal-close')">Annuleren</submit-button>
+                        </slot>
+                    </div>
+                    <a href="#" v-if="!isSignup" @click="emit('modal-signup')">Nog geen account? Maak er 1 aan</a>
                 </div>
             </div>
         </div>
@@ -19,15 +24,17 @@
 </template>
 <script setup>
 import LoginForm from '../forms/LoginForm.vue';
+import SignupForm from '../forms/SignupForm.vue';
 import SubmitButton from '../ui/SubmitButton.vue';
 import { ref } from "vue";
 import { onClickOutside } from '@vueuse/core';
 
 defineProps({
     isOpen: Boolean,
+    isSignup: Boolean
 });
 
-const emit = defineEmits(["modal-close","modal-submit"]);
+const emit = defineEmits(["modal-close","modal-submit","modal-signup","modal-submitSignup"]);
 
 const target = ref(null);
 onClickOutside(target, () => emit('modal-close'))
@@ -53,11 +60,21 @@ onClickOutside(target, () => emit('modal-close'))
     background-color: #fff;
     border-radius: 2px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.33);
+    color: #1E0342;
 }
 
 .modal-footer {
     margin-top: 1rem;
     display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.modal-buttons {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
     gap: 1rem;
     justify-content: center;
 }

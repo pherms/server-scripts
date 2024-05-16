@@ -14,10 +14,11 @@
                 Login
             </div>
         </submit-button>
-        <modal-component :isOpen="isModalOpened" @modal-close="closeModal" @modal-submit="submitHandler" name="login-modal">
+        <modal-component :isOpen="isModalOpened" :isSignup="isSignupOpened" @modal-close="closeModal" @modal-submit="submitHandler" @modal-signup="openSignupForm" @modal-submitSignup="signupHandler" name="login-modal">
             <template #content></template>
             <template #footer></template>
         </modal-component>
+        
     </div>
 </template>
 <script setup>
@@ -27,17 +28,81 @@ import ModalComponent from './ModalComponent.vue';
 import { ref } from "vue";
 
 const isModalOpened = ref(false);
+const isSignupOpened = ref(false);
+
 const openModal = () => {
     isModalOpened.value = true;
 };
 
 const closeModal = () => {
     isModalOpened.value = false;
+    isSignupOpened.value = false;
+
 };
 
-const submitHandler = () => {
+const openSignupForm = () => {
+    console.log("Signup pressed")
+    isSignupOpened.value = true;
+};
+
+const submitHandler = async() => {
     console.log("login pressed")
+    
+    try {
+        const enteredEmailAddress = this.$refs.emailAddress.value;
+        const enteredPassword = this.$refs.password.value;
+
+        console.log('Entered emailadres: ' + enteredEmailAddress);
+        console.log('Entered password: ' + enteredPassword);
+
+        const requestOptions = {
+            method: 'POST',
+            // headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'x-www-form-urlencoded' },
+            body: new URLSearchParams({
+            'emailAddress': enteredEmailAddress,
+            'password': enteredPassword
+            }).toString()
+            // JSON.stringify({ emailAddress: enteredEmailAddress, password: enteredPassword })
+        };
+
+        const response = await fetch('http://127.0.0.1:8081/api/v1/auth', requestOptions);
+        if (!response.ok) {
+            console.log("Error");
+        }
+
+    } catch (error) {
+            console.error("Er is iets fout gegaan!!", error);
+    }
     // Do whaterver on submit
+};
+
+const signupHandler = async() => {
+    console.log("Opslaan pressed")
+    try {
+        const enteredPassword = this.$refs.password.value;
+        const verifyEnteredPassword = this.$refs.password1.value;
+
+        if (enteredPassword !== verifyEnteredPassword) {
+            console.log("Passwords do not match");
+            return;
+        }
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'x-www-form-urlencoded' },
+            body:
+        }
+
+        const response = await fetch('http://127.0.0.1:8081/api/v1/users', requestOptions);
+        if (!response.ok) {
+            console.log("Error");
+        }
+        
+    } catch (error) {
+        console.error("Er is iets fout gegaan!", error);
+    }
+    // isSignupOpened.value = true;
 };
 
 
