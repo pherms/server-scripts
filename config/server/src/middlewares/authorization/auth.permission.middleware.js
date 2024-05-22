@@ -4,6 +4,7 @@ const ADMIN_PERMISSION = require('../../config/env.config')['permissionLevels'][
 
 exports.minimumPermissionLevelRequired = (required_permission_level) => {
     return (req, res, next) => {
+        console.log('permission level:' + req.jwt.permissionLevel)
         let user_permission_level = parseInt(req.jwt.permissionLevel);
         let userId = req.jwt.userId;
         if (user_permission_level & required_permission_level) {
