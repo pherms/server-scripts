@@ -84,7 +84,6 @@
 </template>
 <script>
 import SubmitButton from '../ui/SubmitButton.vue'
-
 export default {
   components: { SubmitButton },
     setup() {
