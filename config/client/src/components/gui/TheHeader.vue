@@ -4,7 +4,7 @@
             <div class="exo-2-title-400">Server</div>
             <div class="handlee-regular-200">Config</div>
         </div>
-        <submit-button class="header-button" @click="openModal">
+        <submit-button v-if="!isLoggedIn" class="header-button" @click="openModal">
             <div class="button-icon">
                 <span class="material-symbols-outlined">
                 login
@@ -14,8 +14,19 @@
                 Login
             </div>
         </submit-button>
+        <submit-button v-if="isLoggedIn" class="header-button" @click="logout">
+            <div class="button-icon">
+                <span class="material-symbols-outlined">
+                logout
+                </span>
+            </div>
+            <div class="button-text">
+                Logout
+            </div>
+        </submit-button>
+        <div v-if="isLoggedIn">{{ userName }}</div>
         <!-- <modal-component :isOpen="isModalOpened" :isSignup="isSignupOpened" @modal-close="closeModal" @modal-submit="submitHandler" @modal-signup="openSignupForm" @modal-submitSignup="signupHandler" name="login-modal"> -->
-        <modal-component :isOpen="isModalOpened" :isSignup="isSignupOpened" @modal-close="closeModal" @modal-submit="submitHandler" @modal-signup="openSignupForm" name="login-modal">
+        <modal-component :isOpen="isModalOpened" :isSignup="isSignupOpened" @modal-close="closeModal" @modal-signup="openSignupForm" name="login-modal">
             <template #content></template>
             <template #footer></template>
         </modal-component>
@@ -37,9 +48,17 @@ const isModalOpened = computed(function () {
     return store.getters.getModalState;
 });
 
+const isLoggedIn = computed(function () {
+    return store.getters.getLoggedInState;
+});
+
+const userName = computed(function () {
+    return store.getters.getUserName;
+});
+
 const isSignupOpened = computed(function () {
     return store.getters.getSignupFormState;
-})
+});
 
 // verwijderen ivm gebruik store
 // const openModal = () => {
@@ -61,42 +80,56 @@ function closeModal() {
     store.commit('toggleModalState', false);
 }
 
-const openSignupForm = () => {
-    console.log("Signup pressed")
-    isSignupOpened.value = true;
-};
+// const openSignupForm = () => {
+//     console.log("Signup pressed")
+//     isSignupOpened.value = true;
+// };
 
-const submitHandler = async() => {
-    console.log("login pressed")
-    
-    try {
-        const enteredEmailAddress = this.$refs.emailAddress.value;
-        const enteredPassword = this.$refs.password.value;
+function openSignupForm() {
+    store.commit('toggleSignupFormState', true);
+}
 
-        console.log('Entered emailadres: ' + enteredEmailAddress);
-        console.log('Entered password: ' + enteredPassword);
-
-        const requestOptions = {
-            method: 'POST',
-            // headers: { 'Content-Type': 'application/json' },
-            headers: { 'Content-Type': 'x-www-form-urlencoded' },
-            body: new URLSearchParams({
-            'emailAddress': enteredEmailAddress,
-            'password': enteredPassword
-            }).toString()
-            // JSON.stringify({ emailAddress: enteredEmailAddress, password: enteredPassword })
-        };
-
-        const response = await fetch('http://127.0.0.1:8081/api/v1/auth', requestOptions);
-        if (!response.ok) {
-            console.log("Error");
-        }
-
-    } catch (error) {
-            console.error("Er is iets fout gegaan!!", error);
+function logout() {
+    let userData = {
+        emailAddress: '',
+        name: ''
     }
-    // Do whaterver on submit
-};
+
+    store.commit('updateAuthToken', '');
+    store.commit('updateUserState', userData);
+    store.commit('toggleLoginState', false );
+}
+// const submitHandler = async() => {
+//     console.log("login pressed")
+    
+//     try {
+//         const enteredEmailAddress = this.$refs.emailAddress.value;
+//         const enteredPassword = this.$refs.password.value;
+
+//         console.log('Entered emailadres: ' + enteredEmailAddress);
+//         console.log('Entered password: ' + enteredPassword);
+
+//         const requestOptions = {
+//             method: 'POST',
+//             // headers: { 'Content-Type': 'application/json' },
+//             headers: { 'Content-Type': 'x-www-form-urlencoded' },
+//             body: new URLSearchParams({
+//             'emailAddress': enteredEmailAddress,
+//             'password': enteredPassword
+//             }).toString()
+//             // JSON.stringify({ emailAddress: enteredEmailAddress, password: enteredPassword })
+//         };
+
+//         const response = await fetch('http://127.0.0.1:8081/api/v1/auth', requestOptions);
+//         if (!response.ok) {
+//             console.log("Error");
+//         }
+
+//     } catch (error) {
+//             console.error("Er is iets fout gegaan!!", error);
+//     }
+//     // Do whaterver on submit
+// };
 
 
 

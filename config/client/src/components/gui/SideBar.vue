@@ -1,14 +1,14 @@
 <template>
     <div class="sidebar">
         <div class="top-icons">
-            <router-link to="/backupConfig">
+            <router-link v-if="isLoggedIn" to="/backupConfig">
                 <div class="button">
                     <span class="material-symbols-outlined">
                         settings
                     </span>
                 </div>
             </router-link>
-            <router-link to="/backupSources">
+            <router-link v-if="isLoggedIn" to="/backupSources">
                 <div class="button">
                     <span class="material-symbols-outlined">
                         add_task
@@ -18,7 +18,7 @@
         </div>
     
         <div class="bottom-icons">
-            <div class="button">
+            <div class="button" v-if="isLoggedIn">
             <span class="material-symbols-outlined">
                 account_circle
             </span>
@@ -26,12 +26,16 @@
         </div>
     </div>
 </template>
-<script>
-export default {
-    setup() {
+<script setup>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 
-    }
-}
+const store = useStore();
+
+const isLoggedIn = computed(function () {
+    return store.getters.getLoggedInState;
+});
+
 </script>
 <style scoped>
 .material-symbols-outlined {

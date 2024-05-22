@@ -19,7 +19,7 @@
       </span>
       Opslaan
     </submit-button>
-    <submit-button class="form-button" @click.stop="emit('modal-close')">
+    <submit-button class="form-button" @click="closeSignupForm">
         <span class="material-symbols-outlined">
             close_small
         </span>
@@ -47,7 +47,6 @@ const emailAddress = ref('');
 const password = ref('');
 const password1 = ref('');
 
-const emit = defineEmits(["modal-close"]);
 const store = useStore()
    
 async function signupHandler() {
@@ -80,6 +79,11 @@ async function signupHandler() {
         console.error("Er is iets fout gegaan!", error);
   }
   store.commit('toggleModalState', false);
+}
+
+function closeSignupForm() {
+  store.commit('toggleModalState', false);
+  store.commit('toggleSignupFormState', false);
 }
   
 </script>

@@ -1,18 +1,18 @@
 <template>
     <h1>Backup Config</h1>
-    <backup-configform></backup-configform>
+    <backup-configform v-if="isLoggedIn"></backup-configform>
 </template>
-<script>
+<script setup>
 import BackupConfigform from '../forms/BackupConfigForm'
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 
-export default ({
-    setup() {
-        
-    },
-    components: {
-        BackupConfigform,
-    }
-})
+const store = useStore();
+
+const isLoggedIn = computed(function () {
+    return store.getters.getLoggedInState;
+});
+
 </script>
 <style scoped>
 * {

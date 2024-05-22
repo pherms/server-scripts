@@ -7,6 +7,12 @@ export default createStore({
         },
         signupFormState: {
             isOpen: false,
+        },
+        userState: {
+            isLoggedIn: false,
+            authToken: '',
+            userName: '',
+            emailAddress: ''
         }
     },
     getters: {
@@ -16,6 +22,15 @@ export default createStore({
         },
         getSignupFormState(state) {
             return state.signupFormState.isOpen;
+        },
+        getLoggedInState(state) {
+            return state.userState.isLoggedIn;
+        },
+        getAuthToken(state) {
+            return state.userState.authToken;
+        },
+        getUserName(state) {
+            return state.userState.userName;
         }
     },
     mutations: {
@@ -25,7 +40,16 @@ export default createStore({
         },
         toggleSignupFormState: function(state, status) {
             state.signupFormState.isOpen = status;
+        },
+        toggleLoginState: function(state, status) {
+            state.userState.isLoggedIn = status;
+        },
+        updateAuthToken: function(state, token) {
+            state.userState.authToken = token;
+        },
+        updateUserState: function(state, data) {
+            state.userState.userName = data.name;
+            state.userState.emailAddress = data.emailAddress;
         }
-
     }
 });

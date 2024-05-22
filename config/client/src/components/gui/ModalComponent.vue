@@ -9,23 +9,6 @@
                     </slot>
                 </div>
                 <div class="modal-footer">
-                    <div class="modal-buttons">
-                        <slot name="footer">
-                            <submit-button class="modal-button" v-if="!isSignup" @click="emit('modal-submit')">
-                                <span class="material-symbols-outlined">
-                                    login
-                                </span>
-                                Login
-                            </submit-button>
-
-                            <submit-button class="modal-button" v-if="!isSignup" @click.stop="emit('modal-close')">
-                                <span class="material-symbols-outlined">
-                                    close_small
-                                </span>
-                                Annuleren
-                            </submit-button>
-                        </slot>
-                    </div>
                     <a href="#" v-if="!isSignup" @click="emit('modal-signup')">Nog geen account? Maak er 1 aan</a>
                 </div>
             </div>
@@ -35,7 +18,7 @@
 <script setup>
 import LoginForm from '../forms/LoginForm.vue';
 import SignupForm from '../forms/SignupForm.vue';
-import SubmitButton from '../ui/SubmitButton.vue';
+
 import { ref } from "vue";
 import { onClickOutside } from '@vueuse/core';
 import { useStore } from 'vuex';
