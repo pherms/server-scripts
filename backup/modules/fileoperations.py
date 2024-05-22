@@ -170,7 +170,7 @@ def removeBackupFile(backuppath,fileName,logfile):
     """
     print(f"verwijderen dagbackup file: {fileName}")
     logfile.write("{} Verwijderen van bestand {}\n".format(datetime.today(),fileName))
-    fullPath = os.path.join(backuppath + fileName)
+    fullPath = os.path.join(backuppath,fileName)
     os.remove(fullPath)
     logfile.write("{} Bestand {} zou verwijderd zijn\n".format(datetime.today(),backuppath + fileName))
 
@@ -265,13 +265,13 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                             files_renamed.append(fileName)
                     else:
                         logfile.write("{} Backup gemaakt op een andere dag. Verwijderen {}\n".format(datetime.today(),fileName))
-
-                        if debug:
-                            files_cleaned.append(fileName)
-                            logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
-                        else:
-                            mods.removeBackupFile(backuppath,fileName,logfile)
-                            files_cleaned.append(fileName)
+                        if ageInDays > 5:
+                            if debug:
+                                files_cleaned.append(fileName)
+                                logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
+                            else:
+                                mods.removeBackupFile(backuppath,fileName,logfile)
+                                files_cleaned.append(fileName)
 
         except Exception as error:
             
@@ -335,9 +335,9 @@ def cleanupLogs(logPath,debug):
             
             if ageInDays >= 84:
                 if debug:
-                    print("[DEBUG] het bestand {} zou worden verwijderd wanneer debugging=True".format(file))
+                    print("[DEBUG] het bestand {} zou worden verwijderd wanneer debugging=False".format(file))
                 else:
-                    os.remove(logPath + file)
+                    os.remove(os.path.join(logPath,file))
 
 def getArchiveFileSize(archive):
     """
