@@ -74,13 +74,11 @@
             <input type="text" name="servicesToCopy" id="servicesToCopy" class="input-border config-form-input">
         </div>
     
-    <div class="config-form-fields">
-        <!-- <button id="submit" class="button">Save data</button> -->
-        <submit-button>Opslaan</submit-button>
-    </div>
-</form>  
-                
-    
+        <div class="config-form-fields">
+            <!-- <button id="submit" class="button">Save data</button> -->
+            <submit-button>Opslaan</submit-button>
+        </div>
+    </form>  
 </template>
 <script>
 import SubmitButton from '../ui/SubmitButton.vue'
