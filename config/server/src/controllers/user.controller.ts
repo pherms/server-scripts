@@ -73,20 +73,6 @@ export const getUserByID = async (req: Request, res: Response) => {
     }
 };
 
-export const getUserByID = async (req: Request, res: Response) => {
-    try {
-        const id: number = parseInt(req.params.id);
-        const foundUser = await db.user.findMany({
-            where: {
-                id: id
-            },
-        });
-        return res.status(200).json(foundUser);
-    } catch (error) {
-        return res.status(500).json(error.message);
-    }
-};
-
 export const updateUserById = async (req: Request, res: Response) => {
     let salt = crypto.randomBytes(16).toString('base64');
     let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest("base64");
