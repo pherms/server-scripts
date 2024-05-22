@@ -269,6 +269,8 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
 
                         if debug:
                             files_cleaned.append(fileName)
+                            # onderstaande regel weer verwijderen wanneer functie werkt
+                            mods.removeBackupFile(backuppath,fileName,logfile)
                             logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
                         else:
                             mods.removeBackupFile(backuppath,fileName,logfile)
