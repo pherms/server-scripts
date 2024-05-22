@@ -338,7 +338,7 @@ def cleanupLogs(logPath,debug):
                 if debug:
                     print("[DEBUG] het bestand {} zou worden verwijderd wanneer debugging=True".format(file))
                 else:
-                    os.remove(logPath + file)
+                    os.remove(os.path.join(logPath,file))
 
 def getArchiveFileSize(archive):
     """
