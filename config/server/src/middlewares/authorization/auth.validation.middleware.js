@@ -23,9 +23,11 @@ exports.validRefreshNeeded = (req, res, next) => {
 };
 
 exports.validJWTNeeded = (req, res, next) => {
-    if (req.headers['authorization']) {
+    console.log(req.headers);
+    if (req.headers['authentication']) {
         try {
-            let authorization = req.headers['authorization'].split(' ');
+            let authorization = req.headers['authentication'].split(' ');
+            console.log(authorization);
             if (authorization[0] !== 'Bearer') {
                 return res.status(401).send();
             } else {

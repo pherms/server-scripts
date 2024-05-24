@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get('/', getConfiguration);
 
-router.put('/', [
+router.post('/', [
     ValidationMiddleware.validJWTNeeded,
     PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
     PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,

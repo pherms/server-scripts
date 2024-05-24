@@ -7,13 +7,13 @@ const config = path.join(__dirname + '../../../config-example.json');
 export const getConfiguration = async function(req: Request, res: Response){
     fs.readFile(config,'utf-8',function (err, data) {
         console.log(data);
-        res.send(JSON.stringify(data));
-        // res.json.stringify(data).send;
+        res.send(JSON.parse(data));
     });
 };
 
 export const updateConfiguration = async function(req: Request, res: Response){
     const jsonInput = req.body;
+    console.log(req);
     console.log(jsonInput);
 
     try {

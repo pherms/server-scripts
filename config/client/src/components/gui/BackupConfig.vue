@@ -1,6 +1,8 @@
 <template>
-    <h1>Backup Config</h1>
-    <backup-configform v-if="isLoggedIn"></backup-configform>
+    <div>
+        <h1>Backup Config</h1>
+        <backup-configform v-if="isLoggedIn"></backup-configform>
+    </div>
 </template>
 <script setup>
 import BackupConfigform from '../forms/BackupConfigForm'

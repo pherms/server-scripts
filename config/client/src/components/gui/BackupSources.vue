@@ -1,5 +1,8 @@
 <template>
-    <backup-sourcesform></backup-sourcesform>
+    <div>
+        <h1>Backup Sources config</h1>
+        <backup-sourcesform></backup-sourcesform>
+    </div>
 </template>
 <script>
 import BackupSourcesform from '../forms/BackupSourcesForm.vue'
