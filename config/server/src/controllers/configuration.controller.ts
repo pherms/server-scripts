@@ -2,7 +2,8 @@ import type { Request, Response } from "express";
 import fs from 'fs';
 import path from 'path';
 
-const config = path.join(__dirname + '../../../config-example.json');
+// const config = path.join(__dirname + '../../../config-example.json');
+const config = path.join('/etc/server-scripts/backup-config.json');
 
 export const getConfiguration = async function(req: Request, res: Response){
     fs.readFile(config,'utf-8',function (err, data) {

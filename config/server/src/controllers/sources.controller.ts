@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import fs from 'fs';
 import path from 'path';
 
-const sources = path.join(__dirname + '../../../sources-example');
+const sources = path.join('/etc/server-scripts/sources');
 
 export const getSources = async function(req: Request, res: Response){
     fs.readFile(sources,'utf-8',function (err, data) {
