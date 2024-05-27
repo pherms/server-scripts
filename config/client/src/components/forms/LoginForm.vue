@@ -2,10 +2,11 @@
   <div>
     <div class="config-form-fields">
       <label for="emailAddress" class="config-form-label w-fit">Login/Email:</label>
-      <input type="email" v-model="emailAddress" name="emailAddress" id="emailAddress">
+      <input type="email" @input="clearError" v-model="emailAddress" name="emailAddress" id="emailAddress">
       <label for="password" class="config-form-label">Password:</label>
-      <input type="password" v-model="password" name="password" id="password">
+      <input type="password" @input="clearError" v-model="password" name="password" id="password">
     </div>
+    <div class="error" v-if="isError">{{ errorMessage }}</div>
     <div class="form-buttons">
       <submit-button class="modal-button" @click="loginUser">
           <span class="material-symbols-outlined">
@@ -25,17 +26,26 @@
 </template>
 <script setup>
 import { useStore } from 'vuex';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import SubmitButton from '../ui/SubmitButton.vue';
 import axios from 'axios';
 
 const store = useStore();
 const emailAddress = ref('');
 const password = ref('');
+const errorMessage = ref('');
 // export default {
+
+const isError = computed(function () {
+  return store.getters.getErrorState
+})
     
 function closeLoginForm() {
   store.commit('toggleModalState', false)
+}
+
+function clearError() {
+  store.commit('toggleErrorState', false)
 }
 
 async function loginUser() {
@@ -46,18 +56,6 @@ async function loginUser() {
     console.log('Entered emailadres: ' + enteredEmailAddress);
     console.log('Entered password: ' + enteredPassword);
 
-    // const requestOptions = {
-    //   method: 'POST',
-    //   headers: { "Content-type": "application/json; charset=UTF-8" },
-    //   // headers: { 'Content-Type': 'x-www-form-urlencoded' },
-    //   // body: new URLSearchParams({
-    //   //   'emailAddress': enteredEmailAddress,
-    //   //   'password': enteredPassword
-    //   // }).toString()
-    //   body: JSON.stringify({ emailAddress: enteredEmailAddress, password: enteredPassword })
-    // };
-
-    // const response = await fetch('http://127.0.0.1:8081/api/v1/auth', requestOptions);
     const response = await axios.post('http://127.0.0.1:8081/api/v1/auth', {
         emailAddress: enteredEmailAddress,
         password: enteredPassword
@@ -66,6 +64,8 @@ async function loginUser() {
         'Content-Type': 'application/json; charset=UTF-8'
       },
     });
+
+
 
     if (response.status === 201) {
       console.log(response.data.accessToken);
@@ -79,77 +79,14 @@ async function loginUser() {
 
     
   } catch (error) {
-    console.error("Er is iets fout gegaan!!", error);
+    if (error.response.status === 400) {
+      store.commit('toggleErrorState', true);
+      errorMessage.value = 'Ongeldige gebruikersnaam of onjuist paswoord';
+    } else {
+      console.error("Er is iets fout gegaan!!", error);
+    }
   }
 }
-    
-    // },
-    // components: {
-        
-    // },
-    // methods: {
-        // submitData() {
-        //     console.log('Submit login button press');
-        //     const enteredEmailAddress = this.$refs.emailAddress.value;
-        //     const enteredPassword = this.$refs.password.value;
-
-        //     console.log('Entered emailadres: ' + enteredEmailAddress);
-        //     console.log('Entered password: ' + enteredPassword);
-
-        //     const requestOptions = {
-        //         method: 'POST',
-        //         // headers: { 'Content-Type': 'application/json' },
-        //         headers: { 'Content-Type': 'x-www-form-urlencoded' },
-        //         body: JSON.stringify({ emailAddress: enteredEmailAddress, password: enteredPassword })
-        //     };
-        //     fetch('http://127.0.0.1:8081/api/v1/auth', requestOptions)
-        //         .then(async response => {
-        //             const isJson = response.headers.get('content-type')?.includes('application/json');
-        //             const data = isJson && await response.json();
-
-        //             // check for error response
-        //             if (!response.ok) {
-        //                 const error = (data && data.message) || response.status;
-        //                 return Promise.reject(error);
-        //             }
-
-        //             // console.log(data.accessToken);
-        //             // this.$refs.accessToken = data.accessToken;
-        //         })
-        //         .catch(error => {
-        //             console.error("Er is iets fout gegaan!", error);
-        //         });
-        // }
-        // async submitData() {
-        //   try {
-        //     const enteredEmailAddress = this.$refs.emailAddress.value;
-        //     const enteredPassword = this.$refs.password.value;
-
-        //     console.log('Entered emailadres: ' + enteredEmailAddress);
-        //     console.log('Entered password: ' + enteredPassword);
-
-        //     const requestOptions = {
-        //       method: 'POST',
-        //       // headers: { 'Content-Type': 'application/json' },
-        //       headers: { 'Content-Type': 'x-www-form-urlencoded' },
-        //       body: new URLSearchParams({
-        //         'emailAddress': enteredEmailAddress,
-        //         'password': enteredPassword
-        //       }).toString()
-        //       // JSON.stringify({ emailAddress: enteredEmailAddress, password: enteredPassword })
-        //     };
-
-        //     const response = await fetch('http://127.0.0.1:8081/api/v1/auth', requestOptions);
-        //     if (!response.ok) {
-        //       console.log("Error");
-        //     }
-
-        //   } catch (error) {
-        //     console.error("Er is iets fout gegaan!!", error);
-        //   }
-        // }
-//     }
-// }
 </script>
 <style scoped>
 .input-border {
@@ -185,15 +122,19 @@ async function loginUser() {
 }
 
 .form-buttons {
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    justify-content: center;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
 }
 
 .form-button {
-    gap: 0.25rem;
+  gap: 0.25rem;
 }
 
+.error {
+  margin-top: 0.5rem;
+  color: red;
+}
 </style>

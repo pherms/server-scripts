@@ -13,6 +13,9 @@ export default createStore({
             authToken: '',
             userName: '',
             emailAddress: ''
+        },
+        errorState: {
+            isError: false,
         }
     },
     getters: {
@@ -31,6 +34,9 @@ export default createStore({
         },
         getUserName(state) {
             return state.userState.userName;
+        },
+        getErrorState(state) {
+            return state.errorState.isError;
         }
     },
     mutations: {
@@ -43,6 +49,9 @@ export default createStore({
         },
         toggleLoginState: function(state, status) {
             state.userState.isLoggedIn = status;
+        },
+        toggleErrorState: function(state, status) {
+            state.errorState.isError = status;
         },
         updateAuthToken: function(state, token) {
             state.userState.authToken = token;

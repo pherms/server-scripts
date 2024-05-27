@@ -4,27 +4,29 @@
             <div class="exo-2-title-400">Server</div>
             <div class="handlee-regular-200">Config</div>
         </div>
-        <submit-button v-if="!isLoggedIn" class="header-button" @click="openModal">
-            <div class="button-icon">
-                <span class="material-symbols-outlined">
-                login
-                </span>
-            </div>
-            <div class="button-text">
-                Login
-            </div>
-        </submit-button>
-        <submit-button v-if="isLoggedIn" class="header-button" @click="logout">
-            <div class="button-icon">
-                <span class="material-symbols-outlined">
-                logout
-                </span>
-            </div>
-            <div class="button-text">
-                Logout
-            </div>
-        </submit-button>
-        <div v-if="isLoggedIn">{{ userName }}</div>
+        <div class="loginstate">
+            <submit-button v-if="!isLoggedIn" class="header-button" @click="openModal">
+                <div class="button-icon">
+                    <span class="material-symbols-outlined">
+                    login
+                    </span>
+                </div>
+                <div class="button-text">
+                    Login
+                </div>
+            </submit-button>
+            <div v-if="isLoggedIn">{{ userName }}</div>
+            <submit-button v-if="isLoggedIn" class="header-button" @click="logout">
+                <div class="button-icon">
+                    <span class="material-symbols-outlined">
+                    logout
+                    </span>
+                </div>
+                <div class="button-text">
+                    Logout
+                </div>
+            </submit-button>
+        </div>
         <!-- <modal-component :isOpen="isModalOpened" :isSignup="isSignupOpened" @modal-close="closeModal" @modal-submit="submitHandler" @modal-signup="openSignupForm" @modal-submitSignup="signupHandler" name="login-modal"> -->
         <modal-component :isOpen="isModalOpened" :isSignup="isSignupOpened" @modal-close="closeModal" @modal-signup="openSignupForm" name="login-modal">
             <template #content></template>
@@ -41,8 +43,6 @@ import SubmitButton from '../ui/SubmitButton.vue';
 import ModalComponent from './ModalComponent.vue';
 
 const store = useStore();
-// const isModalOpened = ref(false);
-// const isSignupOpened = ref(false);
 
 const isModalOpened = computed(function () {
     return store.getters.getModalState;
@@ -60,30 +60,13 @@ const isSignupOpened = computed(function () {
     return store.getters.getSignupFormState;
 });
 
-// verwijderen ivm gebruik store
-// const openModal = () => {
-//     // isModalOpened.value = true;
-//     store.commit('toggleModalState', true);
-// };
 function openModal() {
     store.commit('toggleModalState', true);
 }
 
-// verwijderen ivm gebruik store
-// const closeModal = () => {
-//     // isModalOpened.value = false;
-//     store.commit('toggleModalState', false);
-//     isSignupOpened.value = false;
-// };
-
 function closeModal() {
     store.commit('toggleModalState', false);
 }
-
-// const openSignupForm = () => {
-//     console.log("Signup pressed")
-//     isSignupOpened.value = true;
-// };
 
 function openSignupForm() {
     store.commit('toggleSignupFormState', true);
@@ -99,135 +82,7 @@ function logout() {
     store.commit('updateUserState', userData);
     store.commit('toggleLoginState', false );
 }
-// const submitHandler = async() => {
-//     console.log("login pressed")
-    
-//     try {
-//         const enteredEmailAddress = this.$refs.emailAddress.value;
-//         const enteredPassword = this.$refs.password.value;
-
-//         console.log('Entered emailadres: ' + enteredEmailAddress);
-//         console.log('Entered password: ' + enteredPassword);
-
-//         const requestOptions = {
-//             method: 'POST',
-//             // headers: { 'Content-Type': 'application/json' },
-//             headers: { 'Content-Type': 'x-www-form-urlencoded' },
-//             body: new URLSearchParams({
-//             'emailAddress': enteredEmailAddress,
-//             'password': enteredPassword
-//             }).toString()
-//             // JSON.stringify({ emailAddress: enteredEmailAddress, password: enteredPassword })
-//         };
-
-//         const response = await fetch('http://127.0.0.1:8081/api/v1/auth', requestOptions);
-//         if (!response.ok) {
-//             console.log("Error");
-//         }
-
-//     } catch (error) {
-//             console.error("Er is iets fout gegaan!!", error);
-//     }
-//     // Do whaterver on submit
-// };
-
-
-
-// return { isModalOpened, isSignupOpened, openModal, closeModal, openSignupForm, submitHandler, signupHandler };
-
 </script>
-<!-- <script setup>
-// import LoginForm from '../forms/LoginForm.vue'
-import SubmitButton from '../ui/SubmitButton.vue';
-import ModalComponent from './ModalComponent.vue';
-import { ref } from "vue";
-
-const isModalOpened = ref(false);
-const isSignupOpened = ref(false);
-
-const openModal = () => {
-    isModalOpened.value = true;
-};
-
-const closeModal = () => {
-    isModalOpened.value = false;
-    isSignupOpened.value = false;
-
-};
-
-const openSignupForm = () => {
-    console.log("Signup pressed")
-    isSignupOpened.value = true;
-};
-
-const submitHandler = async() => {
-    console.log("login pressed")
-    
-    try {
-        const enteredEmailAddress = this.$refs.emailAddress.value;
-        const enteredPassword = this.$refs.password.value;
-
-        console.log('Entered emailadres: ' + enteredEmailAddress);
-        console.log('Entered password: ' + enteredPassword);
-
-        const requestOptions = {
-            method: 'POST',
-            // headers: { 'Content-Type': 'application/json' },
-            headers: { 'Content-Type': 'x-www-form-urlencoded' },
-            body: new URLSearchParams({
-            'emailAddress': enteredEmailAddress,
-            'password': enteredPassword
-            }).toString()
-            // JSON.stringify({ emailAddress: enteredEmailAddress, password: enteredPassword })
-        };
-
-        const response = await fetch('http://127.0.0.1:8081/api/v1/auth', requestOptions);
-        if (!response.ok) {
-            console.log("Error");
-        }
-
-    } catch (error) {
-            console.error("Er is iets fout gegaan!!", error);
-    }
-    // Do whaterver on submit
-};
-
-const signupHandler = async() => {
-    const firstName = ref('');
-    const lastName = ref('');
-    const emailAddress = ref('');
-    const password = ref('');
-    const password1 = ref('');
-    console.log("Opslaan pressed")
-    try {
-        const enteredPassword = password.value;
-        const verifyEnteredPassword = password1.value;
-
-        if (enteredPassword !== verifyEnteredPassword) {
-            console.log("Passwords do not match");
-            return;
-        }
-
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'x-www-form-urlencoded' },
-            body: JSON.stringify({firstName: firstName.value, lastName: lastName.value, emailAddress: emailAddress.value, password: enteredPassword})
-        };
-        console.log(requestOptions)
-
-        const response = await fetch('http://127.0.0.1:8081/api/v1/users', requestOptions);
-        if (!response.ok) {
-            console.log("Error");
-        }
-        
-    } catch (error) {
-        console.error("Er is iets fout gegaan!", error);
-    }
-    // isSignupOpened.value = true;
-};
-
-
-</script> -->
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Handlee&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');

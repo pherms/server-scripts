@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div v-if="isLoggedIn">
         <h1>Backup Config</h1>
-        <backup-configform v-if="isLoggedIn"></backup-configform>
+        <backup-configform></backup-configform>
     </div>
 </template>
 <script setup>

@@ -1,8 +1,8 @@
 <template>
   <div class="layout">
-    <form action="#" method="post" id="sourcesConfig">
+    <form action="#" id="form">
         <label for="sources" class="input-form-label">Sources om te backuppen</label>
-        <textarea v-model="form.sourcesData" name="sources" id="sources" cols="30" rows="10" class="config-form-fields input-border config-form-input w-fit"></textarea>
+        <textarea v-model="form" name="sources" id="sources" cols="30" rows="10" class="config-form-fields input-border config-form-input w-fit"></textarea>
     </form>
     <submit-button @click="submitSourcesForm">Opslaan</submit-button>
   </div>
@@ -42,7 +42,9 @@ async function submitSourcesForm() {
         console.log("niet leeg, submitting")
         try {
           const response = await axios.put('http://127.0.0.1:8081/api/v1/sources',
-              form.value
+            {
+              data: form.value
+            }
           , {
               headers: {
                   'Content-Type': 'application/json; charset=UTF-8',

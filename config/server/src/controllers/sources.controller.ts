@@ -7,7 +7,7 @@ const sources = path.join(__dirname + '../../../sources-example');
 export const getSources = async function(req: Request, res: Response){
     fs.readFile(sources,'utf-8',function (err, data) {
         console.log(data);
-        res.json({sourcesData: data}).send;
+        res.json(data).send;
     });
 };
 
@@ -16,17 +16,18 @@ export const updateSources = async function(req: Request, res: Response){
     console.log(jsonInput);
 
     try {
-        const jsonString = JSON.stringify(jsonInput,null,2);
-        console.log(jsonString);
+        // const jsonString = JSON.stringify(jsonInput.data,null,2);
+        const sourcesData = jsonInput.data.toString();
+        console.log(sourcesData);
 
-        fs.writeFile(sources, jsonString, (err) => {
+        fs.writeFile(sources, sourcesData, (err) => {
             if (err) {
                 console.log('Error writing sources file: ', err);
                 return;
             }
             console.log('Sources file has been saved successfully!');
         });
-        res.status(201).send(jsonString);
+        res.status(201).send(sourcesData);
     } catch (error) {
         console.log('An error has occurred: ', error);
     }

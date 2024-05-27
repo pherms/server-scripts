@@ -1,22 +1,23 @@
 <template>
-    <div>
+    <div v-if="isLoggedIn">
         <h1>Backup Sources config</h1>
         <backup-sourcesform></backup-sourcesform>
     </div>
 </template>
-<script>
+<script setup>
 import BackupSourcesform from '../forms/BackupSourcesForm.vue'
 
-export default ({
-    setup() {
-        
-    },
-    components: {
-        BackupSourcesform,
-    }
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
+
+const isLoggedIn = computed(function () {
+    return store.getters.getLoggedInState;
 })
+
 </script>
 
 <style scoped>
 
-</style>BackupSourcesForm
+</style>

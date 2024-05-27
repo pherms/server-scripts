@@ -46,18 +46,6 @@ const isLoggedIn = computed(function () {
   'opsz' 32
 }
 
-@keyframes iconsize {
-    0% {
-        font-size: 24px;
-        background-color: #0E46A3;
-    }
-    100% {
-        font-size: 32px;
-        background-color: #9AC8CD;
-        color: #1E0342;
-    }
-}
-
 .sidebar {
     display: flex;
     flex-direction: column;
@@ -93,8 +81,6 @@ a:visited {
     background: #9AC8CD;
     color: #1E0342;
     font-size: 40px
-    /* animation-name: iconsize;
-    animation-duration: 0.2s; */
 }
 
 .bottom-icons {

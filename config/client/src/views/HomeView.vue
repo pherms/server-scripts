@@ -1,18 +1,20 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <div v-if="!isLoggedIn">
+        <p>Server config admin</p>
+        <p>Server: </p>
+    </div>
+
 </template>
+<script setup>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 
-<script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+const store = useStore();
 
-export default {
-  name: 'HomeView',
-  components: {
-    HelloWorld
-  }
-}
+const isLoggedIn = computed(function () {
+    return store.getters.getLoggedInState;
+});
 </script>
+<style scoped>
+
+</style>

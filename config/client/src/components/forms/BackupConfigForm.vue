@@ -115,8 +115,10 @@ const responseData = async () => {
 async function submitConfigForm() {
     if (authToken.value) {
         console.log("niet leeg, submitting")
-        await axios.post('http://127.0.0.1:8081/api/v1/configuration',
-            form.value,
+        await axios.put('http://127.0.0.1:8081/api/v1/configuration',
+            {
+                data: form.value
+            },
             {
                 headers: {
                     'Content-Type': 'application/json; charset=UTF-8',

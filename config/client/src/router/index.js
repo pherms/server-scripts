@@ -1,16 +1,21 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+// import HomeView from '../views/HomeView.vue'
 
 const routes = [
+  // {
+  //   path: '/',
+  //   name: 'home',
+  //   component: HomeView
+  // },
+  // {
+  //   path: '/backup',
+  //   name: 'Backup',
+  //   component: () => import('../views/BackupView.vue')
+  // },
   {
-    path: '/',
+    path: '/home',
     name: 'home',
-    component: HomeView
-  },
-  {
-    path: '/backup',
-    name: 'Backup',
-    component: () => import('../views/BackupView.vue')
+    component: () => import('../views/HomeView.vue'),
   },
   {
     path: '/backupConfig',
@@ -22,11 +27,11 @@ const routes = [
     name: 'Backup Sources',
     component: () => import('../components/gui/BackupSources.vue')
   },
-  {
-    path: '/other',
-    name: 'Other',
-    component: () => import('../views/BackupView.vue')
-  }
+  // {
+  //   path: '/other',
+  //   name: 'Other',
+  //   component: () => import('../views/BackupView.vue')
+  // }
 ]
 
 const router = createRouter({

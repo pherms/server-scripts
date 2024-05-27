@@ -32,7 +32,6 @@ const store = useStore();
 const emit = defineEmits(["modal-close","modal-submit","modal-signup"]);
 
 const target = ref(null);
-// onClickOutside(target, () => emit('modal-close'))
 onClickOutside(target, () => store.commit('toggleModalState', false))
 
 

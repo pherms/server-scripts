@@ -8,18 +8,10 @@
         </div>
     </div>
 </template>
-<script>
+<script setup>
 import SideBar from './SideBar.vue';
 
-export default {
-    setup() {
-        
-    },
-    components: {
-        SideBar
-    }
 
-}
 </script>
 <style scoped>
 .main {

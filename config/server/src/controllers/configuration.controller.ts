@@ -17,7 +17,7 @@ export const updateConfiguration = async function(req: Request, res: Response){
     console.log(jsonInput);
 
     try {
-        const jsonString = JSON.stringify(jsonInput,null,2);
+        const jsonString = JSON.stringify(jsonInput.data,null,2);
         console.log(jsonString);
 
         fs.writeFile(config, jsonString, (err) => {

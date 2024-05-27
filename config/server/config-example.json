@@ -1,7 +1,7 @@
 {
   "filetype": "tar",
-  "backuppath": "/home/passie/backup/",
-  "logfilepath": "/home/pascal/log/backup/",
+  "backuppath": "/home/pascal/backup/",
+  "logfilepath": "/home/pascal/log/backup/pascal",
   "scriptspath": "/scripts/server-scripts/",
   "apiurl": "https://api.github.com/repos/pherms/server-scripts/releases/latest",
   "sourcesLocation": "/etc/server-scripts/sources",
