@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import type { Request, Response } from "express";
 import { db } from "../utils/db.server";
-const excludehelper = require('../utils/helperfunctions.ts');
+const excludehelper = require('../utils/helperfunctions.js');
   
 export const createUser = async (req: Request, res: Response) => {
     let salt = crypto.randomBytes(16).toString('base64');
