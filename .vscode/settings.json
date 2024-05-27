@@ -1,0 +1,9 @@
+{
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "python.formatting.provider": "none",
+    "eslint.options": {
+        "configFile": "/home/pascal/projects/server-scripts/config/client/babel.config.js"
+    }
+}
