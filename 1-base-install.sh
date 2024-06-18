@@ -57,6 +57,7 @@ mkdir -p /etc/server-scripts
 
 if [[ ! -d $serverapidir ]]; then
   mkdir -p ${serverapidir}middlewares/authorization
+  mkdir -p ${serverapidir}config
 fi
 
 if [[ ! -d $clientconfigdir ]]; then
@@ -78,6 +79,7 @@ yes | cp -a /scripts/server-scripts/config/server/dist/. $serverapidir
 yes | cp /scripts/server-scripts/config/server/src/controllers/authorization.controller.js ${serverapidir}controllers/
 yes | cp /scripts/server-scripts/config/server/src/middlewares/authorization/*.js ${serverapidir}middlewares/authorization/
 yes | cp /scripts/server-scripts/config/server/src/utils/helperfunctions.js ${serverapidir}utils/
+yes | cp /scripts/server-scripts/config/server/src/config/*.js ${serverapidir}config/
 
 # compile en copy client naar folder
 cd /scripts/server-scripts/config/client
