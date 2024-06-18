@@ -55,19 +55,22 @@ mkdir -p /vol/backup
 # create config directory
 mkdir -p /etc/server-scripts
 
-# create server-api directory
-mkdir -p $serverapidir
+if [[ ! -d $serverapidir ]]; then
+  mkdir -p $serverapidir
+fi
 
-# create config client directory
-mkdir -p $clientconfigdir
+if [[ ! -d $clientconfigdir ]]; then
+  mkdir -p $clientconfigdir
+fi
+
+# compile en copy api-server naar folder
+cd /scripts/server-scripts/config/server
 
 if [[ ! "$( psql -h web01.hoofdspoor.home -XtAc "SELECT 1 FROM pg_database WHERE datname='DB_NAME'" )" = '1' ]]; then
   # run npx prisma command
   npx prisma migrate deploy
 fi
 
-# compile en copy api-server naar folder
-cd /scripts/server-scripts/config/server
 npm install
 npm run build
 
