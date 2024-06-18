@@ -64,6 +64,7 @@ mkdir -p $clientconfigdir
 if [[ ! "$( psql -h web01.hoofdspoor.home -XtAc "SELECT 1 FROM pg_database WHERE datname='DB_NAME'" )" = '1' ]]; then
   # run npx prisma command
   npx prisma migrate deploy
+fi
 
 # compile en copy api-server naar folder
 cd /scripts/server-scripts/config/server
