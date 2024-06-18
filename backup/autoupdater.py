@@ -19,6 +19,8 @@ def main():
     timers = config["timerUnits"]
     servicesToInstall = config["servicesToInstall"]
     servicesToCopy = config["servicesToCopy"]
+    serverApiDir = config["serverApiDir"]
+    clientConfigDir = config["clientConfigDir"]
 
     logfile = mods.openLogFile(logfilepath,"update",debug)
     hostname = mods.getHostname(logfile)
@@ -99,44 +101,54 @@ def main():
                     
                     # delete tests directory
                     if os.path.exists(os.path.join(tempFolder,"backup/tests/")):
-                        shutil.rmtree(os.path.join(tempFolder,"backup/tests/"))
+                        # shutil.rmtree(os.path.join(tempFolder,"backup/tests/"))
+                        mods.deleteDirectory(os.path.join(tempFolder,"backup/tests/"),logfile)
                 
                 if os.path.exists(tempFolder):
                     os.system("cp -r {}/* {}".format(tempFolder,scriptfolder))
                     # remove config dir
-                    shutil.rmtree(os.path.join(scriptfolder,"config"))
+                    # shutil.rmtree(os.path.join(scriptfolder,"config"))
+                    mods.deleteDirectory(os.path.join(scriptfolder,"config"),logfile)
 
                     # api server
                     serverDir = Path(os.path.join(tempFolder,"config/server/"))
-                    index = serverDir.parts.index('src')
-                    targetDir = "/opt/server-api/"
+                    # index = serverDir.parts.index('src')
+                    # workingDir = os.path.join(serverDir,"src")
 
                     os.chdir(serverDir)
-                    shutil.rmtree("dist")
+                    # shutil.rmtree("dist")
+                    mods.deleteDirectory(os.path.join(serverDir,"dist"),logfile)
 
                     # recreate build folder en build app
                     os.mkdir("dist")
-                    os.system("npm run build")
+                    # os.system("npm run build")
+                    mods.compileSource("server",logfile)
 
-                    os.system("cp -r {}/ {}".format(os.path.join(serverDir,"dist"),"/opt/server-api/"))
+                    mods.installFiles("server",tempFolder,logfile)
+                    mods.restartDaemon("config-server-api",logfile,debug)
+                    # os.system("cp -r {}/ {}".format(os.path.join(serverDir,"dist"),serverApiDir))
 
-                    for file in workingDir.glob("**/*.js"):
-                        source = file.absolute()
-                        destination = Path(targetDir).joinpath(*source.parts[index+1:])
+                    # for file in workingDir.glob("**/*.js"):
+                    #     source = file.absolute()
+                    #     destination = Path(serverApiDir).joinpath(*source.parts[index+1:])
 
-                        os.system("cp {} {}".format(source,destination))
+                    #     os.system("cp {} {}".format(source,destination))
                     # End api server
-                    
+
                     # config client
                     clientDir = Path(os.path.join(tempFolder,"config/client/"))
                     os.chdir(clientDir)
-                    shutil.rmtree("dist")
+                    # shutil.rmtree("dist")
+                    mods.deleteDirectory(os.path.join(clientDir,"dist"))
 
                     # recreate build folder en build app
                     os.mkdir("dist")
-                    os.system("npm run build")
+                    # os.system("npm run build")
+                    mods.compileSource("client",logfile)
 
-                    os.system("cp -r {}/ {}".format(os.path.join(clientDir,"dist"),"/var/www/client-config/"))
+                    # os.system("cp -r {}/ {}".format(os.path.join(clientDir,"dist"),clientConfigDir))
+                    mods.installFiles("client",tempFolder,logfile)
+                    mods.restartDaemon("apache2",logfile,debug)
                     # end config client
 
                     logfile.write("{} De bestanden zijn gekopieerd naar directory: {}\n".format(datetime.today(),scriptfolder))

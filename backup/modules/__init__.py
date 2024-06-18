@@ -4,3 +4,4 @@ from .archiveactions import *
 from .logging import *
 from .mailfunctions import *
 from .daemons import *
+from .install import *

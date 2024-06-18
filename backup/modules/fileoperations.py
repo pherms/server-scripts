@@ -4,6 +4,7 @@ import time
 import getpass
 import subprocess
 import calendar
+import shutil
 import modules as mods
 from pathlib import Path
 from datetime import datetime, date
@@ -350,3 +351,12 @@ def getArchiveFileSize(archive):
     sizeHumanReadable = mods.archiveSize(os.path.getsize(fullArchivePath))
 
     return sizeHumanReadable
+
+def deleteDirectory(directory,logfile):
+    """
+    Delete directory using shutil
+    
+    param directory: De directory die moet worden verwijderd
+    """
+    logfile.write("{} De directory {} is verwijderd\n".format(datetime.today(),directory))
+    shutil.rmtree(directory)
