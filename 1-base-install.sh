@@ -82,17 +82,15 @@ yes | cp /scripts/server-scripts/config/server/src/utils/helperfunctions.js ${se
 # compile en copy client naar folder
 cd /scripts/server-scripts/config/client
 npm install
-npm build
+npm run build
 yes | cp -a /scripts/server-scripts/config/client/dist/. $clientconfigdir
 cp /scripts/server-scripts/roles/files/apache/config.conf /etc/apache2/sites-available/
 a2ensite config.conf
 
 # Kopieren van bestanden
-# yes | cp ./roles/files/system/resolv.conf /etc/
-# yes | cp ./roles/files/system/head /etc/resolvconf/resolv.conf.d/
-yes | cp ./backup/systemd/* /etc/systemd/system/
-yes | cp ./backup/backup-config.json /etc/server-scripts/backup-config.json
-yes | cp ./backup/sources /etc/server-scripts/
+yes | cp /scripts/server-scripts/backup/systemd/* /etc/systemd/system/
+yes | cp /scripts/server-scripts/backup/backup-config.json /etc/server-scripts/backup-config.json
+yes | cp /scripts/server-scripts/backup/sources /etc/server-scripts/
 
 # Configure DNS
 # resolvectl dns ens18 $dnsserver
