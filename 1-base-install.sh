@@ -74,7 +74,7 @@ fi
 npm install
 npm run build
 
-yes | cp -R /scripts/server-scripts/config/server/dist/ $serverapidir
+yes | cp -R /scripts/server-scripts/config/server/dist $serverapidir
 yes | cp /scripts/server-scripts/config/server/src/controllers/authorization.controller.js ${serverapidir}controllers/
 yes | cp /scripts/server-scripts/config/server/src/middlewares/authorization/*.js ${serverapidir}middlewares/authorization/
 yes | cp /scripts/server-scripts/config/server/src/utils/helperfunctions.js ${serverapidir}utils/
