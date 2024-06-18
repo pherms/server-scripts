@@ -16,6 +16,13 @@ read -p "Wat is de domain name?: " domainname
 
 # Set hostname
 read -p "Wat is de hostnaam van deze server?: " hostname
+
+# ask db password
+read -p "Wat is het password voor de database?: " dbpassword
+
+# ask db server
+read -p "Wat is de databaseserver?: " dbserver
+
 echo "Setting hostname"
 hostnamectl set-hostname $hostname
 
@@ -76,6 +83,7 @@ npm install
 npm run build
 
 yes | cp -a /scripts/server-scripts/config/server/dist/. $serverapidir
+yes | cp /scripts/server-scritps/config/server/.env $serverapidir
 yes | cp /scripts/server-scripts/config/server/src/controllers/authorization.controller.js ${serverapidir}controllers/
 yes | cp /scripts/server-scripts/config/server/src/middlewares/authorization/*.js ${serverapidir}middlewares/authorization/
 yes | cp /scripts/server-scripts/config/server/src/utils/helperfunctions.js ${serverapidir}utils/
