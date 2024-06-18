@@ -86,7 +86,7 @@ a2ensite config.conf
 # yes | cp ./roles/files/system/resolv.conf /etc/
 # yes | cp ./roles/files/system/head /etc/resolvconf/resolv.conf.d/
 yes | cp ./backup/systemd/* /etc/systemd/system/
-yes | cp ./backup/config.json /etc/server-scripts/backup-config.json
+yes | cp ./backup/backup-config.json /etc/server-scripts/backup-config.json
 yes | cp ./backup/sources /etc/server-scripts/
 
 # Configure DNS
