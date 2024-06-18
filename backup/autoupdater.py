@@ -1,5 +1,6 @@
 from datetime import *
 from json import JSONDecodeError
+from pathlib import Path
 import os
 import requests
 import zipfile
@@ -102,6 +103,42 @@ def main():
                 
                 if os.path.exists(tempFolder):
                     os.system("cp -r {}/* {}".format(tempFolder,scriptfolder))
+                    # remove config dir
+                    shutil.rmtree(os.path.join(scriptfolder,"config"))
+
+                    # api server
+                    serverDir = Path(os.path.join(tempFolder,"config/server/"))
+                    index = serverDir.parts.index('src')
+                    targetDir = "/opt/server-api/"
+
+                    os.chdir(serverDir)
+                    shutil.rmtree("dist")
+
+                    # recreate build folder en build app
+                    os.mkdir("dist")
+                    os.system("npm run build")
+
+                    os.system("cp -r {}/ {}".format(os.path.join(serverDir,"dist"),"/opt/server-api/"))
+
+                    for file in workingDir.glob("**/*.js"):
+                        source = file.absolute()
+                        destination = Path(targetDir).joinpath(*source.parts[index+1:])
+
+                        os.system("cp {} {}".format(source,destination))
+                    # End api server
+                    
+                    # config client
+                    clientDir = Path(os.path.join(tempFolder,"config/client/"))
+                    os.chdir(clientDir)
+                    shutil.rmtree("dist")
+
+                    # recreate build folder en build app
+                    os.mkdir("dist")
+                    os.system("npm run build")
+
+                    os.system("cp -r {}/ {}".format(os.path.join(clientDir,"dist"),"/var/www/client-config/"))
+                    # end config client
+
                     logfile.write("{} De bestanden zijn gekopieerd naar directory: {}\n".format(datetime.today(),scriptfolder))
                     if debug:
                         print("[DEBUG] Bestanden zijn gekopieerd naar de scriptsfolder")

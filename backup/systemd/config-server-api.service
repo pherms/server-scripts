@@ -1,0 +1,5 @@
+[Unit]
+Description=API server for server-scripts
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/node '/opt/server-api/index.js'
