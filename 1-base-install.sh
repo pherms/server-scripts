@@ -85,6 +85,7 @@ npm install
 npm run build
 yes | cp -a /scripts/server-scripts/config/client/dist/. $clientconfigdir
 cp /scripts/server-scripts/roles/files/apache/config.conf /etc/apache2/sites-available/
+chown -R www-data:www-data $clientconfigdir
 a2ensite config.conf
 
 # Kopieren van bestanden
