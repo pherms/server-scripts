@@ -57,5 +57,7 @@ def installFiles(type,tempFolder,logfile):
         exit()
 
 def compileSource(type,logfile):
+    logfile.write("{} Installeren van packages voor {} source\n".format(datetime.today(),type))
+    os.system("npm install")
     logfile.write("{} Compileren van {} source\n".format(datetime.today(),type))
     os.system("npm run build")

@@ -68,6 +68,7 @@ fi
 
 # compile en copy api-server naar folder
 cd /scripts/server-scripts/config/server
+npm install
 npm run build
 
 yes | cp -R ./dist/ $serverapidir
@@ -77,6 +78,7 @@ yes | cp ./src/utils/helperfunctions.js ${serverapidir}utils/
 
 # compile en copy client naar folder
 cd /scripts/server-scripts/config/client
+npm install
 npm build
 yes | cp -R ./dist/ $clientconfigdir
 cp /scripts/server-scripts/roles/files/apache/config.conf /etc/apache2/sites-available/
