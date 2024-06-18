@@ -67,6 +67,9 @@ if [[ ! -d $serverapidir ]]; then
   mkdir -p ${serverapidir}config
 fi
 
+echo "DATABASE_URL=\"postgresql://serverconfig:$dbpassowrd@$dbserver:5432/serverconfig\"" >> $serverapidir.env
+echo "PORT=8081" >> $serverapidir.env
+
 if [[ ! -d $clientconfigdir ]]; then
   mkdir -p $clientconfigdir
 fi
@@ -87,9 +90,6 @@ yes | cp /scripts/server-scripts/config/server/src/controllers/authorization.con
 yes | cp /scripts/server-scripts/config/server/src/middlewares/authorization/*.js ${serverapidir}middlewares/authorization/
 yes | cp /scripts/server-scripts/config/server/src/utils/helperfunctions.js ${serverapidir}utils/
 yes | cp /scripts/server-scripts/config/server/src/config/*.js ${serverapidir}config/
-
-echo "DATABASE_URL=\"postgresql://serverconfig:$dbpassowrd@$dbserver:5432/serverconfig\"" >> $serverapidir.env
-echo "PORT=8081" > $serverapidir.env
 
 # compile en copy client naar folder
 cd /scripts/server-scripts/config/client
