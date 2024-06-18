@@ -83,11 +83,13 @@ npm install
 npm run build
 
 yes | cp -a /scripts/server-scripts/config/server/dist/. $serverapidir
-yes | cp /scripts/server-scritps/config/server/.env $serverapidir
 yes | cp /scripts/server-scripts/config/server/src/controllers/authorization.controller.js ${serverapidir}controllers/
 yes | cp /scripts/server-scripts/config/server/src/middlewares/authorization/*.js ${serverapidir}middlewares/authorization/
 yes | cp /scripts/server-scripts/config/server/src/utils/helperfunctions.js ${serverapidir}utils/
 yes | cp /scripts/server-scripts/config/server/src/config/*.js ${serverapidir}config/
+
+echo "DATABASE_URL=\"postgresql://serverconfig:$dbpassowrd@$dbserver:5432/serverconfig\"" >> $serverapidir.env
+echo "PORT=8081" > $serverapidir.env
 
 # compile en copy client naar folder
 cd /scripts/server-scripts/config/client
