@@ -56,7 +56,7 @@ mkdir -p /vol/backup
 mkdir -p /etc/server-scripts
 
 if [[ ! -d $serverapidir ]]; then
-  mkdir -p $serverapidir
+  mkdir -p ${serverapidir}middlewares/authorization
 fi
 
 if [[ ! -d $clientconfigdir ]]; then
@@ -74,7 +74,7 @@ fi
 npm install
 npm run build
 
-yes | cp -a /scripts/server-scripts/config/server/dist/. $serverapidir
+yes | cp -r /scripts/server-scripts/config/server/dist/ $serverapidir
 yes | cp /scripts/server-scripts/config/server/src/controllers/authorization.controller.js ${serverapidir}controllers/
 yes | cp /scripts/server-scripts/config/server/src/middlewares/authorization/*.js ${serverapidir}middlewares/authorization/
 yes | cp /scripts/server-scripts/config/server/src/utils/helperfunctions.js ${serverapidir}utils/
