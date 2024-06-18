@@ -85,7 +85,11 @@ fi
 npm install
 npm run build
 
+# copy source naar $serverapidir, dan npm install, dan npx prisma generate
+
+
 yes | cp -a /scripts/server-scripts/config/server/dist/. $serverapidir
+yes | cp /scripts/server-scripts/config/server/package.json $serverapidir
 yes | cp /scripts/server-scripts/config/server/src/controllers/authorization.controller.js ${serverapidir}controllers/
 yes | cp /scripts/server-scripts/config/server/src/middlewares/authorization/*.js ${serverapidir}middlewares/authorization/
 yes | cp /scripts/server-scripts/config/server/src/utils/helperfunctions.js ${serverapidir}utils/
