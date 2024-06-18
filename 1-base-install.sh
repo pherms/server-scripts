@@ -47,7 +47,7 @@ if [[ -z "$isContrib" ]]; then
 fi
 
 apt update -y
-apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-linux snapd lshw xfsprogs openssh-server prometheus-node-exporter dnsutils systemd-resolved rsync ntp acl python3 python3-pip python3-requests nodejs apache2 postgresql-client
+apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-linux lshw openssh-server prometheus-node-exporter dnsutils systemd-resolved rsync ntp acl python3 python3-pip python3-requests nodejs apache2 postgresql-client
 
 # create backup directory
 mkdir -p /vol/backup
@@ -119,4 +119,3 @@ echo "    screenfetch;" >> /etc/profile
 echo "fi" >> /etc/profile
 
 export $Username
-export $password
