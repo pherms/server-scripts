@@ -67,7 +67,7 @@ if [[ ! -d $serverapidir ]]; then
   mkdir -p ${serverapidir}config
 fi
 
-echo "DATABASE_URL=\"postgresql://serverconfig:$dbpassowrd@$dbserver:5432/serverconfig\"" >> $serverapidir.env
+echo "DATABASE_URL=\"postgresql://serverconfig:$dbpassword@$dbserver:5432/serverconfig\"" >> $serverapidir.env
 echo "PORT=8081" >> $serverapidir.env
 
 if [[ ! -d $clientconfigdir ]]; then
