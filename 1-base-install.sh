@@ -90,6 +90,7 @@ npm run build
 
 yes | cp -a /scripts/server-scripts/config/server/dist/. $serverapidir
 yes | cp /scripts/server-scripts/config/server/package.json $serverapidir
+yes | cp -a /scripts/server-scripts/config/server/prisma/ $serverapidir
 yes | cp /scripts/server-scripts/config/server/src/controllers/authorization.controller.js ${serverapidir}controllers/
 yes | cp /scripts/server-scripts/config/server/src/middlewares/authorization/*.js ${serverapidir}middlewares/authorization/
 yes | cp /scripts/server-scripts/config/server/src/utils/helperfunctions.js ${serverapidir}utils/
@@ -103,6 +104,7 @@ yes | cp -a /scripts/server-scripts/config/client/dist/. $clientconfigdir
 cp /scripts/server-scripts/roles/files/apache/config.conf /etc/apache2/sites-available/
 chown -R www-data:www-data $clientconfigdir
 a2ensite config.conf
+a2enmod headers
 
 # Kopieren van bestanden
 yes | cp /scripts/server-scripts/backup/systemd/* /etc/systemd/system/
@@ -115,6 +117,7 @@ yes | cp /scripts/server-scripts/backup/sources /etc/server-scripts/
 
 # reload systemctl daemon en enable en start services
 systemctl daemon-reload
+systemctl restart apache2
 systemctl enable ssh.service
 systemctl start ssh.service
 systemctl enable prometheus-node-exporter.service
