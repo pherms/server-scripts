@@ -84,6 +84,7 @@ yes | cp /scripts/server-scripts/config/server/src/middlewares/authorization/*.j
 yes | cp /scripts/server-scripts/config/server/src/utils/helperfunctions.js ${serverapidir}utils/
 yes | cp /scripts/server-scripts/config/server/src/config/*.js ${serverapidir}config/
 
+pause
 # compile en copy api-server naar folder
 cd $serverapidir
 
