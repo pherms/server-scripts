@@ -56,7 +56,9 @@ async function loginUser() {
     console.log('Entered emailadres: ' + enteredEmailAddress);
     console.log('Entered password: ' + enteredPassword);
 
-    const response = await axios.post('http://127.0.0.1:8081/api/v1/auth', {
+    const url = 'http://' + process.env.VUE_APP_apiserver + '/api/v1/auth';
+
+    const response = await axios.post(url, {
         emailAddress: enteredEmailAddress,
         password: enteredPassword
       }, {

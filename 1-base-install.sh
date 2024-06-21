@@ -74,19 +74,7 @@ if [[ ! -d $clientconfigdir ]]; then
   mkdir -p $clientconfigdir
 fi
 
-# compile en copy api-server naar folder
-cd /scripts/server-scripts/config/server
-
-if [[ ! "$( psql -h web01.hoofdspoor.home -XtAc "SELECT 1 FROM pg_database WHERE datname='DB_NAME'" )" = '1' ]]; then
-  # run npx prisma command
-  npx prisma migrate deploy
-fi
-
-npm install
-npm run build
-
 # copy source naar $serverapidir, dan npm install, dan npx prisma generate
-
 
 yes | cp -a /scripts/server-scripts/config/server/dist/. $serverapidir
 yes | cp /scripts/server-scripts/config/server/package.json $serverapidir
@@ -95,6 +83,14 @@ yes | cp /scripts/server-scripts/config/server/src/controllers/authorization.con
 yes | cp /scripts/server-scripts/config/server/src/middlewares/authorization/*.js ${serverapidir}middlewares/authorization/
 yes | cp /scripts/server-scripts/config/server/src/utils/helperfunctions.js ${serverapidir}utils/
 yes | cp /scripts/server-scripts/config/server/src/config/*.js ${serverapidir}config/
+
+# compile en copy api-server naar folder
+cd $serverapidir
+
+npm install
+npm run generate
+npm run migrate
+npm run build
 
 # compile en copy client naar folder
 cd /scripts/server-scripts/config/client

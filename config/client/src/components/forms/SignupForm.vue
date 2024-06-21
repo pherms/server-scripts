@@ -70,7 +70,11 @@ async function signupHandler() {
       };
       console.log(requestOptions)
 
-      const response = await fetch('http://127.0.0.1:8081/api/v1/users', requestOptions);
+      const url = 'http://' + process.env.VUE_APP_apiserver + '/api/v1/users';
+      console.log(url);
+      console.log(process.env.VUE_APP_apiserver);
+
+      const response = await fetch(url, requestOptions);
       if (!response.ok) {
           console.log("Error");
       }

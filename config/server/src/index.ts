@@ -27,6 +27,7 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions));
+// app.options("*", cors(corsOptions));
 app.use(compression());
 app.use(cookieParser());
 app.use(urlencoded({
