@@ -358,5 +358,6 @@ def deleteDirectory(directory,logfile):
     
     param directory: De directory die moet worden verwijderd
     """
-    logfile.write("{} De directory {} is verwijderd\n".format(datetime.today(),directory))
-    shutil.rmtree(directory)
+    if os.path.exists(directory):
+        logfile.write("{} De directory {} is verwijderd\n".format(datetime.today(),directory))
+        shutil.rmtree(directory)
