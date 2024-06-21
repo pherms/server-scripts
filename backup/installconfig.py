@@ -114,7 +114,6 @@ def main():
     try:
         # delete tests directory
         logfile.write("{} Installeren van de server-scripts:\n".format(datetime.today()))
-        print("Tempfolder is: {}",format(tempFolder))
         if os.path.exists(os.path.join(tempFolder,"backup/tests/")):
             logfile.write("{} Verwijderen van de unit-tests directories\n".format(datetime.today()))
             mods.deleteDirectory(os.path.join(tempFolder,"backup/tests/"),logfile)
@@ -137,7 +136,7 @@ def main():
 # Installeren API server
     try:
         # api server
-        logfile.write("{} Installeren van de API server: {}\n".format(datetime.today()))
+        logfile.write("{} Installeren van de API server\n".format(datetime.today()))
         serverDir = Path(os.path.join(tempFolder,"config/server/"))
         # index = serverDir.parts.index('src')
         # workingDir = os.path.join(serverDir,"src")
