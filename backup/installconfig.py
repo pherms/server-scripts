@@ -114,6 +114,7 @@ def main():
         # delete tests directory
         logfile.write("{} Installeren van de server-scripts: {}\n".format(datetime.today()))
         if os.path.exists(os.path.join(tempFolder,"backup/tests/")):
+            print(tempFolder)
             logfile.write("{} Verwijderen van de unit-tests directories\n".format(datetime.today()))
             mods.deleteDirectory(os.path.join(tempFolder,"backup/tests/"),logfile)
         
