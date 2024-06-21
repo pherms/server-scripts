@@ -10,7 +10,9 @@ echo "Installeren packages"
 apt install -y postfix openssl mailutils curl wget gpg apt-transport-https 
 
 echo "Writing postfix configuration"
-yes | cp ./roles/files/postfix/main.cf /etc/postfix/
+yes | cp ./roles/files/postfix/* /etc/postfix/
+
+echo "Update /etc/postfix/sasl_passwd"
 
 echo "Postfix is geconfigureerd"
 echo "Start en enable postfix service"

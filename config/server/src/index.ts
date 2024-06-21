@@ -21,16 +21,13 @@ const PORT: number = parseInt(process.env.PORT as string, 10);
 
 const app = express();
 const corsOptions = {
-    // origin: "*",
     origin: true,
     optionsSuccessStatus: 200,
     credentials: true
 }
-// app.use(cors({
-//     credentials: true,
-//     origin: true,
-// }));
+
 app.use(cors(corsOptions));
+// app.options("*", cors(corsOptions));
 app.use(compression());
 app.use(cookieParser());
 app.use(urlencoded({

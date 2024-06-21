@@ -4,9 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx tsc && node dist/index.js",
+    "build": "npx tsc",
+    "generate": "npx prisma generate",
+    "migrate": "npx prisma migrate deploy",
+    "migrate-dev": "npx prisma migrate dev",
+    "start": "node dist/index.js",
     "start-dev": "nodemon src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "npx prisma generate --schema=./prisma/schema.prisma"
+  },
+  "prisma": {
+    "schema": "prisma/schema.prisma"
   },
   "keywords": [],
   "author": "",

@@ -1,0 +1,9 @@
+[Unit]
+Description=API server for server-scripts
+[Service]
+Type=oneshot
+ExecStart=pm2 start config-server-api
+
+[Install]
+WantedBy=multi-user.target
+Alias=config-server-api.service

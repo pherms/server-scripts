@@ -16,6 +16,7 @@ import axios from 'axios'
 const form = ref({})
 
 const store = useStore();
+const url = 'http://' + process.env.VUE_APP_apiserver + '/api/v1/sources';
 
 const authToken = computed(function () {
     return store.getters.getAuthToken;
@@ -23,7 +24,7 @@ const authToken = computed(function () {
 
 const responseData = async () => {
     try {
-        await axios.get('http://127.0.0.1:8081/api/v1/sources', {
+        await axios.get(url, {
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
                 'Authentication': 'Bearer ' + authToken.value
@@ -41,7 +42,7 @@ async function submitSourcesForm() {
     if (authToken.value) {
         console.log("niet leeg, submitting")
         try {
-          const response = await axios.put('http://127.0.0.1:8081/api/v1/sources',
+          const response = await axios.put(url,
             {
               data: form.value
             }

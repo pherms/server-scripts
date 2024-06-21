@@ -6,10 +6,28 @@ function GetPassword {
   read -sp "Re-enter password: " password2
 }
 
+# ask dns server and domain name
+read -p "Wat is de dns server?: " dnsserver
+
+# ask domain name
+read -p "Wat is de domain name?: " domainname
+
+# ask if server-config db al bestaat
+
 # Set hostname
 read -p "Wat is de hostnaam van deze server?: " hostname
+
+# ask db password
+read -p "Wat is het password voor de database?: " dbpassword
+
+# ask db server
+read -p "Wat is de databaseserver?: " dbserver
+
 echo "Setting hostname"
 hostnamectl set-hostname $hostname
+
+serverapidir="/opt/server-api/"
+clientconfigdir="/var/www/client-config/"
 
 # Setup regular user
 read -p "Normale gebruiker toevoegen? (Y/N): " addRegularUser
@@ -36,7 +54,8 @@ if [[ -z "$isContrib" ]]; then
 fi
 
 apt update -y
-apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-linux snapd lshw xfsprogs openssh-server prometheus-node-exporter dnsutils resolvconf rsync ntp acl python3 python3-pip python3-requests
+apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-linux lshw openssh-server prometheus-node-exporter dnsutils systemd-resolved rsync ntp acl python3 python3-pip python3-requests nodejs npm apache2 postgresql-client
+npm install pm2 -g
 
 # create backup directory
 mkdir -p /vol/backup
@@ -44,21 +63,65 @@ mkdir -p /vol/backup
 # create config directory
 mkdir -p /etc/server-scripts
 
+if [[ ! -d $serverapidir ]]; then
+  mkdir -p ${serverapidir}middlewares/authorization
+  mkdir -p ${serverapidir}config
+fi
+
+echo "DATABASE_URL=\"postgresql://serverconfig:$dbpassword@$dbserver:5432/serverconfig\"" >> $serverapidir.env
+echo "PORT=8081" >> $serverapidir.env
+
+if [[ ! -d $clientconfigdir ]]; then
+  mkdir -p $clientconfigdir
+fi
+
+# copy source naar $serverapidir, dan npm install, dan npx prisma generate
+
+yes | cp -a /scripts/server-scripts/config/server/dist/. $serverapidir
+yes | cp /scripts/server-scripts/config/server/package.json $serverapidir
+yes | cp -a /scripts/server-scripts/config/server/prisma/ $serverapidir
+yes | cp /scripts/server-scripts/config/server/src/controllers/authorization.controller.js ${serverapidir}controllers/
+yes | cp /scripts/server-scripts/config/server/src/middlewares/authorization/*.js ${serverapidir}middlewares/authorization/
+yes | cp /scripts/server-scripts/config/server/src/utils/helperfunctions.js ${serverapidir}utils/
+yes | cp /scripts/server-scripts/config/server/src/config/*.js ${serverapidir}config/
+
+pause
+# compile en copy api-server naar folder
+cd $serverapidir
+
+npm install
+npm run generate
+npm run migrate
+npm run build
+
+pm2 start /opt/server-api/index.js -n config-server-api
+
+# compile en copy client naar folder
+cd /scripts/server-scripts/config/client
+npm install
+npm run build
+yes | cp -a /scripts/server-scripts/config/client/dist/. $clientconfigdir
+cp /scripts/server-scripts/roles/files/apache/config.conf /etc/apache2/sites-available/
+chown -R www-data:www-data $clientconfigdir
+a2ensite config.conf
+a2enmod headers
+
 # Kopieren van bestanden
-yes | cp ./roles/files/system/resolv.conf /etc/
-yes | cp ./roles/files/system/head /etc/resolvconf/resolv.conf.d/
-yes | cp ./backup/systemd/* /etc/systemd/system/
-yes | cp ./backup/config.json /etc/server-scripts/backup-config.json
-yes | cp ./backup/sources /etc/server-scripts/
+yes | cp /scripts/server-scripts/backup/systemd/* /etc/systemd/system/
+yes | cp /scripts/server-scripts/backup/backup-config.json /etc/server-scripts/backup-config.json
+yes | cp /scripts/server-scripts/backup/sources /etc/server-scripts/
+
+Configure DNS
+resolvectl dns ens18 $dnsserver
+resolvectl domain ens18 $domainname
 
 # reload systemctl daemon en enable en start services
 systemctl daemon-reload
+systemctl restart apache2
 systemctl enable ssh.service
 systemctl start ssh.service
 systemctl enable prometheus-node-exporter.service
 systemctl start prometheus-node-exporter.service
-systemctl enable resolvconf.service
-systemctl start resolvconf.service
 systemctl restart systemd-resolved.service
 systemctl enable backup.timer
 systemctl start backup.timer
@@ -67,6 +130,8 @@ systemctl start autoupdate.timer
 systemctl enable backup.service
 systemctl enable cleanup.service
 systemctl enable copytoserver@$Username.service
+systemctl enable config-server-api.service
+systemctl start config-server-api.service
 
 
 # Set timezone
@@ -78,4 +143,3 @@ echo "    screenfetch;" >> /etc/profile
 echo "fi" >> /etc/profile
 
 export $Username
-export $password

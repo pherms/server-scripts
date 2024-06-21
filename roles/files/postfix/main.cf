@@ -25,6 +25,7 @@ compatibility_level = 2
 smtpd_tls_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
 smtpd_tls_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
 smtpd_use_tls=yes
+#smtpd_tls_security_level=none
 smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 
@@ -32,14 +33,14 @@ smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 # information on enabling SSL in the smtp client.
 
 smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
-myhostname = adelaide.merel107.local
+myhostname = adelaide.hoofdspoor.home
 mydomain = pascalherms.nl
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
 myorigin = /etc/mailname
-mydestination = adelaide.merel107.local, merel107.local, adelaide.merel107.local, localhost.merel107.local, localhost
-relayhost = [smtp.kpnmail.nl]:587
-mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 192.168.2.0/24
+mydestination = adelaide.hoofdspoor.home, hoofdspoor.home, adelaide.hoofdspoor.home, localhost.hoofdspoor.home, localhost
+relayhost = [smtp-mail.outlook.com]:587
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 192.168.2.0/24 2a02:a447:8173:1::/64
 mailbox_size_limit = 0
 recipient_delimiter = +
 inet_interfaces = all
@@ -48,4 +49,8 @@ smtp_sasl_auth_enable = yes
 smtp_sasl_security_options = noanonymous
 smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
 smtp_use_tls = yes
+smtp_tls_security_level = may
+sender_canonical_maps = regexp:/etc/postfix/sender_canonical
+smtp_always_send_ehlo = yes
 smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+maillog_file = /var/log/postfix.log
