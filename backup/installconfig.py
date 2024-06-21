@@ -14,6 +14,7 @@ def main():
     debug = bool(config["debug"])
     scriptfolder = config["scriptspath"]
     apiurl = config["apiurl"]
+    tempFolder = ""
 
     logfile = mods.openLogFile(logfilepath,"update",debug)
 
