@@ -108,9 +108,9 @@ yes | cp /scripts/server-scripts/backup/systemd/* /etc/systemd/system/
 yes | cp /scripts/server-scripts/backup/backup-config.json /etc/server-scripts/backup-config.json
 yes | cp /scripts/server-scripts/backup/sources /etc/server-scripts/
 
-# Configure DNS
-# resolvectl dns ens18 $dnsserver
-# resolvectl domain ens18 $domainname
+Configure DNS
+resolvectl dns ens18 $dnsserver
+resolvectl domain ens18 $domainname
 
 # reload systemctl daemon en enable en start services
 systemctl daemon-reload

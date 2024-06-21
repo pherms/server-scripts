@@ -12,12 +12,8 @@ def main():
     debug = bool(config["debug"])
     scriptfolder = config["scriptspath"]
     apiurl = config["apiurl"]
-    timers = config["timerUnits"]
-    serverApiDir = config["serverApiDir"]
-    clientConfigDir = config["clientConfigDir"]
 
     logfile = mods.openLogFile(logfilepath,"update",debug)
-    hostname = mods.getHostname(logfile)
 
 # Downloading zip
     try:
@@ -130,28 +126,19 @@ def main():
             mods.compileSource("server",logfile)
 
             mods.installFiles("server",tempFolder,logfile)
+            mods.databaseSetup(logfile)
             mods.restartDaemon("config-server-api",logfile,debug)
-            # os.system("cp -r {}/ {}".format(os.path.join(serverDir,"dist"),serverApiDir))
-
-            # for file in workingDir.glob("**/*.js"):
-            #     source = file.absolute()
-            #     destination = Path(serverApiDir).joinpath(*source.parts[index+1:])
-
-            #     os.system("cp {} {}".format(source,destination))
-            # End api server
 
             # config client
             clientDir = Path(os.path.join(tempFolder,"config/client/"))
             os.chdir(clientDir)
-            # shutil.rmtree("dist")
+            
             mods.deleteDirectory(os.path.join(clientDir,"dist"),logfile)
 
             # recreate build folder en build app
             os.mkdir("dist")
-            # os.system("npm run build")
+            
             mods.compileSource("client",logfile)
-
-            # os.system("cp -r {}/ {}".format(os.path.join(clientDir,"dist"),clientConfigDir))
             mods.installFiles("client",tempFolder,logfile)
             mods.restartDaemon("apache2",logfile,debug)
             # end config client

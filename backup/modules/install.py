@@ -51,6 +51,16 @@ def installFiles(type,tempFolder,logfile):
                 destination = Path(destinationDir).joinpath(*source.parts[index+1:])
 
                 os.system("cp {} {}".format(source,destination))
+            
+            # yes | cp -a /scripts/server-scripts/config/server/dist/. $serverapidir
+            # yes | cp /scripts/server-scripts/config/server/package.json $serverapidir
+            # yes | cp -a /scripts/server-scripts/config/server/prisma/ $serverapidir
+            logfile.write("{} Kopieren van package.json\n".format(datetime.today()))
+            os.system("cp {} {}".format(source,destinationDir))
+
+            logfile.write("{} Kopieren van prisma directory\n".format(datetime.today()))
+            os.system("cp -r {} {}".format(os.path.join(sourceDir,"prisma"),destinationDir))
+
     except Exception as error:
         print("Er is een fout opgetreden. {}".format(error))
         logfile.write("{} Er is een fout opgetreden. De error is:\n{}".format(datetime.today(),error))
@@ -61,3 +71,10 @@ def compileSource(type,logfile):
     os.system("npm install")
     logfile.write("{} Compileren van {} source\n".format(datetime.today(),type))
     os.system("npm run build")
+
+def databaseSetup(logfile):
+    logfile.write("{} Genereren database files\n".format(datetime.today()))
+    os.system("npm run generate")
+
+    logfile.write("{} Deployen van database wijzigingen\n".format(datetime.today()))
+    os.system("npm run migrate")
