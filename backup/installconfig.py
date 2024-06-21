@@ -77,10 +77,10 @@ def main():
                 print("[DEBUG] Er is een fout opgetreden bij het installeren van service: {}".format(serviceToInstall))
 
     except Exception as error:
-        logfile.write("{} Er is iets fout gegaan tijdens het installeren van de service {}\n".format(datetime.today(),servicesToInstall))
+        logfile.write("{} Er is iets fout gegaan tijdens het installeren van de service {}\n".format(datetime.today(),serviceToInstall))
         logfile.write("{} De foutmelding is: {}\n".format(datetime.today(),error))
         if debug:
-            print("[DEBUG] Er is iets fout gegaan tijdens het installeren van de service {}. De error is: {}".format(servicesToInstall,error))
+            print("[DEBUG] Er is iets fout gegaan tijdens het installeren van de service {}. De error is: {}".format(serviceToInstall,error))
         exit()
 
 # Installing client en server
