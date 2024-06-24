@@ -42,8 +42,9 @@ def installFiles(type,tempFolder,logfile):
         (sourceDir,destinationDir) = mods.determineConfigFolder(type,tempFolder)
         print("Sourcedir in InstallFiles functie: {}".format(sourceDir))
         print("Destination in InstallFiles functie: {}".format(destinationDir))
-        index = Path(sourceDir).parts.index('src')
-        print(Path(sourceDir).parts.index('src'))
+        # index = Path(sourceDir).parts.index('src')
+        # print(Path(sourceDir).parts.index('src'))
+        index = 5
         print("Index: {}".format(index))
         workingDir = Path(os.path.join(sourceDir,"src"))
     except Exception as error:
