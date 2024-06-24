@@ -16,10 +16,10 @@ def determineConfigFolder(type,tempFolder):
 
     match type:
         case "client":
-            sourceDir = Path(os.path.join(tempFolder,"config/client/"))
+            sourceDir = os.path.join(tempFolder,"config/client/")
             destinationDir = config["clientConfigDir"]
         case "server":
-            sourceDir = Path(os.path.join(tempFolder,"config/server/"))
+            sourceDir = os.path.join(tempFolder,"config/server/")
             destinationDir = config["serverApiDir"]
             print("sourceDir in determineConfigFolder functie voor type {}: {}".format(sourceDir,type))
             print("destinationDir in determineConfigFolder functie voor type {}: {}".format(destinationDir,type))
