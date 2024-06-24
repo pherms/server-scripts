@@ -105,7 +105,7 @@ def main():
             
     except Exception as error:
         logfile.write("{} Er is iets fout gegaan tijdens het downloaden van de zipfile\n".format(datetime.today()))
-        logfile.write("{} De foutmelding is: {}\n".format(datetime.today(),error))
+        logfile.write("{} De foutmelding is (line 108): {}\n".format(datetime.today(),error))
         if debug:
             print("[DEBUG] Er is iets fout gegaan tijdens het downloaden van de zip. De error is: {}".format(error))
         exit()
