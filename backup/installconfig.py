@@ -149,6 +149,7 @@ def main():
     dirsToCreate = ["dist", "middlewares/authorization","config"]
     for dir in dirsToCreate:
         path = Path(os.path.join(serverDir,dir))
+        print(path)
         path.mkdir(parents=True, exist_ok=True)
     # os.system("npm run build")
     try:
