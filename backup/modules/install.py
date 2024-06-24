@@ -42,13 +42,14 @@ def installFiles(type,tempFolder,logfile):
     print("Sourcedir in InstallFiles functie: {}".format(sourceDir))
     print("Destination in InstallFiles functie: {}".format(destinationDir))
     index = Path(sourceDir).parts.index('src')
-    workingDir = os.path.join(sourceDir,"src")
+    print("Index: {}".format(index))
+    workingDir = Path(os.path.join(sourceDir,"src"))
 
     try:
         logfile.write("{} Kopieren van de gecompilede sources\n".format(datetime.today()))
         os.system("cp -r {}/ {}".format(os.path.join(sourceDir,"dist"),destinationDir))
 
-        if (type == "server"):
+        if type == "server":
             logfile.write("{} Kopieren van additionele javascript files tbv server\n".format(datetime.today()))
             for file in workingDir.glob("**/*.js"):
                 source = file.absolute()
