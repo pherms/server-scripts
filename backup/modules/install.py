@@ -40,6 +40,7 @@ def installFiles(type,tempFolder,logfile):
 
     try:
         (sourceDir,destinationDir) = mods.determineConfigFolder(type,tempFolder)
+        sourceDir = os.path.join(sourceDir,"src/")
         print("Sourcedir in InstallFiles functie: {}".format(sourceDir))
         print("Destination in InstallFiles functie: {}".format(destinationDir))
         index = int(Path(sourceDir).parts.index('src'))
