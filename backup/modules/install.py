@@ -54,7 +54,7 @@ def installFiles(type,tempFolder,logfile):
     try:
         logfile.write("{} Kopieren van de gecompilede sources\n".format(datetime.today()))
         print("Kopieren van additionele files. functie: installFiles (2e deel)")
-        os.system("cp -r {}/ {}".format(os.path.join(sourceDir,"dist"),destinationDir))
+        os.system("cp -a {}/. {}".format(os.path.join(sourceDir,"dist"),destinationDir))
 
         if type == "server":
             logfile.write("{} Kopieren van additionele javascript files tbv server\n".format(datetime.today()))
