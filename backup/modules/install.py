@@ -38,12 +38,16 @@ def installFiles(type,tempFolder,logfile):
     logfile.write("{} Gevonden type installatie: {}\n".format(datetime.today(),type))
     logfile.write("{} Bepalen van de bron en doel directories\n".format(datetime.today()))
 
-    (sourceDir,destinationDir) = mods.determineConfigFolder(type,tempFolder)
-    print("Sourcedir in InstallFiles functie: {}".format(sourceDir))
-    print("Destination in InstallFiles functie: {}".format(destinationDir))
-    index = Path(sourceDir).parts.index('src')
-    print("Index: {}".format(index))
-    workingDir = Path(os.path.join(sourceDir,"src"))
+    try:
+        (sourceDir,destinationDir) = mods.determineConfigFolder(type,tempFolder)
+        print("Sourcedir in InstallFiles functie: {}".format(sourceDir))
+        print("Destination in InstallFiles functie: {}".format(destinationDir))
+        index = Path(sourceDir).parts.index('src')
+        print("Index: {}".format(index))
+        workingDir = Path(os.path.join(sourceDir,"src"))
+    except Exception as error:
+        print("Er is een fout opgetreden: {}".format(error))
+        exit()
 
     try:
         logfile.write("{} Kopieren van de gecompilede sources\n".format(datetime.today()))
