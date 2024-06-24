@@ -68,7 +68,7 @@ def installFiles(type,tempFolder,logfile):
             # yes | cp /scripts/server-scripts/config/server/package.json $serverapidir
             # yes | cp -a /scripts/server-scripts/config/server/prisma/ $serverapidir
             logfile.write("{} Kopieren van package.json\n".format(datetime.today()))
-            os.system("cp {} {}".format(source,destinationDir))
+            os.system("cp {} {}".format(os.path.join(sourceDir,"package.json"),destinationDir))
 
             logfile.write("{} Kopieren van prisma directory\n".format(datetime.today()))
             os.system("cp -r {} {}".format(os.path.join(sourceDir,"prisma"),destinationDir))
