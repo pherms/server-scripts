@@ -43,6 +43,7 @@ def installFiles(type,tempFolder,logfile):
         print("Sourcedir in InstallFiles functie: {}".format(sourceDir))
         print("Destination in InstallFiles functie: {}".format(destinationDir))
         index = Path(sourceDir).parts.index('src')
+        print(Path(sourceDir).parts.index('src'))
         print("Index: {}".format(index))
         workingDir = Path(os.path.join(sourceDir,"src"))
     except Exception as error:
