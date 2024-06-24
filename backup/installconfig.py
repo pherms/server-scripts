@@ -14,6 +14,7 @@ def main():
     debug = bool(config["debug"])
     scriptfolder = config["scriptspath"]
     apiurl = config["apiurl"]
+    serverApiDir = config["serverApiDir"]
     tempFolder = ""
 
     logfile = mods.openLogFile(logfilepath,"update",debug)
@@ -147,8 +148,8 @@ def main():
 
     # recreate build folder en build app
     dirsToCreate = ["dist", "middlewares/authorization","config"]
-    for dir in dirsToCreate:
-        path = Path(os.path.join(serverDir,dir))
+    for directoryToCreate in dirsToCreate:
+        path = Path(os.path.join(serverApiDir,directoryToCreate))
         print(path)
         path.mkdir(parents=True, exist_ok=True)
     # os.system("npm run build")
