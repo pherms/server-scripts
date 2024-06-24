@@ -37,6 +37,8 @@ def installFiles(type,tempFolder,logfile):
     logfile.write("{} Bepalen van de bron en doel directories\n".format(datetime.today()))
 
     (sourceDir,destinationDir) = mods.determineConfigFolder(type,tempFolder)
+    print("Sourcedir in InstallFiles functie: {}".format(sourceDir))
+    print("Destination in InstallFiles functie: {}".format(destinationDir))
     index = sourceDir.parts.index('src')
     workingDir = os.path.join(sourceDir,"src")
 
