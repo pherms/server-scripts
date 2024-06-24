@@ -46,11 +46,12 @@ def installFiles(type,tempFolder,logfile):
         print("Index: {}".format(index))
         workingDir = Path(os.path.join(sourceDir,"src"))
     except Exception as error:
-        print("Er is een fout opgetreden: {}".format(error))
+        print("Er is een fout opgetreden in eerste deel van installFiles functie: {}".format(error))
         exit()
 
     try:
         logfile.write("{} Kopieren van de gecompilede sources\n".format(datetime.today()))
+        print("Kopieren van additionele files. functie: installFiles (2e deel)")
         os.system("cp -r {}/ {}".format(os.path.join(sourceDir,"dist"),destinationDir))
 
         if type == "server":
