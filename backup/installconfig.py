@@ -134,28 +134,43 @@ def main():
         exit()
 
 # Installeren API server
+    #try:
+    # api server
+    logfile.write("{} Installeren van de API server\n".format(datetime.today()))
+    serverDir = Path(os.path.join(tempFolder,"config/server/"))
+    # index = serverDir.parts.index('src')
+    # workingDir = os.path.join(serverDir,"src")
+
+    os.chdir(serverDir)
+    # shutil.rmtree("dist")
+    mods.deleteDirectory(os.path.join(serverDir,"dist"),logfile)
+
+    # recreate build folder en build app
+    os.mkdir("dist")
+    # os.system("npm run build")
     try:
-        # api server
-        logfile.write("{} Installeren van de API server\n".format(datetime.today()))
-        serverDir = Path(os.path.join(tempFolder,"config/server/"))
-        # index = serverDir.parts.index('src')
-        # workingDir = os.path.join(serverDir,"src")
-
-        os.chdir(serverDir)
-        # shutil.rmtree("dist")
-        mods.deleteDirectory(os.path.join(serverDir,"dist"),logfile)
-
-        # recreate build folder en build app
-        os.mkdir("dist")
-        # os.system("npm run build")
         mods.compileSource("server",logfile)
+    except Exception as error:
+        print("Er is een error in compileSource: {}".format(error))
 
+    try:
         mods.installFiles("server",tempFolder,logfile)
+    except Exception as error:
+        print("Er is een error in InstallFiles {}".format(error))
+
+    try:
         mods.databaseSetup(logfile)
+    except Exception as error:
+        print("Er is een error in database setup {}".format(error))
+
+    try:
         mods.restartDaemon("config-server-api",logfile,debug)
     except Exception as error:
-        logfile.write("{} Er is iets fout gegaan bij het installeren van de API server.\nDe error is: {}\n".format(datetime.today(),error))
-        exit()
+        print("Er is een error in restart Daemon: {}".format(error))
+        
+    #except Exception as error:
+    #    logfile.write("{} Er is iets fout gegaan bij het installeren van de API server.\nDe error is: {}\n".format(datetime.today(),error))
+    #    exit()
 
 # Installeren web client
     try:
