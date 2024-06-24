@@ -150,27 +150,27 @@ def main():
     # os.system("npm run build")
     try:
         mods.compileSource("server",logfile)
-        exit()
     except Exception as error:
         print("Er is een error in compileSource: {}".format(error))
+        exit()
 
     try:
         mods.installFiles("server",tempFolder,logfile)
-        exit()
     except Exception as error:
         print("Er is een error in InstallFiles {}".format(error))
+        exit()
 
     try:
         mods.databaseSetup(logfile)
-        exit()
     except Exception as error:
         print("Er is een error in database setup {}".format(error))
+        exit()
 
     try:
         mods.restartDaemon("config-server-api",logfile,debug)
-        exit()
     except Exception as error:
         print("Er is een error in restart Daemon: {}".format(error))
+        exit()
 
     #except Exception as error:
     #    logfile.write("{} Er is iets fout gegaan bij het installeren van de API server.\nDe error is: {}\n".format(datetime.today(),error))
