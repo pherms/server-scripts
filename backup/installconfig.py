@@ -154,7 +154,7 @@ def main():
         mods.databaseSetup(logfile)
         mods.restartDaemon("config-server-api",logfile,debug)
     except Exception as error:
-        logfile.write("{} Er is iets fout gegaan bij het installeren van de API server. De error is: {}\n".format(datetime.today(),error))
+        logfile.write("{} Er is iets fout gegaan bij het installeren van de API server.\nDe error is: {}\n".format(datetime.today(),error))
         exit()
 
 # Installeren web client
