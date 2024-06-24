@@ -147,7 +147,7 @@ def main():
     mods.deleteDirectory(os.path.join(serverDir,"dist"),logfile)
 
     # recreate build folder en build app
-    dirsToCreate = ["dist", "middlewares/authorization","config"]
+    dirsToCreate = ["dist", "middlewares/authorization","controllers","config","utils"]
     for directoryToCreate in dirsToCreate:
         path = Path(os.path.join(serverApiDir,directoryToCreate))
         print(path)
