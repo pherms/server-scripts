@@ -146,7 +146,10 @@ def main():
     mods.deleteDirectory(os.path.join(serverDir,"dist"),logfile)
 
     # recreate build folder en build app
-    os.mkdir("dist")
+    dirsToCreate = ["dist", "middlewares/authorization","config"]
+    for dir in dirsToCreate:
+        path = Path(os.path.join(serverDir,dir))
+        path.mkdir(parents=True, exist_ok=True)
     # os.system("npm run build")
     try:
         mods.compileSource("server",logfile)
