@@ -76,40 +76,16 @@ if [[ ! -d $clientconfigdir ]]; then
   mkdir -p $clientconfigdir
 fi
 
-# copy source naar $serverapidir, dan npm install, dan npx prisma generate
-
-yes | cp -a /scripts/server-scripts/config/server/dist/. $serverapidir
-yes | cp /scripts/server-scripts/config/server/package.json $serverapidir
-yes | cp -a /scripts/server-scripts/config/server/prisma/ $serverapidir
-yes | cp /scripts/server-scripts/config/server/src/controllers/authorization.controller.js ${serverapidir}controllers/
-yes | cp /scripts/server-scripts/config/server/src/middlewares/authorization/*.js ${serverapidir}middlewares/authorization/
-yes | cp /scripts/server-scripts/config/server/src/utils/helperfunctions.js ${serverapidir}utils/
-yes | cp /scripts/server-scripts/config/server/src/config/*.js ${serverapidir}config/
-
-pause
-# compile en copy api-server naar folder
-cd $serverapidir
-
-npm install
-npm run generate
-npm run migrate
-npm run build
-
-# pm2 start $serverapidir/index.js
-# pm2 startup systemd
-
-# compile en copy client naar folder
-cd /scripts/server-scripts/config/client
-npm install
-npm run build
-yes | cp -a /scripts/server-scripts/config/client/dist/. $clientconfigdir
 cp /scripts/server-scripts/roles/files/apache/config.conf /etc/apache2/sites-available/
 chown -R www-data:www-data $clientconfigdir
+
+python3 /scripts/server-scripts/backup/installconfig.py
+# copy source naar $serverapidir, dan npm install, dan npx prisma generate
+
 a2ensite config.conf
 a2enmod headers
 
 # Kopieren van bestanden
-yes | cp /scripts/server-scripts/backup/systemd/* /etc/systemd/system/
 yes | cp /scripts/server-scripts/backup/backup-config.json /etc/server-scripts/backup-config.json
 yes | cp /scripts/server-scripts/backup/sources /etc/server-scripts/
 
@@ -125,15 +101,15 @@ systemctl start ssh.service
 systemctl enable prometheus-node-exporter.service
 systemctl start prometheus-node-exporter.service
 systemctl restart systemd-resolved.service
-systemctl enable backup.timer
-systemctl start backup.timer
-systemctl enable autoupdate.timer
-systemctl start autoupdate.timer
-systemctl enable backup.service
-systemctl enable cleanup.service
-systemctl enable copytoserver@$Username.service
-systemctl enable config-server-api.service
-systemctl start config-server-api.service
+# systemctl enable backup.timer
+# systemctl start backup.timer
+# systemctl enable autoupdate.timer
+# systemctl start autoupdate.timer
+# systemctl enable backup.service
+# systemctl enable cleanup.service
+# systemctl enable copytoserver@$Username.service
+# systemctl enable config-server-api.service
+# systemctl start config-server-api.service
 # systemctl start pm2-root
 
 

@@ -49,8 +49,6 @@ def installFiles(type,tempFolder,logfile):
         print("Sourcedir in InstallFiles functie: {}".format(sourceDir))
         print("Destination in InstallFiles functie: {}".format(destinationDir))
         index = int(Path(workingDir).parts.index('src'))
-        # print(Path(sourceDir).parts.index('src'))
-        print("Index: {}".format(index))
         
     except Exception as error:
         print("Er is een fout opgetreden in eerste deel van installFiles functie: {}".format(error))
@@ -84,12 +82,23 @@ def installFiles(type,tempFolder,logfile):
         exit()
 
 def compileSource(type,logfile):
+    """
+    Compileert de node of vue sources
+
+    :param str type: Het type wat moet worden gecompileert. Mogelijke waarden zijn: client en server
+    :param obj logfile: de logfile waar data naartoe moet worden geschreven
+    """
     logfile.write("{} Installeren van packages voor {} source\n".format(datetime.today(),type))
     os.system("npm install")
     logfile.write("{} Compileren van {} source\n".format(datetime.today(),type))
     os.system("npm run build")
 
 def databaseSetup(logfile):
+    """
+    Genereert de benodigde database client files
+
+    :param obj logfile: de logfile waar data naartoe moet worden geschreven
+    """
     logfile.write("{} Genereren database files\n".format(datetime.today()))
     os.system("npm run generate")
 
@@ -97,6 +106,11 @@ def databaseSetup(logfile):
     os.system("npm run migrate")
 
 def installDependencies(logfile):
+    """
+    Installeert de benodigde dependencies welke benodigd zijn voor het compileren en het uitvoeren
+
+    :param obj logfile: de logfile waar data naartoe moet worden geschreven
+    """
     logfile.write("{} Installeren van dependencies\n".format(datetime.today()))
     os.system("npm install")
 
