@@ -121,7 +121,6 @@ def main():
                 # Installeer daemons. Eerst daemons, dan timers
                 # Service moet worden geïnstalleerd, maar wordt gestart door een timer
                 for serviceToInstall in servicesToInstall:
-                    print(serviceToInstall)
                     status = mods.checkIfDaemonIsNotInstalled(serviceToInstall,logfile,debug)
 
                     if status:
