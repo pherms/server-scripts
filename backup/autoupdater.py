@@ -113,38 +113,6 @@ def main():
 
                     # Installing API server and client
                     installconfig.main()
-                    
-                    # # api server
-                    # serverDir = Path(os.path.join(tempFolder,"config/server/"))
-                    # # index = serverDir.parts.index('src')
-                    # # workingDir = os.path.join(serverDir,"src")
-
-                    # os.chdir(serverDir)
-                    # # shutil.rmtree("dist")
-                    # mods.deleteDirectory(os.path.join(serverDir,"dist"),logfile)
-
-                    # # recreate build folder en build app
-                    # os.mkdir("dist")
-                    # # os.system("npm run build")
-                    # mods.compileSource("server",logfile)
-
-                    # mods.installFiles("server",tempFolder,logfile)
-                    # mods.databaseSetup(logfile)
-                    # mods.restartDaemon("config-server-api",logfile,debug)
-
-                    # # config client
-                    # clientDir = Path(os.path.join(tempFolder,"config/client/"))
-                    # os.chdir(clientDir)
-                    
-                    # mods.deleteDirectory(os.path.join(clientDir,"dist"),logfile)
-
-                    # # recreate build folder en build app
-                    # os.mkdir("dist")
-                    
-                    # mods.compileSource("client",logfile)
-                    # mods.installFiles("client",tempFolder,logfile)
-                    # mods.restartDaemon("apache2",logfile,debug)
-                    # # end config client
 
                     logfile.write("{} De bestanden zijn gekopieerd naar directory: {}\n".format(datetime.today(),scriptfolder))
                     if debug:

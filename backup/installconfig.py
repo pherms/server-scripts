@@ -57,6 +57,30 @@ def main():
             print("[DEBUG] fout bij uitvoeren API request: {}. Zie logfile".format(response.status_code))
         exit()
 
+# Downloaden zip file
+    try:
+        requestZip = requests.get(zipUrl)
+        print(requestZip)
+        if debug:
+            print("[DEBUG] zipfile is gedownload. statuscode: {}".format(requestZip.status_code))
+            
+        if requestZip.ok:
+            logfile.write("{} De zipfile {} is succesvol gedownload\n".format(datetime.today(),zipUrl))
+            zipFile = zipfile.ZipFile(io.BytesIO(requestZip.content))
+            folderInZip = zipFile.namelist()[0]
+            tempFolder = "/tmp/" + folderInZip[:-1]
+
+            os.chdir('/tmp')
+            zipFile.extractall()
+            logfile.write("{} De zipfile is uitgepakt naar directory {}\n".format(datetime.today(),tempFolder))
+            
+    except Exception as error:
+        logfile.write("{} Er is iets fout gegaan tijdens het downloaden van de zipfile\n".format(datetime.today()))
+        logfile.write("{} De foutmelding is (line 108): {}\n".format(datetime.today(),error))
+        if debug:
+            print("[DEBUG] Er is iets fout gegaan tijdens het downloaden van de zip. De error is: {}".format(error))
+        exit()
+
 # Installeer daemons
     try:
         # Installeer daemons. Eerst daemons, dan timers
@@ -85,30 +109,6 @@ def main():
         logfile.write("{} De foutmelding is: {}\n".format(datetime.today(),error))
         if debug:
             print("[DEBUG] Er is iets fout gegaan tijdens het installeren van de service {}. De error is: {}".format(serviceToInstall,error))
-        exit()
-
-# Downloaden zip file
-    try:
-        requestZip = requests.get(zipUrl)
-        print(requestZip)
-        if debug:
-            print("[DEBUG] zipfile is gedownload. statuscode: {}".format(requestZip.status_code))
-            
-        if requestZip.ok:
-            logfile.write("{} De zipfile {} is succesvol gedownload\n".format(datetime.today(),zipUrl))
-            zipFile = zipfile.ZipFile(io.BytesIO(requestZip.content))
-            folderInZip = zipFile.namelist()[0]
-            tempFolder = "/tmp/" + folderInZip[:-1]
-
-            os.chdir('/tmp')
-            zipFile.extractall()
-            logfile.write("{} De zipfile is uitgepakt naar directory {}\n".format(datetime.today(),tempFolder))
-            
-    except Exception as error:
-        logfile.write("{} Er is iets fout gegaan tijdens het downloaden van de zipfile\n".format(datetime.today()))
-        logfile.write("{} De foutmelding is (line 108): {}\n".format(datetime.today(),error))
-        if debug:
-            print("[DEBUG] Er is iets fout gegaan tijdens het downloaden van de zip. De error is: {}".format(error))
         exit()
 
 # Installing script files
@@ -184,10 +184,6 @@ def main():
     except Exception as error:
         print("Er is een error in restart Daemon: {}".format(error))
         exit()
-
-    #except Exception as error:
-    #    logfile.write("{} Er is iets fout gegaan bij het installeren van de API server.\nDe error is: {}\n".format(datetime.today(),error))
-    #    exit()
 
 # Installeren web client
     try:
