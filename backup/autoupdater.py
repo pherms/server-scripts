@@ -65,7 +65,7 @@ def main():
 
                     # Installing API server and client
                     mods.installApiServer(tempFolder,serverApiDir,debug,logfile)
-                    mods.installWebClient()
+                    mods.installWebClient(tempFolder,debug,logfile)
 
                     logfile.write("{} De bestanden zijn gekopieerd naar directory: {}\n".format(datetime.today(),scriptfolder))
                     if debug:
