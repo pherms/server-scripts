@@ -1,8 +1,13 @@
 [Unit]
 Description=API server for server-scripts
+After=network.target
+
 [Service]
-Type=oneshot
-ExecStart=pm2 start config-server-api
+Environment=NODE_ENV=production
+Type=simple
+WorkingDirectory=/opt/server-api
+ExecStart=/usr/bin/node index.js
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target

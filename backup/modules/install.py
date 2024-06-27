@@ -16,11 +16,13 @@ def determineConfigFolder(type,tempFolder):
 
     match type:
         case "client":
-            sourceDir = Path(os.path.join(tempFolder,"config/client/"))
+            sourceDir = os.path.join(tempFolder,"config/client/")
             destinationDir = config["clientConfigDir"]
         case "server":
-            sourceDir = Path(os.path.join(tempFolder,"config/server/"))
+            sourceDir = os.path.join(tempFolder,"config/server/")
             destinationDir = config["serverApiDir"]
+            print("sourceDir in determineConfigFolder functie voor type {}: {}".format(sourceDir,type))
+            print("destinationDir in determineConfigFolder functie voor type {}: {}".format(destinationDir,type))
     
     return (sourceDir,destinationDir)
 
@@ -36,15 +38,25 @@ def installFiles(type,tempFolder,logfile):
     logfile.write("{} Gevonden type installatie: {}\n".format(datetime.today(),type))
     logfile.write("{} Bepalen van de bron en doel directories\n".format(datetime.today()))
 
-    (sourceDir,destinationDir) = mods.determineConfigFolder(type,tempFolder)
-    index = sourceDir.parts.index('src')
-    workingDir = os.path.join(sourceDir,"src")
+    try:
+        (sourceDir,destinationDir) = mods.determineConfigFolder(type,tempFolder)
+        workingDir = Path(os.path.join(sourceDir,"src"))
+        print("Sourcedir in InstallFiles functie: {}".format(sourceDir))
+        print("Destination in InstallFiles functie: {}".format(destinationDir))
+        index = int(Path(workingDir).parts.index('src'))
+        # print(Path(sourceDir).parts.index('src'))
+        print("Index: {}".format(index))
+        
+    except Exception as error:
+        print("Er is een fout opgetreden in eerste deel van installFiles functie: {}".format(error))
+        exit()
 
     try:
         logfile.write("{} Kopieren van de gecompilede sources\n".format(datetime.today()))
-        os.system("cp -r {}/ {}".format(os.path.join(sourceDir,"dist"),destinationDir))
+        print("Kopieren van additionele files. functie: installFiles (2e deel)")
+        os.system("cp -a {}/. {}".format(os.path.join(sourceDir,"dist"),Path(destinationDir)))
 
-        if (type == "server"):
+        if type == "server":
             logfile.write("{} Kopieren van additionele javascript files tbv server\n".format(datetime.today()))
             for file in workingDir.glob("**/*.js"):
                 source = file.absolute()
@@ -56,10 +68,10 @@ def installFiles(type,tempFolder,logfile):
             # yes | cp /scripts/server-scripts/config/server/package.json $serverapidir
             # yes | cp -a /scripts/server-scripts/config/server/prisma/ $serverapidir
             logfile.write("{} Kopieren van package.json\n".format(datetime.today()))
-            os.system("cp {} {}".format(source,destinationDir))
+            os.system("cp {} {}".format(os.path.join(sourceDir,"package.json"),Path(destinationDir)))
 
             logfile.write("{} Kopieren van prisma directory\n".format(datetime.today()))
-            os.system("cp -r {} {}".format(os.path.join(sourceDir,"prisma"),destinationDir))
+            os.system("cp -r {} {}".format(os.path.join(sourceDir,"prisma"),Path(destinationDir)))
 
     except Exception as error:
         print("Er is een fout opgetreden. {}".format(error))
@@ -78,3 +90,7 @@ def databaseSetup(logfile):
 
     logfile.write("{} Deployen van database wijzigingen\n".format(datetime.today()))
     os.system("npm run migrate")
+
+def installDependencies(logfile):
+    logfile.write("{} Installeren van dependencies\n".format(datetime.today()))
+    os.system("npm install")

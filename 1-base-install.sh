@@ -55,7 +55,8 @@ fi
 
 apt update -y
 apt install -y git sudo screenfetch intel-microcode initramfs-tools firmware-linux lshw openssh-server prometheus-node-exporter dnsutils systemd-resolved rsync ntp acl python3 python3-pip python3-requests nodejs npm apache2 postgresql-client
-npm install pm2 -g
+# pm2
+# npm install -g pm2
 
 # create backup directory
 mkdir -p /vol/backup
@@ -94,7 +95,8 @@ npm run generate
 npm run migrate
 npm run build
 
-pm2 start /opt/server-api/index.js -n config-server-api
+# pm2 start $serverapidir/index.js
+# pm2 startup systemd
 
 # compile en copy client naar folder
 cd /scripts/server-scripts/config/client
@@ -132,6 +134,7 @@ systemctl enable cleanup.service
 systemctl enable copytoserver@$Username.service
 systemctl enable config-server-api.service
 systemctl start config-server-api.service
+# systemctl start pm2-root
 
 
 # Set timezone

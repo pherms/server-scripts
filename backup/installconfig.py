@@ -14,6 +14,8 @@ def main():
     debug = bool(config["debug"])
     scriptfolder = config["scriptspath"]
     apiurl = config["apiurl"]
+    serverApiDir = config["serverApiDir"]
+    tempFolder = ""
 
     logfile = mods.openLogFile(logfilepath,"update",debug)
 
@@ -55,6 +57,30 @@ def main():
             print("[DEBUG] fout bij uitvoeren API request: {}. Zie logfile".format(response.status_code))
         exit()
 
+# Downloaden zip file
+    try:
+        requestZip = requests.get(zipUrl)
+        print(requestZip)
+        if debug:
+            print("[DEBUG] zipfile is gedownload. statuscode: {}".format(requestZip.status_code))
+            
+        if requestZip.ok:
+            logfile.write("{} De zipfile {} is succesvol gedownload\n".format(datetime.today(),zipUrl))
+            zipFile = zipfile.ZipFile(io.BytesIO(requestZip.content))
+            folderInZip = zipFile.namelist()[0]
+            tempFolder = "/tmp/" + folderInZip[:-1]
+
+            os.chdir('/tmp')
+            zipFile.extractall()
+            logfile.write("{} De zipfile is uitgepakt naar directory {}\n".format(datetime.today(),tempFolder))
+            
+    except Exception as error:
+        logfile.write("{} Er is iets fout gegaan tijdens het downloaden van de zipfile\n".format(datetime.today()))
+        logfile.write("{} De foutmelding is (line 108): {}\n".format(datetime.today(),error))
+        if debug:
+            print("[DEBUG] Er is iets fout gegaan tijdens het downloaden van de zip. De error is: {}".format(error))
+        exit()
+
 # Installeer daemons
     try:
         # Installeer daemons. Eerst daemons, dan timers
@@ -85,77 +111,104 @@ def main():
             print("[DEBUG] Er is iets fout gegaan tijdens het installeren van de service {}. De error is: {}".format(serviceToInstall,error))
         exit()
 
-# Installing client en server
+# Installing script files
     try:
-        requestZip = requests.get(zipUrl)
-        print(requestZip)
-        if debug:
-            print("[DEBUG] zipfile is gedownload. statuscode: {}".format(requestZip.status_code))
-            
-        if requestZip.ok:
-            logfile.write("{} De zipfile {} is succesvol gedownload\n".format(datetime.today(),zipUrl))
-            zipFile = zipfile.ZipFile(io.BytesIO(requestZip.content))
-            folderInZip = zipFile.namelist()[0]
-            tempFolder = "/tmp/" + folderInZip[:-1]
-
-            os.chdir('/tmp')
-            zipFile.extractall()
-            logfile.write("{} De zipfile is uitgepakt naar directory {}\n".format(datetime.today(),tempFolder))
-            
-            # delete tests directory
-            if os.path.exists(os.path.join(tempFolder,"backup/tests/")):
-                # shutil.rmtree(os.path.join(tempFolder,"backup/tests/"))
-                mods.deleteDirectory(os.path.join(tempFolder,"backup/tests/"),logfile)
+        # delete tests directory
+        logfile.write("{} Installeren van de server-scripts:\n".format(datetime.today()))
+        if os.path.exists(os.path.join(tempFolder,"backup/tests/")):
+            logfile.write("{} Verwijderen van de unit-tests directories\n".format(datetime.today()))
+            mods.deleteDirectory(os.path.join(tempFolder,"backup/tests/"),logfile)
         
         if os.path.exists(tempFolder):
+            logfile.write("{} Kopieren van de scripts naar de scriptfolder: {}\n".format(datetime.today(),scriptfolder))
             os.system("cp -r {}/* {}".format(tempFolder,scriptfolder))
             # remove config dir
-            # shutil.rmtree(os.path.join(scriptfolder,"config"))
+            logfile.write("{} Verwijderen van de config dir uit de folder: {}\n".format(datetime.today(),os.path.join(scriptfolder,"config")))
             mods.deleteDirectory(os.path.join(scriptfolder,"config"),logfile)
 
-            # api server
-            serverDir = Path(os.path.join(tempFolder,"config/server/"))
-            # index = serverDir.parts.index('src')
-            # workingDir = os.path.join(serverDir,"src")
-
-            os.chdir(serverDir)
-            # shutil.rmtree("dist")
-            mods.deleteDirectory(os.path.join(serverDir,"dist"),logfile)
-
-            # recreate build folder en build app
-            os.mkdir("dist")
-            # os.system("npm run build")
-            mods.compileSource("server",logfile)
-
-            mods.installFiles("server",tempFolder,logfile)
-            mods.databaseSetup(logfile)
-            mods.restartDaemon("config-server-api",logfile,debug)
-
-            # config client
-            clientDir = Path(os.path.join(tempFolder,"config/client/"))
-            os.chdir(clientDir)
-            
-            mods.deleteDirectory(os.path.join(clientDir,"dist"),logfile)
-
-            # recreate build folder en build app
-            os.mkdir("dist")
-            
-            mods.compileSource("client",logfile)
-            mods.installFiles("client",tempFolder,logfile)
-            mods.restartDaemon("apache2",logfile,debug)
-            # end config client
-
-            logfile.write("{} De bestanden zijn gekopieerd naar directory: {}\n".format(datetime.today(),scriptfolder))
-            if debug:
-                print("[DEBUG] Bestanden zijn gekopieerd naar de scriptsfolder")
-    
+        logfile.write("{} De server scripts zijn geinstalleerd\n".format(datetime.today()))
     except Exception as error:
-        logfile.write("{} Er is iets fout gegaan tijdens het downloaden van de zipfile\n".format(datetime.today()))
+        logfile.write("{} Er is iets fout gegaan tijdens het installeren van de scriptfiles\n".format(datetime.today()))
         logfile.write("{} De foutmelding is: {}\n".format(datetime.today(),error))
         if debug:
-            print("[DEBUG] Er is iets fout gegaan tijdens het downloaden van de zip. De error is: {}".format(error))
+            print("[DEBUG] Er is iets fout gegaan tijdens het installeren van de scriptfiles. De error is: {}".format(error))
         exit()
 
+# Installeren API server
+    #try:
+    # api server
+    logfile.write("{} Installeren van de API server\n".format(datetime.today()))
+    serverDir = Path(os.path.join(tempFolder,"config/server/"))
+    # index = serverDir.parts.index('src')
+    # workingDir = os.path.join(serverDir,"src")
+
+    os.chdir(serverDir)
+    # shutil.rmtree("dist")
+    mods.deleteDirectory(os.path.join(serverDir,"dist"),logfile)
+
+    # recreate build folder en build app
+    dirsToCreate = ["middlewares/authorization","config"]
+    for directoryToCreate in dirsToCreate:
+        path = Path(os.path.join(serverApiDir,directoryToCreate))
+        print(path)
+        path.mkdir(parents=True, exist_ok=True)
+    # os.system("npm run build")
+    try:
+        mods.compileSource("server",logfile)
+    except Exception as error:
+        print("Er is een error in compileSource: {}".format(error))
+        exit()
+
+    try:
+        mods.installFiles("server",tempFolder,logfile)
+    except Exception as error:
+        print("Er is een error in InstallFiles {}".format(error))
+        exit()
+
+    os.chdir(serverApiDir)
+
+    try:    
+        mods.installDependencies(logfile)
+    except Exception as error:
+        print("Er is een fout opgetreden bij het installeren van de dependencies")
+        exit()
+
+    try:
+        mods.databaseSetup(logfile)
+    except Exception as error:
+        print("Er is een error in database setup {}".format(error))
+        exit()
+
+    try:
+        mods.restartDaemon("config-server-api",logfile,debug)
+    except Exception as error:
+        print("Er is een error in restart Daemon: {}".format(error))
+        exit()
+
+# Installeren web client
+    try:
+        # config client
+        logfile.write("{} Installeren van de web client\n".format(datetime.today()))
+        clientDir = Path(os.path.join(tempFolder,"config/client/"))
+        os.chdir(clientDir)
+        
+        mods.deleteDirectory(os.path.join(clientDir,"dist"),logfile)
+
+        # recreate build folder en build app
+        os.mkdir("dist")
+        
+        mods.compileSource("client",logfile)
+        mods.installFiles("client",tempFolder,logfile)
+        mods.restartDaemon("apache2",logfile,debug)
+        # end config client
+
+        logfile.write("{} De bestanden zijn gekopieerd naar directory: {}\n".format(datetime.today(),scriptfolder))
+        if debug:
+            print("[DEBUG] Bestanden zijn gekopieerd naar de scriptsfolder")
+        logfile.write("{} De webclient is geinstallleerd\n".format(datetime.today()))
+    except Exception as error:
+        logfile.write("{} Er is iets fout gegaan bij het installeren van de web client. De error is: {}\n".format(datetime.today(),error))
+        exit()
 
 if __name__ == '__main__':
     main()
