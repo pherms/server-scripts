@@ -1,5 +1,10 @@
 import modules as mods
+import io
 import os
+import json
+import requests
+import zipfile
+from json import JSONDecodeError
 from pathlib import Path
 from datetime import datetime
 
@@ -94,3 +99,178 @@ def databaseSetup(logfile):
 def installDependencies(logfile):
     logfile.write("{} Installeren van dependencies\n".format(datetime.today()))
     os.system("npm install")
+
+def getReleaseInfo(apiurl,debug,logfile):
+    """
+    Opvragen van laatste release informatie van Github
+
+    :param str apiurl: De url waar de query naar gemaakt moet worden
+    :param str logfile: Het logfile object
+    :param bool debug: aanzetten debug logging
+    :return: latestVersion: Het laatste versie nummer
+    :return: zipUrl: de url om de zipfile te downloaden
+    :rtype: tuple
+    """
+    try:
+        response = requests.get(apiurl)
+
+        if response.status_code == 200:
+            if debug:
+                print("[DEBUG] API request succesvol uitgevoerd: {}".format(response.status_code))
+
+            logfile.write("{} API request naar {} succesvol uitgevoerd. Status code: {}\n".format(datetime.today(),apiurl,response.status_code))
+            responseDictionary = response.json()
+            
+            if debug:
+                prettyJson = json.dumps(responseDictionary, indent=4)
+                print(prettyJson)
+
+            latestVersion = responseDictionary.get('tag_name')
+            zipUrl = responseDictionary.get('zipball_url')
+            if debug:
+                print("[DEBUG] latest version: {}\n[DEBUG] zipUrl: {}".format(latestVersion,zipUrl))
+            
+            return (latestVersion,zipUrl)
+
+        else:
+            print("Er is iets fout gegaan bij het uitvoeren van de API request naar Github. Het script wordt afgebroken")
+            logfile.write("{} Er is iets fout gegaan bij het uitvoeren van de API request naar Github. Het proces wordt gestopt\n".format(datetime.today()))
+            exit()
+
+    except JSONDecodeError as jsonerror:
+        if debug:
+            print("[DEBUG] Er is iets fout gegaan tijdens het decoden van de JSON.\n[DEBUG] De error is: {}".format(jsonerror))
+
+        logfile.write("{} Er is iets fout gegaan tijdens het decoden van de JSON. De error is: {}\n".format(datetime.today(),jsonerror))
+        exit()
+
+    except Exception as error:
+        logfile.write("{} Er is iets fout gegaan tijdens het uitvoeren van de API request. Status code: {}\n".format(datetime.today(),response.status_code))
+        logfile.write("{} De error is: {}\n".format(datetime.today(),error))
+        if debug:
+            print("[DEBUG] fout bij uitvoeren API request: {}. Zie logfile".format(response.status_code))
+        exit()
+
+def downloadZip(zipUrl,debug,logfile):
+    """
+    Downloaden van zipfile. Return data is tempFolder
+
+    :param str zipUrl: De url waar de zipfile kan worden gedownload
+    :param str logfile: Het logfile object
+    :param bool debug: aanzetten debug logging
+    :return: tempFolder: de folder op het OS waar de bestanden in worden uitgepakt
+    :rtype: tuple
+    """
+    try:
+        requestZip = requests.get(zipUrl)
+        print(requestZip)
+        if debug:
+            print("[DEBUG] zipfile is gedownload. statuscode: {}".format(requestZip.status_code))
+            
+        if requestZip.ok:
+            logfile.write("{} De zipfile {} is succesvol gedownload\n".format(datetime.today(),zipUrl))
+            zipFile = zipfile.ZipFile(io.BytesIO(requestZip.content))
+            folderInZip = zipFile.namelist()[0]
+            tempFolder = "/tmp/" + folderInZip[:-1]
+
+            os.chdir('/tmp')
+            zipFile.extractall()
+            logfile.write("{} De zipfile is uitgepakt naar directory {}\n".format(datetime.today(),tempFolder))
+        
+        return tempFolder
+            
+    except Exception as error:
+        logfile.write("{} Er is iets fout gegaan tijdens het downloaden van de zipfile\n".format(datetime.today()))
+        logfile.write("{} De foutmelding is (line 108): {}\n".format(datetime.today(),error))
+        if debug:
+            print("[DEBUG] Er is iets fout gegaan tijdens het downloaden van de zip. De error is: {}".format(error))
+        exit()
+
+def installApiServer(tempFolder,serverApiDir,debug,logfile):
+    """
+    Installeert de Node.js API server
+
+    :param str tempFolder: De folder waar de zipfile naartoe is uitgepakt
+    :param str serverApiDir: De directory waar de server API uit draait
+    :param bool debug: aanzetten debug logging
+    :param str logfile: het logfile object
+    """
+    logfile.write("{} Installeren van de API server\n".format(datetime.today()))
+    serverDir = Path(os.path.join(tempFolder,"config/server/"))
+    # index = serverDir.parts.index('src')
+    # workingDir = os.path.join(serverDir,"src")
+
+    os.chdir(serverDir)
+    # shutil.rmtree("dist")
+    mods.deleteDirectory(os.path.join(serverDir,"dist"),logfile)
+
+    # recreate build folder en build app
+    dirsToCreate = ["middlewares/authorization","config"]
+    for directoryToCreate in dirsToCreate:
+        path = Path(os.path.join(serverApiDir,directoryToCreate))
+        print(path)
+        path.mkdir(parents=True, exist_ok=True)
+    # os.system("npm run build")
+    try:
+        compileSource("server",logfile)
+    except Exception as error:
+        print("Er is een error in compileSource: {}".format(error))
+        exit()
+
+    try:
+        installFiles("server",tempFolder,logfile)
+    except Exception as error:
+        print("Er is een error in InstallFiles {}".format(error))
+        exit()
+
+    os.chdir(serverApiDir)
+
+    try:    
+        installDependencies(logfile)
+    except Exception as error:
+        print("Er is een fout opgetreden bij het installeren van de dependencies")
+        exit()
+
+    try:
+        databaseSetup(logfile)
+    except Exception as error:
+        print("Er is een error in database setup {}".format(error))
+        exit()
+
+    try:
+        mods.restartDaemon("config-server-api",logfile,debug)
+    except Exception as error:
+        print("Er is een error in restart Daemon: {}".format(error))
+        exit()
+
+def installWebClient(tempFolder,debug,logfile):
+    """
+    Installeert de Web client onder apache
+
+    :param str tempFolder: De folder waar de zipfile naartoe is uitgepakt
+    :param bool debug: aanzetten debug logging
+    :param str logfile: het logfile object
+    """
+    try:
+        # config client
+        logfile.write("{} Installeren van de web client\n".format(datetime.today()))
+        clientDir = Path(os.path.join(tempFolder,"config/client/"))
+        os.chdir(clientDir)
+        
+        mods.deleteDirectory(os.path.join(clientDir,"dist"),logfile)
+
+        # recreate build folder en build app
+        os.mkdir("dist")
+        
+        compileSource("client",logfile)
+        installFiles("client",tempFolder,logfile)
+        mods.restartDaemon("apache2",logfile,debug)
+        # end config client
+
+        logfile.write("{} De bestanden zijn gekopieerd naar directory: {}\n".format(datetime.today(),scriptfolder))
+        if debug:
+            print("[DEBUG] Bestanden zijn gekopieerd naar de scriptsfolder")
+        logfile.write("{} De webclient is geinstallleerd\n".format(datetime.today()))
+    except Exception as error:
+        logfile.write("{} Er is iets fout gegaan bij het installeren van de web client. De error is: {}\n".format(datetime.today(),error))
+        exit()

@@ -29,42 +29,7 @@ def main():
     try:
         versionfile = scriptfolder + "version.txt"
 
-        try:
-            response = requests.get(apiurl)
-
-            if response.status_code == 200:
-                if debug:
-                    print("[DEBUG] API request succesvol uitgevoerd: {}".format(response.status_code))
-
-                logfile.write("{} API request naar {} succesvol uitgevoerd. Status code: {}\n".format(datetime.today(),apiurl,response.status_code))
-                responseDictionary = response.json()
-                
-                if debug:
-                    prettyJson = json.dumps(responseDictionary, indent=4)
-                    print(prettyJson)
-
-                latestVersion = responseDictionary.get('tag_name')
-                zipUrl = responseDictionary.get('zipball_url')
-                if debug:
-                    print("[DEBUG] latest version: {}\n[DEBUG] zipUrl: {}".format(latestVersion,zipUrl))
-            else:
-                print("Er is iets fout gegaan bij het uitvoeren van de API request naar Github. Het script wordt afgebroken")
-                logfile.write("{} Er is iets fout gegaan bij het uitvoeren van de API request naar Github. Het proces wordt gestopt\n".format(datetime.today()))
-                exit()
-
-        except JSONDecodeError as jsonerror:
-            if debug:
-                print("[DEBUG] Er is iets fout gegaan tijdens het decoden van de JSON.\n[DEBUG] De error is: {}".format(jsonerror))
-
-            logfile.write("{} Er is iets fout gegaan tijdens het decoden van de JSON. De error is: {}\n".format(datetime.today(),jsonerror))
-            exit()
-
-        except Exception as error:
-            logfile.write("{} Er is iets fout gegaan tijdens het uitvoeren van de API request. Status code: {}\n".format(datetime.today(),response.status_code))
-            logfile.write("{} De error is: {}\n".format(datetime.today(),error))
-            if debug:
-                print("[DEBUG] fout bij uitvoeren API request: {}. Zie logfile".format(response.status_code))
-            exit()
+        latestVersion,zipUrl = mods.getReleaseInfo(apiurl,debug,logfile)
             
         if os.path.exists(versionfile):
             try:
@@ -85,25 +50,12 @@ def main():
 
         if installedVersion == '' or installedVersion != latestVersion:
             try:
-                requestZip = requests.get(zipUrl)
-                print(requestZip)
-                if debug:
-                    print("[DEBUG] zipfile is gedownload. statuscode: {}".format(requestZip.status_code))
+                tempFolder = mods.downloadZip(zipUrl,debug,logfile)
                     
-                if requestZip.ok:
-                    logfile.write("{} De zipfile {} is succesvol gedownload\n".format(datetime.today(),zipUrl))
-                    zipFile = zipfile.ZipFile(io.BytesIO(requestZip.content))
-                    folderInZip = zipFile.namelist()[0]
-                    tempFolder = "/tmp/" + folderInZip[:-1]
-
-                    os.chdir('/tmp')
-                    zipFile.extractall()
-                    logfile.write("{} De zipfile is uitgepakt naar directory {}\n".format(datetime.today(),tempFolder))
-                    
-                    # delete tests directory
-                    if os.path.exists(os.path.join(tempFolder,"backup/tests/")):
-                        # shutil.rmtree(os.path.join(tempFolder,"backup/tests/"))
-                        mods.deleteDirectory(os.path.join(tempFolder,"backup/tests/"),logfile)
+                # delete tests directory
+                if os.path.exists(os.path.join(tempFolder,"backup/tests/")):
+                    # shutil.rmtree(os.path.join(tempFolder,"backup/tests/"))
+                    mods.deleteDirectory(os.path.join(tempFolder,"backup/tests/"),logfile)
                 
                 if os.path.exists(tempFolder):
                     os.system("cp -r {}/* {}".format(tempFolder,scriptfolder))
@@ -112,7 +64,8 @@ def main():
                     mods.deleteDirectory(os.path.join(scriptfolder,"config"),logfile)
 
                     # Installing API server and client
-                    installconfig.main()
+                    mods.installApiServer(tempFolder,serverApiDir,debug,logfile)
+                    mods.installWebClient()
 
                     logfile.write("{} De bestanden zijn gekopieerd naar directory: {}\n".format(datetime.today(),scriptfolder))
                     if debug:
