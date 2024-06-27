@@ -21,7 +21,6 @@ def main():
     servicesToInstall = config["servicesToInstall"]
     servicesToCopy = config["servicesToCopy"]
     serverApiDir = config["serverApiDir"]
-    clientConfigDir = config["clientConfigDir"]
 
     logfile = mods.openLogFile(logfilepath,"update",debug)
     hostname = mods.getHostname(logfile)
