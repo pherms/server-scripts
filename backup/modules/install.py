@@ -267,7 +267,7 @@ def installWebClient(tempFolder,debug,logfile):
         mods.restartDaemon("apache2",logfile,debug)
         # end config client
 
-        logfile.write("{} De bestanden zijn gekopieerd naar directory: {}\n".format(datetime.today(),scriptfolder))
+        logfile.write("{} De bestanden zijn gekopieerd naar webfolder\n".format(datetime.today()))
         if debug:
             print("[DEBUG] Bestanden zijn gekopieerd naar de scriptsfolder")
         logfile.write("{} De webclient is geinstallleerd\n".format(datetime.today()))
