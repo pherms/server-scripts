@@ -1,8 +1,10 @@
 [Unit]
 Description=API server for server-scripts
+After=network.target
+
 [Service]
-Type=oneshot
-ExecStart=pm2 start config-server-api
+Type=simple
+ExecStart=/usr/bin/node /opt/server-api/index.js
 
 [Install]
 WantedBy=multi-user.target
