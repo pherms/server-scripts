@@ -40,9 +40,14 @@ app.use('/api/v1/users',userRouter);
 app.use('/api/v1/configuration',configurationRouter);
 app.use('/api/v1/sources',sourcesRouter);
 
-const server = http.createServer(app);
+try {
+    const server = http.createServer(app);
 
-server.listen(PORT,() => {
-    console.log(`Listening on port: ${PORT}`);
-});
+    server.listen(PORT,() => {
+        console.log(`Listening on port: ${PORT}`);
+    });
+} catch (error) {
+    console.log(error);
+}
+
 
