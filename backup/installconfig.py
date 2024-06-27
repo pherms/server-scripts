@@ -165,6 +165,14 @@ def main():
         print("Er is een error in InstallFiles {}".format(error))
         exit()
 
+    os.chdir(serverApiDir)
+
+    try:    
+        mods.installDependencies(logfile)
+    except Exception as error:
+        print("Er is een fout opgetreden bij het installeren van de dependencies")
+        exit()
+
     try:
         mods.databaseSetup(logfile)
     except Exception as error:

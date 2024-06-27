@@ -90,3 +90,7 @@ def databaseSetup(logfile):
 
     logfile.write("{} Deployen van database wijzigingen\n".format(datetime.today()))
     os.system("npm run migrate")
+
+def installDependencies(logfile):
+    logfile.write("{} Installeren van dependencies\n".format(datetime.today()))
+    os.system("npm install")
