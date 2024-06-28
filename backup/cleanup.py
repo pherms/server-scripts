@@ -22,14 +22,14 @@ def main():
         if hostType == 'vm':
             files = mods.getCreationTime(backuppath,debug)
 
-            g_files_cleaned,g_files_renamed = mods.determineRemoveOrBackup(files,logfile,backuppath,debug)
+            g_files_cleaned,g_files_renamed = mods.determineRemoveOrBackup(files,hostType,logfile,backuppath,debug)
         elif hostType == 'host':
             backupRootPath = str(Path(backuppath).parent)
             for folder in os.listdir(backupRootPath):
                 currentFolder = os.path.join(str(backupRootPath),str(folder))
                 if mods.isDirectory(currentFolder):
                     files = mods.getCreationTime(currentFolder,debug)
-                    files_cleaned_currentFolder,files_renamed_currentFolder = mods.determineRemoveOrBackup(files,logfile,currentFolder,debug)
+                    files_cleaned_currentFolder,files_renamed_currentFolder = mods.determineRemoveOrBackup(files,hostType,logfile,currentFolder,debug)
                 g_files_cleaned.append(files_cleaned_currentFolder)
                 g_files_renamed.append(files_renamed_currentFolder)
                         

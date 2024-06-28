@@ -175,13 +175,14 @@ def removeBackupFile(backuppath,fileName,logfile):
     os.remove(fullPath)
     logfile.write("{} Bestand {} zou verwijderd zijn\n".format(datetime.today(),backuppath + fileName))
 
-def determineRemoveOrBackup(files,logfile,backuppath,debug):
+def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
     """
     Bepalen of de backup file moet worden hernoemd of verwijderd
 
     :param str backuppath: het volledige pad waar de backup file gevonden kan worden
     :param str files: de array met files die moeten worden gerenamed, dan wel verwijderd
     :param str logfile: het logfile object waar naartoe moet worden gelogd
+    :param str hostType: het host type waarop het script moet worden uitgevoerd. 2 opties: vm en host
     :param bool debug: Debug toggle. Wanneer true, dan worden geen files verwijderd
     :return: een tuple, bestaande uit files_cleaned en files_renamed
     :rtype: tuple
