@@ -196,7 +196,9 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
         fileName = file
         backupFileDate = mods.determineCreationDateFromFileName(fileName,debug)
         fullPath = os.path.join(str(backuppath), str(fileName))
-        backupDag = date.fromisoformat(backupFileDate).isocalendar()[2]
+        # backupDag = date.fromisoformat(backupFileDate).isocalendar()[2]
+        backupDag = date.fromisoformat(backupFileDate).weekday()
+        print("Backupdag: {}".format(backupDag))
         ageInDays = (datetime.now() - datetime.strptime(backupFileDate, '%Y-%m-%d')).days
         regexPattern = "(?<=-)[A-Z,a-z]+"
 
@@ -213,6 +215,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
 
         logfile.write("{} Beoordelen van bestand: {}\n".format(datetime.today(),file))
         try:
+            print("Week or month value: {}".format(weekOrMonth))
             match weekOrMonth:
                 case "week":
                     if ageInDays >= 28:
@@ -251,11 +254,10 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                             mods.removeBackupFile(backuppath,fileName,logfile)
                             files_cleaned.append(fileName)
 
-                case _:
+                case "none":
                     # Er zit geen month of week in de bestandsnaam
                     logfile.write("{} Dag backup. Bepalen of deze op zondag is gemaakt.\n".format(datetime.today()))
-
-                    if backupDag == sunday:
+                    if backupDag == 6:
                         logfile.write("{} Backup gemaakt op zondag. Hernoemen naar week backup\n".format(datetime.today()))
 
                         if debug:
@@ -269,6 +271,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                         if ageInDays > 5:
                             if debug:
                                 files_cleaned.append(fileName)
+                                print("[DEBUG] {} wordt verwijderd".format(fileName))
                                 logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
                             else:
                                 mods.removeBackupFile(backuppath,fileName,logfile)
