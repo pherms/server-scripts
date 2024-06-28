@@ -197,7 +197,6 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
         backupFileDate = mods.determineCreationDateFromFileName(fileName,debug)
         fullPath = os.path.join(str(backuppath), str(fileName))
         backupDag = date.fromisoformat(backupFileDate).isocalendar()[2]
-        print(date.fromisoformat(backupFileDate).weekday())
         ageInDays = (datetime.now() - datetime.strptime(backupFileDate, '%Y-%m-%d')).days
         regexPattern = "(?<=-)[A-Z,a-z]+"
 
@@ -256,8 +255,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                 case "none":
                     # Er zit geen month of week in de bestandsnaam
                     logfile.write("{} Dag backup. Bepalen of deze op zondag is gemaakt.\n".format(datetime.today()))
-                    print("Backupdag: {}".format(backupDag))
-                    if backupDag == sunday:
+                    if backupDag == 7:
                         logfile.write("{} Backup gemaakt op zondag. Hernoemen naar week backup\n".format(datetime.today()))
 
                         if debug:
