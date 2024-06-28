@@ -1,5 +1,10 @@
 [Unit]
 Description=Autoupdate server scriptjes
+After=network.target
+
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/python3 '/scripts/server-scripts/backup/autoupdater.py'
+
+[Install]
+WantedBy=multi-user.target
