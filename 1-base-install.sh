@@ -31,20 +31,20 @@ clientconfigdir="/var/www/client-config/"
 
 # Setup regular user
 read -p "Normale gebruiker toevoegen? (Y/N): " addRegularUser
-if [[ "${addRegularUser,,}" = "y" ]]; then
-  GetPassword
-  if [[ "$password1" = "$password2" ]]; then
-    echo "Passwords do match"
-    password=$password1
-  else
-    GetPassword
-  fi
-fi
+# if [[ "${addRegularUser,,}" = "y" ]]; then
+#   GetPassword
+#   if [[ "$password1" = "$password2" ]]; then
+#     echo "Passwords do match"
+#     password=$password1
+#   else
+#     GetPassword
+#   fi
+# fi
 
-if [ "${addRegularUser,,}" = "y" ]; then
-  #add regular user
-  useradd -m -s /bin/bash -p $(openssl passwd -crypt $password) -G sudo,backup $userName
-fi
+# if [ "${addRegularUser,,}" = "y" ]; then
+#   #add regular user
+#   useradd -m -s /bin/bash -p $(openssl passwd -crypt $password) -G sudo,backup $userName
+# fi
 
 # update sources-list
 isContrib=$(grep "main contrib non-free" /etc/apt/sources.list)
@@ -86,6 +86,7 @@ a2ensite config.conf
 a2enmod headers
 
 # Kopieren van bestanden
+yes | cp /scripts/server-scripts/backup/systemd/* /etc/systemd/system/
 yes | cp /scripts/server-scripts/backup/backup-config.json /etc/server-scripts/backup-config.json
 yes | cp /scripts/server-scripts/backup/sources /etc/server-scripts/
 
@@ -101,17 +102,15 @@ systemctl start ssh.service
 systemctl enable prometheus-node-exporter.service
 systemctl start prometheus-node-exporter.service
 systemctl restart systemd-resolved.service
-# systemctl enable backup.timer
-# systemctl start backup.timer
-# systemctl enable autoupdate.timer
-# systemctl start autoupdate.timer
-# systemctl enable backup.service
-# systemctl enable cleanup.service
-# systemctl enable copytoserver@$Username.service
+systemctl enable backup.timer
+systemctl start backup.timer
+systemctl enable autoupdate.timer
+systemctl start autoupdate.timer
+systemctl enable backup.service
+systemctl enable cleanup.service
+systemctl enable copytoserver@$Username.service
 # systemctl enable config-server-api.service
 # systemctl start config-server-api.service
-# systemctl start pm2-root
-
 
 # Set timezone
 timedatectl set-timezone Europe/Amsterdam
