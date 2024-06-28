@@ -198,6 +198,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
         fullPath = os.path.join(str(backuppath), str(fileName))
         # backupDag = date.fromisoformat(backupFileDate).isocalendar()[2]
         backupDag = date.fromisoformat(backupFileDate).weekday()
+        print("Backupdag: {}".format(backupDag))
         ageInDays = (datetime.now() - datetime.strptime(backupFileDate, '%Y-%m-%d')).days
         regexPattern = "(?<=-)[A-Z,a-z]+"
 
