@@ -271,6 +271,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                         if ageInDays > 5:
                             if debug:
                                 files_cleaned.append(fileName)
+                                print("[DEBUG] {} wordt verwijderd".format(fileName))
                                 logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
                             else:
                                 mods.removeBackupFile(backuppath,fileName,logfile)
