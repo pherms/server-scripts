@@ -251,7 +251,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                             mods.removeBackupFile(backuppath,fileName,logfile)
                             files_cleaned.append(fileName)
 
-                case _:
+                case "none":
                     # Er zit geen month of week in de bestandsnaam
                     logfile.write("{} Dag backup. Bepalen of deze op zondag is gemaakt.\n".format(datetime.today()))
 
