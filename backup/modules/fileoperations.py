@@ -213,6 +213,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
 
         logfile.write("{} Beoordelen van bestand: {}\n".format(datetime.today(),file))
         try:
+            print("Week or month value: {}".format(weekOrMonth))
             match weekOrMonth:
                 case "week":
                     if ageInDays >= 28:
