@@ -174,6 +174,7 @@ def removeBackupFile(backuppath,fileName,logfile):
     print(f"verwijderen dagbackup file: {fileName}")
     logfile.write("{} Verwijderen van bestand {}\n".format(datetime.today(),fileName))
     fullPath = os.path.join(backuppath,fileName)
+    print(fullPath)
     os.remove(fullPath)
     logfile.write("{} Bestand {} zou verwijderd zijn\n".format(datetime.today(),backuppath + fileName))
 
