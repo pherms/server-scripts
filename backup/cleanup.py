@@ -26,6 +26,7 @@ def main():
         elif hostType == 'host':
             backupRootPath = str(Path(backuppath).parent)
             for folder in os.listdir(backupRootPath):
+                folder = "web01"
                 currentFolder = os.path.join(str(backupRootPath),str(folder))
                 if mods.isDirectory(currentFolder):
                     files = mods.getCreationTime(currentFolder,debug)
