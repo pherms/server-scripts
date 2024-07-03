@@ -269,8 +269,9 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                             mods.renameBackupFile(backuppath,fileName,logfile,"week",debug)
                             files_renamed.append(fileName)
                     else:
-                        logfile.write("{} Backup gemaakt op een andere dag. Verwijderen {}\n".format(datetime.today(),fileName))
+                        logfile.write("{} Backup gemaakt op een andere dag\n".format(datetime.today()))
                         if ageInDays > 5:
+                            logfile.write("{} Backup bestand {} is ouder dan 5 dagen\n".format(datetime.today(),fileName))
                             if debug:
                                 files_cleaned.append(fileName)
                                 print("[DEBUG] {} wordt verwijderd".format(fileName))
