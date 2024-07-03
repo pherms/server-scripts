@@ -130,7 +130,7 @@ def renameBackupFile(backuppath,fileName,logfile,type,debug):
             fileNameArray = fileName.split('.')
             fileNameNew = backuppath + fileNameArray[0] + '-week.' + fileNameArray[1] + '.' + fileNameArray[2]
             if not debug:
-                os.rename(backuppath + fileName,fileNameNew)
+                os.rename(os.path.join(backuppath,fileName),Path(fileNameNew))
             else:
                 print("[DEBUG] {} wordt hernoemd naar {}".format(fileName,fileNameNew))
                 logfile.write("{} [DEBUG] {} wordt hernoemd naar {}\n".format(datetime.today(),fileName,fileNameNew))
@@ -140,25 +140,27 @@ def renameBackupFile(backuppath,fileName,logfile,type,debug):
             fileNameArray = fileName.split('.')
             fileNameNew = backuppath + fileNameArray[0].replace('-week','') + '-month.' + fileNameArray[1] + '.' + fileNameArray[2]
             if not debug:
-                os.rename(backuppath + fileName,fileNameNew)
+                os.rename(os.path.join(backuppath,fileName),Path(fileNameNew))
             else:
                 print("[DEBUG] {} wordt hernoemd naar {}".format(fileName,fileNameNew))
                 logfile.write("{} [DEBUG] {} wordt hernoemd naar {}\n".format(datetime.today(),fileName,fileNameNew))
 
     elif fileName.split('.')[-1] == "zip":
         if type == 'week':
+            fileNameNew = backuppath + fileName.split('.')[0] + '-week.' + fileName.split('.')[1]
             logfile.write("{} Hernoemen van bestand {} naar weekbackup\n".format(datetime.today(),backuppath + fileName))
             if not debug:
-                os.rename(backuppath + fileName,backuppath + fileName.split('.')[0] + '-week.' + fileName.split('.')[1])
+                os.rename(os.path.join(backuppath,fileName),Path(fileNameNew))
             else:
-                print("[DEBUG] {} wordt hernoemd naar {}".format(fileName,fileName.split('.')[0] + '-week.' + fileName.split('.')[1]))
+                print("[DEBUG] {} wordt hernoemd naar {}".format(fileName,fileNameNew))
                 logfile.write("{} [DEBUG] {} wordt hernoemd naar {}\n".format(datetime.today(),fileName,fileName.split('.')[0] + '-week.' + fileName.split('.')[1]))
         else:
+            fileNameNew = backuppath + fileName.split('.')[0].replace('-week','') + '-month.' + fileName.split('.')[1]
             logfile.write("{} Hernoemen van bestand {} naar maandbackup\n".format(datetime.today(),backuppath + fileName))
             if not debug:
-                os.rename(backuppath + fileName,backuppath + fileName.split('.')[0].replace('-week','') + '-month.' + fileName.split('.')[1])  
+                os.rename(os.path.join(backuppath,fileName),Path(fileNameNew))
             else:
-                print("[DEBUG] {} wordt hernoemd naar {}".format(fileName,fileName.split('.')[0] + '-month.' + fileName.split('.')[1]))
+                print("[DEBUG] {} wordt hernoemd naar {}".format(fileName,fileNameNew))
                 logfile.write("{} [DEBUG] {} wordt hernoemd naar {}\n".format(datetime.today(),fileName,fileName.split('.')[0].replace('-week','') + '-month.' + fileName.split('.')[1]))
 
 def removeBackupFile(backuppath,fileName,logfile):
