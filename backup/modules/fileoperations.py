@@ -226,6 +226,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                             logfile.write("{} [DEBUG] {} wordt hernoemd naar maand backup\n".format(datetime.today(),fileName))
                         else:
                             # rename file
+                            logfile.write("{} Backupfile {} is ouder dan 28 dagen\n".format(datetime.today(),fileName))
                             mods.renameBackupFile(backuppath,fileName,logfile,"month",debug)
                             files_renamed.append(fileName)
                         
@@ -238,23 +239,23 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
 
                         laatsteZondag = int(determineLastSundayOfMonth(jaar,maand))
 
-                        print("Laatste zondag: {}".format(laatsteZondag))
-                        print("Dag van maandbackup: {}".format(dag))
                         if dag != laatsteZondag:
                             if debug:
                                 print("[DEBUG] {} wordt verwijderd.".format(fileName))
                                 files_cleaned.append(fileName)
                                 logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
                             else:
+                                logfile.write("{} Backupfile {} is niet gemaakt op de laatste zondag van de maand en wordt verwijderd\n".format(datetime.today(),fileName))
                                 mods.removeBackupFile(backuppath,fileName,logfile)
                                 files_cleaned.append(fileName)
                             
                     elif ageInDays >= 84:
                         if debug:
-                            print("[DEBUG] {} wordt verwijderd.".format(fileName))
+                            print("[DEBUG] {} is ouder dan 84 dagen en wordt verwijderd.".format(fileName))
                             files_cleaned.append(fileName)
                             logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
                         else:
+                            logfile.write("{} Backupfile {} is ouder dan 84 dagen\n".format(datetime.today(),fileName))
                             mods.removeBackupFile(backuppath,fileName,logfile)
                             files_cleaned.append(fileName)
 
@@ -268,6 +269,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                             print("[DEBUG] {} wordt hernoemd naar week backup".format(fileName))
                             logfile.write("{} [DEBUG] {} wordt hernoemd naar week backup\n".format(datetime.today(),fileName))
                         else:
+                            logfile.write("{} Dagbackup bestand {} is gemaakt op zondag en wordt hernoemd\n".format(datetime.today(),fileName))
                             mods.renameBackupFile(backuppath,fileName,logfile,"week",debug)
                             files_renamed.append(fileName)
                     else:
@@ -279,6 +281,7 @@ def determineRemoveOrBackup(files,hostType,logfile,backuppath,debug):
                                 print("[DEBUG] {} wordt verwijderd".format(fileName))
                                 logfile.write("{} [DEBUG] {} wordt verwijderd\n".format(datetime.today(),fileName))
                             else:
+                                logfile.write("{} Dagbackup bestand {} is ouder dan 5 dagen en wordt verwijderd\n".format(datetime.today(),fileName))
                                 mods.removeBackupFile(backuppath,fileName,logfile)
                                 files_cleaned.append(fileName)
 
