@@ -2,8 +2,8 @@
     <form action="#" id="form" class="config-form grid grid-cols-2 gap-4">
         <!-- <div class="grid grid-flow-row grid-cols-2 gap-4"></div> -->
         <div class="config-form-fields">
-            <div class=""><label for="filetype" class="config-form-label w-fit">filetype</label></div>
-            <div class=""><input type="text" v-model="form.filetype" name="filetype" id="filetype" class="input-border config-form-input"></div>
+            <label for="filetype" class="config-form-label w-fit">filetype</label>
+            <input type="text" v-model="form.filetype" name="filetype" id="filetype" class="input-border config-form-input">
         </div>
         <div class="config-form-col2 config-form-fields">
             <label for="backuppath" class="config-form-label w-fit">Backuppath</label>
@@ -116,7 +116,7 @@ const responseData = async () => {
 async function submitConfigForm() {
     if (authToken.value) {
         console.log("niet leeg, submitting")
-        await axios.put(url,
+        await axios.post(url,
             {
                 data: form.value
             },

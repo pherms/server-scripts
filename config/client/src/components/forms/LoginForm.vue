@@ -68,25 +68,27 @@ async function loginUser() {
     });
 
 
+    console.log(response.status)
+    if (response.status === 201 || response.status === 200) {
+      console.log(response)
+      var accessToken = response.data.accesstoken;
+      var username = response.data.User.username;
+      var email = response.data.User.emailaddress;
 
-    if (response.status === 201) {
-      console.log(response.data.accessToken);
-      console.log(response.data.user.name);
-      console.log(response.data.user.emailAddress);
-      store.commit('updateAuthToken', response.data.accessToken);
-      store.commit('updateUserState', response.data.user);
+      store.commit('updateAuthToken', accessToken);
+      store.commit('updateUserState', {username, email});
       store.commit('toggleLoginState', true);
       store.commit('toggleModalState', false);
     }
 
     
   } catch (error) {
-    if (error.response.status === 400) {
-      store.commit('toggleErrorState', true);
-      errorMessage.value = 'Ongeldige gebruikersnaam of onjuist paswoord';
-    } else {
+    // if (error.status === 400) {
+    //   store.commit('toggleErrorState', true);
+    //   errorMessage.value = 'Ongeldige gebruikersnaam of onjuist paswoord';
+    // } else {
       console.error("Er is iets fout gegaan!!", error);
-    }
+    // }
   }
 }
 </script>

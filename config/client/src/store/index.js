@@ -58,7 +58,7 @@ export default createStore({
         },
         updateUserState: function(state, data) {
             state.userState.userName = data.name;
-            state.userState.emailAddress = data.emailAddress;
+            state.userState.emailAddress = data.email;
         }
     }
 });
