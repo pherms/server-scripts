@@ -2,7 +2,7 @@
   <div class="layout">
     <form action="#" id="form">
         <label for="sources" class="input-form-label">Sources om te backuppen</label>
-        <textarea v-model="form" name="sources" id="sources" cols="30" rows="10" class="config-form-fields input-border config-form-input w-fit"></textarea>
+        <textarea v-model="sourcesInput" name="sources" id="sources" cols="30" rows="10" class="config-form-fields input-border config-form-input w-fit"></textarea>
     </form>
     <submit-button @click="submitSourcesForm">Opslaan</submit-button>
   </div>
@@ -13,7 +13,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useStore } from 'vuex'
 import axios from 'axios'
 
-const form = ref({})
+const sourcesInput = ref({})
 
 const store = useStore();
 const url = 'http://' + process.env.VUE_APP_apiserver + '/api/v1/sources';
@@ -24,15 +24,13 @@ const authToken = computed(function () {
 
 const responseData = async () => {
     try {
-        await axios.get(url, {
-            headers: {
-                'Content-Type': 'application/json; charset=UTF-8',
-                'Authentication': 'Bearer ' + authToken.value
-            }
-        }).then(response => {
-            form.value = response.data;
+        const response = await axios.get(url, {
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authentication': 'Bearer ' + authToken.value
+          }
         });
-        console.log(form.value);
+        sourcesInput.value = response.data.sources;
     } catch (error) {
         console.error('Error fetching data:', error);
     }
@@ -42,9 +40,11 @@ async function submitSourcesForm() {
     if (authToken.value) {
         console.log("niet leeg, submitting")
         try {
-          const response = await axios.put(url,
+          const response = await axios.post(url,
             {
-              data: form.value
+              data: {
+                sources: sourcesInput.value
+              }
             }
           , {
               headers: {

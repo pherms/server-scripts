@@ -55,8 +55,8 @@ def main():
             print("[DEBUG] Er is iets fout gegaan tijdens het installeren van de service {}. De error is: {}".format(serviceToInstall,error))
         exit()
 
-# Installeren API server
-    mods.installApiServer(tempFolder,serverApiDir,debug,logfile)
+# # Installeren API server
+#     mods.installApiServer(tempFolder,serverApiDir,debug,logfile)
 
 # Installeren web client
     mods.installWebClient(tempFolder,debug,logfile)

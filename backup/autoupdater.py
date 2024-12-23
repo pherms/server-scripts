@@ -63,7 +63,7 @@ def main():
                     mods.deleteDirectory(os.path.join(scriptfolder,"config"),logfile)
 
                     # Installing API server and client
-                    mods.installApiServer(tempFolder,serverApiDir,debug,logfile)
+                    # mods.installApiServer(tempFolder,serverApiDir,debug,logfile)
                     mods.installWebClient(tempFolder,debug,logfile)
 
                     logfile.write("{} De bestanden zijn gekopieerd naar directory: {}\n".format(datetime.today(),scriptfolder))
