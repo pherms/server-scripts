@@ -15,7 +15,7 @@
     "debug": false,
     "hostType": "vm",
     "timerUnits": ["autoupdate.timer","backup.timer"],
-    "servicesToInstall": ["cleanup.service","config-server-api.service"],
+    "servicesToInstall": ["cleanup.service"],
     "servicesToCopy": ["autoupdate.service","backup.service"],
     "serverApiDir": "/opt/server-api/",
     "clientConfigDir": "/var/www/client-config/"
