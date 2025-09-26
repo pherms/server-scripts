@@ -56,6 +56,8 @@ def addFilesToArchive(archive,filetype,logfile,listToBackup,debug):
     :param obj logfile: het open logbestand waar naartoe wordt gelogd
     :param list listToBackup: Lijst met te backuppen bestanden en directories
     :param bool debug: Enable debug print in de console
+    :return: success of failure
+    :rtype: str
     """
     for folderToBackup in listToBackup:
         errorMessage = ""
@@ -87,6 +89,8 @@ def addFilesToArchive(archive,filetype,logfile,listToBackup,debug):
             mods.sendMailFailedBackup(mods.getHostname(logfile),logmessage)
             closeArchiveWrite(archive,folderToBackup)
             exit()
+    
+    return "success"
 
 def determineFolderlists(line,exclusionList,inclusionList,debug): # line uit sources
     """

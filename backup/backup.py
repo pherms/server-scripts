@@ -40,7 +40,7 @@ def main():
     if debug:
         print("[DEBUG] Exclusion list: {}".format(exclusionList))
 
-    mods.addFilesToArchive(archive,filetype,logfile,listToBackup,debug)
+    result = mods.addFilesToArchive(archive,filetype,logfile,listToBackup,debug)
 
     mods.closeArchiveWrite(archive,filetype)
     archiveFileSize = mods.getArchiveFileSize(archive)
@@ -50,6 +50,6 @@ def main():
     mods.closeLogFile(logfile)
 
     logfileread = mods.openLogFile(logfilepath,"backup","read",debug)
-    mods.sendLogFile(hostname,logfileread,debug,apiserver,apitoken)
+    mods.sendLogFile(hostname,logfileread,debug,apiserver,apitoken,result)
 if __name__ == '__main__':
     main()
