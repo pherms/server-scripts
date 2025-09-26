@@ -372,3 +372,22 @@ def deleteDirectory(directory,logfile):
     if os.path.exists(directory):
         logfile.write("{} De directory {} is verwijderd\n".format(datetime.today(),directory))
         shutil.rmtree(directory)
+
+def readFile(fileName):
+    """
+    Read a text file and return the content
+
+    :param str fileName: The path to the text file
+    :return: the content of the file
+    :rtype: string
+    """
+    try:
+        fullPath = os.path.abspath(fileName)
+        with open(fullPath, 'r', encoding='utf-8') as file:
+            content = file.read()
+            # Strip whitespace characters like `\n` at the end of each line
+            content = content.strip()
+        return content
+    except Exception as e:
+        print(f"Error reading file {fileName}: {e}")
+        return

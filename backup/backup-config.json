@@ -18,5 +18,6 @@
     "servicesToInstall": ["cleanup.service"],
     "servicesToCopy": ["autoupdate.service","backup.service"],
     "serverApiDir": "/opt/server-api/",
-    "clientConfigDir": "/var/www/client-config/"
+    "clientConfigDir": "/var/www/client-config/",
+    "apiServer": "api.hoofdspoor.home"
 }

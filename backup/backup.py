@@ -17,8 +17,10 @@ def main():
     logfilepath = config["logfilepath"]
     sources = config["sourcesLocation"]
     debug = bool(config["debug"])
-    logfile = mods.openLogFile(logfilepath,"backup",debug)
+    apiserver = config["apiServer"]
+    logfile = mods.openLogFile(logfilepath,"backup","write",debug)
     hostname = mods.getHostname(logfile)
+    apitoken = mods.readFile("./apitoken")
     exclusionList = []
     inclusionList = []
     listToBackup = []
@@ -44,15 +46,10 @@ def main():
     archiveFileSize = mods.getArchiveFileSize(archive)
 
     logfile.write("{} Backup geslaagd\n".format(datetime.today()))
+    logfile.write("{} De backup is {}\n".format(datetime.today(),archiveFileSize))
     mods.closeLogFile(logfile)
 
-    message_text = """\
-    De backup van {hostname} is succesvol uitgevoerd.\n
-    Het backup bestand is {filesizeHumanReadable} groot.\n
-    Zie ook bijgande logfile\n""".format(hostname=hostname,filesizeHumanReadable=archiveFileSize)
-    subject = "Backup server {} succesvol".format(hostname)
-
-    mods.sendMail(subject,message_text,logfile)
-    
+    logfileread = mods.openLogFile(logfilepath,"backup","read",debug)
+    mods.sendLogFile(hostname,logfileread,debug,apiserver,apitoken)
 if __name__ == '__main__':
     main()
