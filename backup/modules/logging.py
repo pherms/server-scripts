@@ -1,8 +1,9 @@
 import modules as mods
 from datetime import datetime
 from pathlib import Path
+import requests
 
-def openLogFile(logpath,logfiletype,debug):
+def openLogFile(logpath,logfiletype,action,debug):
     """
     Opent de logfile in schrijf modus, waar naartoe moet worden gelogd.
 
@@ -23,7 +24,10 @@ def openLogFile(logpath,logfiletype,debug):
         logfilename = "updatelog.log"
 
     try:
-        logfile = open(logpath + logfilename,"w")
+        if action == "write":
+            logfile = open(logpath + logfilename,"w")
+        elif action == "read":
+            logfile = open(logpath + logfilename,"r")
 
         if debug:
             print("[DEBUG] Logfile {} is aangemaakt".format(logfilename))
@@ -40,3 +44,39 @@ def closeLogFile(logfile):
     :param str logfile: het logfile object wat moet worden gesloten
     """
     logfile.close()
+
+def sendLogFile(serverName,logfile,debug,apiServer,apiToken):
+    """
+    Verzend de logfile via een API call.
+
+    :param str serverName: de server waar naartoe is gebackupt
+    :param str logfile: het logfile object wat moet worden verzonden
+    :param bool debug: of debug mode aan staat
+    :param str apiServer: de API server waar naartoe moet worden verzonden
+    """
+    logContent = logfile.read()
+    endpoint = "http://{}/api/v1/logging".format(apiServer)
+
+    headers = {}
+    if apiToken:
+        headers["X-API-Token"] = apiToken
+        headers["Content-Type"] = "application/json"
+    
+    payload = {
+        "Servername": serverName,
+        "Logentry": logContent,
+        "Logdate": datetime.now().isoformat()
+    }
+    try:
+        response = requests.post(endpoint, json=payload, headers=headers, timeout=20)
+    except Exception as e:
+        print("Er is een error opgetreden tijdens het verbinden met de API server: {}".format(e))
+        return
+
+    if debug:
+        print("[DEBUG] API response: {}".format(response.status_code))
+
+    if response.status_code != 200:
+        print("Fout bij het verzenden van logdata: {} {}".format(response.status_code, response.text))
+        return
+
