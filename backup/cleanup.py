@@ -12,7 +12,7 @@ def main():
     hostType = config["hostType"]
     debug = bool(config["debug"])
 
-    logfile = mods.openLogFile(logfilepath,"cleanup",debug)
+    logfile = mods.openLogFile(logfilepath,"cleanup","write",debug)
     hostname = mods.getHostname(logfile)
 
     try:
