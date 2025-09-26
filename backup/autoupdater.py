@@ -22,7 +22,7 @@ def main():
     servicesToCopy = config["servicesToCopy"]
     serverApiDir = config["serverApiDir"]
 
-    logfile = mods.openLogFile(logfilepath,"update",debug)
+    logfile = mods.openLogFile(logfilepath,"update","write",debug)
     hostname = mods.getHostname(logfile)
 
     try:

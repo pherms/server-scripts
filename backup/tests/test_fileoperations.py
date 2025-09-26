@@ -23,14 +23,14 @@ class Testing(unittest.TestCase):
         self.assertTrue(isDirectory)
 
     def test_createfilename_tar_bz2(self):
-        logfile = mods.openLogFile(backuppath,'backup',False)
+        logfile = mods.openLogFile(backuppath,'backup','write',False)
         date = datetime.today().strftime('%Y%m%d')
         fileName = mods.generateFileName("pc10702","tar","bz2",logfile,False)
         logfile.close()
         self.assertEqual("pc10702-{}.tar.bz2".format(date),fileName)
 
     def test_createfilename_zip(self):
-        logfile = mods.openLogFile(backuppath,'backup',False)
+        logfile = mods.openLogFile(backuppath,'backup','write',False)
         date = datetime.today().strftime('%Y%m%d')
         fileName = mods.generateFileName("pc10702","zip","",logfile,False)
         logfile.close()
@@ -49,7 +49,7 @@ class Testing(unittest.TestCase):
         self.assertTrue(isinstance(result,dict))
 
     def test_renameBackupFile_to_week(self):
-        logfile = mods.openLogFile(backuppath,'backup',False)
+        logfile = mods.openLogFile(backuppath,'backup','write',False)
         fileName = mods.generateFileName("pc10702","tar","bz2",logfile,False)
         with open(os.path.join(backuppath, fileName), 'w') as fp:
             pass
@@ -59,7 +59,7 @@ class Testing(unittest.TestCase):
         self.assertTrue("week" in result[0])
 
     def test_renameBackupFile_to_month(self):
-        logfile = mods.openLogFile(backuppath,'backup',False)
+        logfile = mods.openLogFile(backuppath,'backup','write',False)
         fileName = mods.generateFileName("pc10702","tar","bz2",logfile,False)
         with open(os.path.join(backuppath, fileName), 'w') as fp:
             pass
@@ -77,7 +77,7 @@ class Testing(unittest.TestCase):
                 fp.close()
 
         files = mods.getCreationTime(backuppath,False)
-        logfile = mods.openLogFile(backuppath,'backup',False)
+        logfile = mods.openLogFile(backuppath,'backup','write',False)
         files_cleaned, files_renamed = mods.determineRemoveOrBackup(files,"",logfile,backuppath,False)
         logfile.close()
 

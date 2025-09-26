@@ -14,7 +14,7 @@ def main():
     debug = config['debug']
 
     if hostType == 'vm':
-        logfile = mods.openLogFile(logfiledir,"copy",debug)
+        logfile = mods.openLogFile(logfiledir,"copy","write",debug)
         hostname = mods.getHostname(logfile)
 
         logfile.write("{} Beginnen met kopieren van backupfiles naar server {}\n".format(datetime.today(),backupserver))

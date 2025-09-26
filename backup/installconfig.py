@@ -17,7 +17,7 @@ def main():
     serverApiDir = config["serverApiDir"]
     tempFolder = ""
 
-    logfile = mods.openLogFile(logfilepath,"update",debug)
+    logfile = mods.openLogFile(logfilepath,"update","write",debug)
 
 # Get latestVersion en zipUrl from repository
     latestVersion,zipUrl = mods.getReleaseInfo(apiurl,debug,logfile)

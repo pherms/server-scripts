@@ -20,25 +20,25 @@ class Testing(unittest.TestCase):
         shutil.rmtree(backuppath)
 
     def test_openLogFile_backup(self):
-        logfile = mods.openLogFile(os.path.join(backuppath,"logging/"),'backup',False)
+        logfile = mods.openLogFile(os.path.join(backuppath,"logging/"),'backup','write',False)
         result = glob.glob("{}/*backup*".format(os.path.join(backuppath,"logging/")))
         self.assertTrue("backup" in result[0])
         logfile.close()
 
     def test_openLogFile_cleanup(self):
-        logfile = mods.openLogFile(os.path.join(backuppath,"logging/"),'cleanup',False)
+        logfile = mods.openLogFile(os.path.join(backuppath,"logging/"),'cleanup','write',False)
         result = glob.glob("{}/*cleanup*".format(os.path.join(backuppath,"logging/")))
         self.assertTrue("cleanup" in result[0])
         logfile.close()
     
     def test_openLogFile_copy(self):
-        logfile = mods.openLogFile(os.path.join(backuppath,"logging/"),'copy',False)
+        logfile = mods.openLogFile(os.path.join(backuppath,"logging/"),'copy','write',False)
         result = glob.glob("{}/*copy*".format(os.path.join(backuppath,"logging/")))
         self.assertTrue("copy" in result[0])
         logfile.close()
 
     def test_openLogFile_update(self):
-        logfile = mods.openLogFile(os.path.join(backuppath,"logging/"),'update',False)
+        logfile = mods.openLogFile(os.path.join(backuppath,"logging/"),'update','write',False)
         result = glob.glob("{}/*update*".format(os.path.join(backuppath,"logging/")))
         self.assertTrue("update" in result[0])
         logfile.close()
