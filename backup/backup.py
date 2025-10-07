@@ -50,6 +50,6 @@ def main():
     mods.closeLogFile(logfile)
 
     logfileread = mods.openLogFile(logfilepath,"backup","read",debug)
-    mods.sendLogFile(hostname,logfileread,debug,apiserver,apitoken,result)
+    mods.sendLogFile(hostname,logfileread,debug,apiserver,apitoken,result,archiveFileSize)
 if __name__ == '__main__':
     main()

@@ -88,7 +88,7 @@ def addFilesToArchive(archive,filetype,logfile,listToBackup,debug):
             logfile.write(logmessage)
             mods.sendMailFailedBackup(mods.getHostname(logfile),logmessage)
             closeArchiveWrite(archive,folderToBackup)
-            exit()
+            return "failure"
     
     return "success"
 
