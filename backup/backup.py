@@ -20,7 +20,7 @@ def main():
     apiserver = config["apiServer"]
     logfile = mods.openLogFile(logfilepath,"backup","write",debug)
     hostname = mods.getHostname(logfile)
-    apitoken = mods.readFile("./apitoken")
+    apitoken = config["apiToken"]
     exclusionList = []
     inclusionList = []
     listToBackup = []
