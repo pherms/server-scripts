@@ -45,7 +45,7 @@ def closeLogFile(logfile):
     """
     logfile.close()
 
-def sendLogFile(serverName,logfile,debug,apiServer,apiToken,backupStatus):
+def sendLogFile(serverName,logfile,debug,apiServer,apiToken,backupStatus,archiveFileSize):
     """
     Verzend de logfile via een API call.
 
@@ -55,6 +55,7 @@ def sendLogFile(serverName,logfile,debug,apiServer,apiToken,backupStatus):
     :param str apiServer: de API server waar naartoe moet worden verzonden
     :param str apiToken: de API token voor authenticatie
     :param str backupStatus: de status van de backup, "success" of "failure
+    :param str archiveFileSize: de grootte van het backup bestand
     """
     logContent = logfile.read()
     endpoint = "http://{}/api/v1/logging".format(apiServer)
@@ -68,7 +69,8 @@ def sendLogFile(serverName,logfile,debug,apiServer,apiToken,backupStatus):
         "Servername": serverName,
         "Logentry": logContent,
         "Logdate": datetime.now().isoformat(),
-        "Backupresult": backupStatus
+        "Backupresult": backupStatus,
+        "Backupfilesize": archiveFileSize
     }
     try:
         response = requests.post(endpoint, json=payload, headers=headers, timeout=20)
