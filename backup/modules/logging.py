@@ -57,11 +57,11 @@ def sendLogFile(serverName,logfile,debug,apiServer,apiToken,backupStatus,archive
     :param str backupStatus: de status van de backup, "success" of "failure
     :param str archiveFileSize: de grootte van het backup bestand
     """
+    logContent = logfile
+
     if backupStatus == "failure":
         logContent = logfile.read()
         logfile.close()
-    elif backupStatus == "success":
-        logContent = logfile
 
     endpoint = "http://{}/api/v1/logging".format(apiServer)
 
