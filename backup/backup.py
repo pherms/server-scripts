@@ -53,7 +53,6 @@ def main():
         logfileread = "Backup succesvol uitgevoerd"
     elif result == "failure":
         logfileread = mods.openLogFile(logfilepath,"backup","read",debug)
-        mods.closeLogFile(logfileread)
     
     mods.sendLogFile(hostname,logfileread,debug,apiserver,apitoken,result,archiveFileSize)
 if __name__ == '__main__':
