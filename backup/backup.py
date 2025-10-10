@@ -49,7 +49,11 @@ def main():
     logfile.write("{} De backup is {}\n".format(datetime.today(),archiveFileSize))
     mods.closeLogFile(logfile)
 
-    logfileread = mods.openLogFile(logfilepath,"backup","read",debug)
+    logfileread = "Backup succesvol uitgevoerd"
+    
+    if result == "failure":
+        logfileread = mods.openLogFile(logfilepath,"backup","read",debug)
+    
     mods.sendLogFile(hostname,logfileread,debug,apiserver,apitoken,result,archiveFileSize)
 if __name__ == '__main__':
     main()

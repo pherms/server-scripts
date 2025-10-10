@@ -1,13 +1,14 @@
 <template>
     <div v-if="isLoggedIn">
         <div class="header">
-            <h1>Backup Sources config</h1>
+            <h1>Log Viewer</h1>
         </div>
-        <backup-sourcesform></backup-sourcesform>
+        <log-viewform></log-viewform>
     </div>
 </template>
+
 <script setup>
-import BackupSourcesform from '../forms/BackupSourcesForm.vue'
+import LogViewform from '../forms/LogViewForm.vue';
 
 import { computed } from 'vue';
 import { useStore } from 'vuex';

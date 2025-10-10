@@ -15,6 +15,13 @@
                     </span>
                 </div>
             </router-link>
+            <router-link v-if="isLoggedIn" to="/logViewer">
+                <div class="button">
+                    <span class="material-symbols-outlined">
+                        article
+                    </span>
+                </div>
+            </router-link>
         </div>
     
         <div class="bottom-icons">
