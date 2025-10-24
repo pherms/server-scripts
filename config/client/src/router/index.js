@@ -27,6 +27,11 @@ const routes = [
     name: 'Backup Sources',
     component: () => import('../components/gui/BackupSources.vue')
   },
+  {
+    path: '/logViewer',
+    name: 'Log Viewer',
+    component: () => import('../components/gui/LogViewer.vue')
+  }
   // {
   //   path: '/other',
   //   name: 'Other',

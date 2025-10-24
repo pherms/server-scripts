@@ -1,6 +1,8 @@
 <template>
     <div v-if="isLoggedIn">
-        <h1>Backup Config</h1>
+        <div class="header">
+            <h1>Backup Config</h1>
+        </div>
         <backup-configform></backup-configform>
     </div>
 </template>
@@ -19,5 +21,11 @@ const isLoggedIn = computed(function () {
 <style scoped>
 * {
     color: #1E0342;
+}
+
+.header {
+    display: flex;
+    justify-content: left;
+    margin-bottom: 0.5rem;
 }
 </style>
