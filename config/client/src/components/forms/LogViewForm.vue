@@ -91,14 +91,19 @@ async function fetchServers() {
     }
 }
 
-const responseData = async (page = 1) => {
+const responseData = async (page = 1, useServer = false) => {
     try {
-        const response = await axios.get(url, {
-          params: {page: page, limit: limit.value, server: selectedServer.value || undefined },
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authentication': 'Bearer ' + authToken.value
-          }
+        // build endpoint: use /api/v1/logging/{serverName} only when useServer is true
+        const endpoint = useServer && selectedServer.value
+            ? `${url}/${encodeURIComponent(selectedServer.value)}`
+            : url;
+
+        const response = await axios.get(endpoint, {
+            params: { page: page, limit: limit.value },
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authentication': 'Bearer ' + authToken.value
+            }
         });
 
         const payload = response.data;
@@ -130,9 +135,11 @@ const formatCell = (val) => {
     return String(val);
 }
 
-onMounted(() => {
-  responseData();
-  fetchServers();
+onMounted(async () => {
+  // populate the select box first
+  await fetchServers();
+  // initial load: show ALL records (do not filter by server)
+  responseData(1, false);
 });
 
 const pageNumbers = computed(() => {
@@ -149,17 +156,19 @@ function goToPage(p) {
     if (totalPages.value && p > totalPages.value) p = totalPages.value;
     if (p === currentPage.value) return;
     currentPage.value = p;
-    responseData(p);
+    // if a server is selected, keep filtering while paging
+    responseData(p, !!selectedServer.value);
 }
 
 function changeLimit() {
     currentPage.value = 1;
-    responseData(1);
+    responseData(1, !!selectedServer.value);
 }
 
 function onServerChange() {
     currentPage.value = 1;
-    responseData(1);
+    // when user changes selection, fetch only that server's logs
+    responseData(1, true);
 }
 </script>
 
