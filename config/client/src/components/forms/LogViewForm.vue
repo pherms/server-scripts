@@ -1,28 +1,8 @@
 <template>
     <div>
-        <div>
-            Select server:
-            <select v-model="selectedServer" @change="onServerChange">
-                <option v-if="!servers.length" disabled>Loading...</option>
-                <option v-for="server in servers" :key="server.ID ?? server.id ?? server.Servername" :value="server.Servername">{{ server.Servername }}</option>
-            </select>
-        </div>
-        
-        <div v-if="!logData.length">Geen loggegevens beschikbaar</div>
-        <table v-else class="log-table">
-            <thead>
-                <tr>
-                    <th v-for="column in columns" :key="column">{{ column }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(log, index) in logData" :key="index">
-                    <td v-for="column in columns" :key="column">
-                        {{ formatCell(log[column]) }}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <server-select v-model="selectedServer" :servers="servers" @change="onServerChange" />
+
+        <logview-table :rows="logData" :columns="columns" />
         <div class="pagination" v-if="totalPages > 1">
             <submit-button @click="goToPage(currentPage - 1)" :disabled="currentPage <= 1">Vorige</submit-button>
             <submit-button
@@ -48,7 +28,11 @@
 </template>
 
 <script setup>
+// import UI components
 import SubmitButton from '../ui/SubmitButton.vue';
+import ServerSelect from '../ui/SelectBox.vue';
+import LogviewTable from '../ui/LogviewTable.vue';
+
 import { ref, onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
 import axios from 'axios';
@@ -129,12 +113,6 @@ const columns = computed(() => {
     return logData.value.length > 0 ? Object.keys(logData.value[0]) : [];
 });
 
-const formatCell = (val) => {
-    if (val === null || val === undefined) return '';
-    if (typeof val === 'object') return JSON.stringify(val);
-    return String(val);
-}
-
 onMounted(async () => {
   // populate the select box first
   await fetchServers();
@@ -170,6 +148,7 @@ function onServerChange() {
     // when user changes selection, fetch only that server's logs
     responseData(1, true);
 }
+
 </script>
 
 <style>
