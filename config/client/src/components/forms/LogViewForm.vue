@@ -3,35 +3,23 @@
         <server-select v-model="selectedServer" :servers="servers" @change="onServerChange" />
 
         <logview-table :rows="logData" :columns="columns" />
-        <div class="pagination" v-if="totalPages > 1">
-            <submit-button @click="goToPage(currentPage - 1)" :disabled="currentPage <= 1">Vorige</submit-button>
-            <submit-button
-              v-for="p in pageNumbers"
-              :key="p"
-              @click="goToPage(p)"
-              :class="{ active: p === currentPage }"
-            >{{ p }}</submit-button>
-            <submit-button @click="goToPage(currentPage + 1)" :disabled="currentPage >= totalPages">Volgende</submit-button>
-            <div>
-                <span class="page-info">Pagina {{ currentPage }} van {{ totalPages }} ({{ total }} records)</span>
-            </div>
-            <label>
-                Per pagina:
-                <select v-model.number="limit" @change="changeLimit">
-                    <option :value="10">10</option>
-                    <option :value="25">25</option>
-                    <option :value="50">50</option>
-                </select>
-            </label>
-        </div>
+        <data-pagination
+            :current-page="currentPage"
+            :total-pages="totalPages"
+            :total="total"
+            :limit="limit"
+            :page-numbers="pageNumbers"
+            @change-page="goToPage"
+            @change-limit="onChangeLimit"
+        />
     </div>
 </template>
 
 <script setup>
 // import UI components
-import SubmitButton from '../ui/SubmitButton.vue';
 import ServerSelect from '../ui/SelectBox.vue';
 import LogviewTable from '../ui/LogviewTable.vue';
+import DataPagination from '../ui/DataPagination.vue';
 
 import { ref, onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
@@ -54,6 +42,7 @@ const totalPages = ref(0);
 // servers for select
 const servers = ref([]);
 const selectedServer = ref('');
+const filterByServer = ref(false);
 
 async function fetchServers() {
     try {
@@ -63,6 +52,7 @@ async function fetchServers() {
             'Authentication': 'Bearer ' + authToken.value
           }
         });
+
         const payload = response.data;
         servers.value = Array.isArray(payload) ? payload : (payload && payload.data ? payload.data : []);
         // set default selected server if none selected
@@ -71,7 +61,7 @@ async function fetchServers() {
             selectedServer.value = servers.value[0].Servername ?? servers.value[0].name ?? servers.value[0];
         }
     } catch (error) {
-        console.error('Error fetching servers:', error);
+        console.error('fetching servers failed');
     }
 }
 
@@ -89,7 +79,7 @@ const responseData = async (page = 1, useServer = false) => {
                 'Authentication': 'Bearer ' + authToken.value
             }
         });
-
+        
         const payload = response.data;
         const rows = Array.isArray(payload) ? payload : (payload && payload.data ? payload.data : []);
         logData.value = rows;
@@ -105,7 +95,7 @@ const responseData = async (page = 1, useServer = false) => {
             totalPages.value = Math.ceil(total.value / limit.value);
         }
     } catch (error) {
-        console.error('Error fetching log data:', error);
+        console.error('responseData failed');
     }
 };
 
@@ -135,20 +125,23 @@ function goToPage(p) {
     if (p === currentPage.value) return;
     currentPage.value = p;
     // if a server is selected, keep filtering while paging
-    responseData(p, !!selectedServer.value);
+    responseData(p, filterByServer.value);
 }
 
-function changeLimit() {
+function onChangeLimit(newLimit) {
+    limit.value = newLimit;
+    // reset to first page and fetch current filter state
     currentPage.value = 1;
-    responseData(1, !!selectedServer.value);
+    responseData(1, filterByServer.value);
 }
 
 function onServerChange() {
     currentPage.value = 1;
+    // user explicitly changed server selection
+    filterByServer.value = true;
     // when user changes selection, fetch only that server's logs
     responseData(1, true);
 }
-
 </script>
 
 <style>
@@ -167,25 +160,5 @@ function onServerChange() {
 }
 .log-table thead {
   background: #f5f5f5;
-}
-
-.pagination {
-  justify-content: center;
-  margin-top: 0.75rem;
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.pagination button {
-  padding: 0.25rem 0.5rem;
-}
-.pagination button.active {
-  font-weight: bold;
-  background: #eee;
-}
-.page-info {
-  margin-left: 0.5rem;
-  font-size: 0.9rem;
 }
 </style>
