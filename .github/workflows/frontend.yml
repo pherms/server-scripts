@@ -103,7 +103,7 @@ jobs:
             - name: Build and Push Docker Image
               uses: docker/build-push-action@v5
               with:
-                  context: .
+                  context: ./config/client
                   file: ./config/client/Dockerfile
                   push: true
                   build-args: |

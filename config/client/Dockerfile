@@ -1,11 +1,10 @@
 FROM node:22-alpine AS build
-RUN mkdir /app
+WORKDIR /app
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
-COPY . ./app/
-WORKDIR /app
+COPY package*.json ./
 RUN npm install --production
 
 COPY . .
