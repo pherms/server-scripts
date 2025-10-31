@@ -1,4 +1,4 @@
-name: Go Release
+name: Config Frontend CI/CD
 
 on:
     push:
@@ -59,7 +59,7 @@ jobs:
                   git config --global user.email "pherms@outlook.com"
                   git tag ${{ steps.gitversion.outputs.semVer }}
                   # git push origin ${{ steps.gitversion.outputs.semVer }}
-                  git push https://x-access-token:${PAT_TOKEN}@github.com/pherms/server-api.git --tags
+                  git push https://x-access-token:${PAT_TOKEN}@github.com/pherms/server-scripts.git --tags
 
     release:
         name: Create Release
