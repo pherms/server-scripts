@@ -1,0 +1,6 @@
+mode: ContinuousDeployment
+major-version-bump-message: '\+semver:\s?(breaking|major)'
+minor-version-bump-message: '\+semver:\s?(feature|minor)|^feature:'
+patch-version-bump-message: '\+semver:\s?(fix|patch)|^fix:'
+no-bump-message: '\+semver:\s?(none|skip)'
+commit-message-incrementing: Enabled

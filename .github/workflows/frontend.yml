@@ -1,0 +1,113 @@
+name: Go Release
+
+on:
+    push:
+        branches:
+            - "**" # Trigger on pushes to any branch
+    pull_request:
+        branches: [main, master]
+    # push:
+    #   tags:
+    #     - "*" # Triggers the workflow when a tag is pushed (e.g., v1.0.0)
+
+jobs:
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        outputs:
+            semVer: ${{ steps.gitversion.outputs.semVer }}
+            major: ${{ steps.gitversion.outputs.major }}
+            minor: ${{ steps.gitversion.outputs.minor }}
+            patch: ${{ steps.gitversion.outputs.patch }}
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  persist-credentials: false
+
+            - name: Install GitVersion
+              uses: gittools/actions/gitversion/setup@v0.10.2
+              with:
+                  versionSpec: "6.x"
+
+            - name: Determine Version
+              id: gitversion
+              uses: gittools/actions/gitversion/execute@v0.10.2
+              with:
+                  useConfigFile: true
+            - name: Vue tests
+              run: |
+                  cd config/client
+                  npm install
+                  npm run test:ci
+
+            - name: Display Version Info
+              run: |
+                  echo "SemVer: ${{ steps.gitversion.outputs.semVer }}"
+                  echo "Major: ${{ steps.gitversion.outputs.major }}"
+                  echo "Minor: ${{ steps.gitversion.outputs.minor }}"
+                  echo "Patch: ${{ steps.gitversion.outputs.patch }}"
+
+            - name: Tag main branch
+              env:
+                  PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+              if: github.event_name == 'push' && (github.ref == 'refs/heads/main' && github.event_name == 'push')
+              run: |
+                  git config --global user.name "Pascal Herms"
+                  git config --global user.email "pherms@outlook.com"
+                  git tag ${{ steps.gitversion.outputs.semVer }}
+                  # git push origin ${{ steps.gitversion.outputs.semVer }}
+                  git push https://x-access-token:${PAT_TOKEN}@github.com/pherms/server-api.git --tags
+
+    release:
+        name: Create Release
+        needs: build
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') || github.event_name == 'workflow_dispatch'
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Create GitHub Release
+              id: create_release
+              uses: ncipollo/release-action@v1
+              with:
+                  token: ${{ secrets.PAT_TOKEN }}
+                  tag: ${{ needs.build.outputs.semVer }}
+                  name: ${{ needs.build.outputs.semVer }}
+                  draft: false
+                  prerelease: false
+
+    Docker:
+        name: Build and Push Docker Image
+        needs: build
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') || github.event_name == 'workflow_dispatch'
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Log in to Docker Hub
+              uses: docker/login-action@v3
+              with:
+                  username: ${{ secrets.DOCKER_HUB_USERNAME }}
+                  password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+            - name: Build and Push Docker Image
+              uses: docker/build-push-action@v5
+              with:
+                  context: .
+                  file: ./config/client/Dockerfile
+                  push: true
+                  build-args: |
+                      VERSION=${{ needs.build.outputs.semVer }}
+                  tags: |
+                      ${{ secrets.DOCKER_HUB_USERNAME }}/config-frontend:latest
+                      ${{ secrets.DOCKER_HUB_USERNAME }}/config-frontend:${{ needs.build.outputs.semVer }}
