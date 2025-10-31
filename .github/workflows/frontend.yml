@@ -40,7 +40,7 @@ jobs:
             - name: Vue tests
               run: |
                   cd config/client
-                  npm install
+                  npm ci
                   npm run test:ci
 
             - name: Display Version Info
