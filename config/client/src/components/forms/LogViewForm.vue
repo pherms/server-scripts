@@ -21,13 +21,15 @@ import ServerSelect from '../ui/SelectBox.vue';
 import LogviewTable from '../ui/LogviewTable.vue';
 import DataPagination from '../ui/DataPagination.vue';
 
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, inject } from 'vue';
 import { useStore } from 'vuex';
 import axios from 'axios';
 
 const store = useStore();
 const logData = ref([]);
-const url = 'http://' + process.env.VUE_APP_apiserver + '/api/v1/logging';
+const apiServer = inject('apiServer');
+    
+const url = 'http://' + apiServer + '/api/v1/logging';
 
 const authToken = computed(function () {
     return store.getters.getAuthToken;
@@ -46,7 +48,7 @@ const filterByServer = ref(false);
 
 async function fetchServers() {
     try {
-        const response = await axios.get('http://' + process.env.VUE_APP_apiserver + '/api/v1/server', {
+        const response = await axios.get('http://' + apiServer + '/api/v1/server', {
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
             'Authentication': 'Bearer ' + authToken.value

@@ -37,7 +37,7 @@ const password = ref('');
 const password1 = ref('');
 </script> -->
 <script setup>
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import SubmitButton from "../ui/SubmitButton.vue";
 import { useStore } from 'vuex';
 
@@ -48,6 +48,7 @@ const password = ref('');
 const password1 = ref('');
 
 const store = useStore()
+const apiServer = inject('apiServer');
    
 async function signupHandler() {
 
@@ -70,9 +71,9 @@ async function signupHandler() {
       };
       console.log(requestOptions)
 
-      const url = 'http://' + process.env.VUE_APP_apiserver + '/api/v1/users';
+      const url = 'http://' + apiServer + '/api/v1/users';
       console.log(url);
-      console.log(process.env.VUE_APP_apiserver);
+      console.log(apiServer);
 
       const response = await fetch(url, requestOptions);
       if (!response.ok) {
