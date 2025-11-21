@@ -3,13 +3,15 @@
   <main-content></main-content>
 </template>
 <script>
-const apiServer = window.APP_CONFIG.apiServer || 'default'
+import { provide } from 'vue'
 import TheHeader from './components/gui/TheHeader.vue'
 import MainContent from './components/gui/MainContent.vue'
 
 export default {
   setup() {
-    
+    const apiServer = window.APP_CONFIG?.apiServer || process.env.VUE_APP_apiserver || 'default'
+    provide('apiServer', apiServer) // now the value is used and available to children
+    return {}
   },
   components: {
     TheHeader,

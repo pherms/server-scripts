@@ -9,14 +9,15 @@
 </template>
 <script setup>
 import SubmitButton from '../ui/SubmitButton.vue'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, inject } from 'vue'
 import { useStore } from 'vuex'
 import axios from 'axios'
 
 const sourcesInput = ref({})
+const apiServer = inject('apiServer');
 
 const store = useStore();
-const url = 'http://' + process.env.VUE_APP_apiserver + '/api/v1/sources';
+const url = 'http://' + apiServer + '/api/v1/sources';
 
 const authToken = computed(function () {
     return store.getters.getAuthToken;
