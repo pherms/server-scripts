@@ -1,20 +1,22 @@
 FROM node:22-alpine AS build
-WORKDIR /app
+
+RUN npm install -g @vue/cli@3
+RUN mkdir -p /app
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
-COPY package*.json ./
-RUN npm ci --silent
+COPY config/client/. ./app/
+WORKDIR /app
 
-COPY . .
+RUN npm ci --include=dev
 
 ARG VUE_APP_apiserver
 ENV VUE_APP_apiserver=${VUE_APP_apiserver}
 
 RUN npm run build
 
-FROM nginx:stable-alpine AS runtime
+FROM nginx:mainline-alpine3.22 AS runtime
 
 COPY --from=build /app/dist /usr/share/nginx/html
 
