@@ -3,6 +3,7 @@
   <main-content></main-content>
 </template>
 <script>
+const apiServer = window.APP_CONFIG.apiServer || 'default'
 import TheHeader from './components/gui/TheHeader.vue'
 import MainContent from './components/gui/MainContent.vue'
 
