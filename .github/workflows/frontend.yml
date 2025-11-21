@@ -85,7 +85,7 @@ jobs:
     Docker:
         name: Build and Push Docker Image
         needs: build
-        # if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') || github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') || github.event_name == 'workflow_dispatch'
         runs-on: ubuntu-latest
 
         steps:
