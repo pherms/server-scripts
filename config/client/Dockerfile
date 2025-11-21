@@ -18,7 +18,14 @@ RUN npm run build
 
 FROM nginx:mainline-alpine3.22 AS runtime
 
+COPY --from=build /app/docker-entrypoint.sh /docker-entrypoint.sh
+COPY --from=build /app/config.template.js /usr/share/nginx/html/config.template.js
+
 COPY --from=build /app/dist /usr/share/nginx/html
 
+RUN apk add --no-cache gettext \
+    && chmod +x /docker-entrypoint.sh
+
 EXPOSE 80
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
 CMD ["nginx", "-g", "daemon off;"]
