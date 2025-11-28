@@ -109,7 +109,7 @@ jobs:
                   build-args: |
                       VERSION=${{ needs.build.outputs.semVer }}
                       VUE_APP_version=${{ needs.build.outputs.semVer }}
-                      VUE_APP_apiserver=http://api.hoofdspoor.home
+                      VUE_APP_apiserver=api-server.api-services.svc.cluster.local
                   tags: |
                       ${{ secrets.DOCKER_HUB_USERNAME }}/config-frontend:latest
                       ${{ secrets.DOCKER_HUB_USERNAME }}/config-frontend:${{ needs.build.outputs.semVer }}
