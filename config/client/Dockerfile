@@ -14,6 +14,9 @@ RUN npm ci --include=dev
 ARG VUE_APP_apiserver
 ENV VUE_APP_apiserver=${VUE_APP_apiserver}
 
+ARG VUE_APP_version
+ENV VUE_APP_version=${VUE_APP_version}
+
 RUN npm run build
 
 FROM nginx:mainline-alpine3.22 AS runtime

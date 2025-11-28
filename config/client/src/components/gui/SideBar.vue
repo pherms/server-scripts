@@ -31,6 +31,7 @@
             </span>
             </div>
         </div>
+        <div>{{ version }}</div>
     </div>
 </template>
 <script setup>
@@ -38,6 +39,8 @@ import { computed } from 'vue';
 import { useStore } from 'vuex';
 
 const store = useStore();
+
+const version = process.env.VUE_APP_version;
 
 const isLoggedIn = computed(function () {
     return store.getters.getLoggedInState;
